@@ -26,7 +26,12 @@ export default function Header() {
                   </ul>
                 </nav>
               )}
-              <Button>Donate</Button>
+              {HEADER_ITEMS?.buttons &&
+                HEADER_ITEMS?.buttons.map((btn, index) => (
+                  <Button link={{ href: btn.href ?? '' }} key={index}>
+                    Donate
+                  </Button>
+                ))}
             </section>
           )}
         </div>

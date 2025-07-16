@@ -12,7 +12,7 @@ const HEADER_ITEMS: HEADER_ITEMS = {
     // // { href: "/contact", text: "Contact" },
     // { href: '/contact', text: 'Contact' },
   ],
-  buttons: [{ text: 'Donate' }],
+  buttons: [{ href: '/donate', text: 'Donate' }],
 };
 
 export const PROJECTS = [

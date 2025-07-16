@@ -18,7 +18,9 @@ export default function TwoColumnCard() {
                 Your donations can ensure that Deaf Education is made available to more children.
                 Together, we can make education a reality for deaf children.
               </p>
-              <Button size="large">Donate Now</Button>
+              <Button size="large" width="auto" link={{ href: '/donate' }}>
+                Donate Now
+              </Button>
             </div>
             <div className={styles.colTwo}>
               <div className={styles.imageHolder}>
