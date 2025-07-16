@@ -1,59 +1,97 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
-import { getPayload } from 'payload'
-import React from 'react'
-import { fileURLToPath } from 'url'
+import { headers as getHeaders } from 'next/headers.js';
+import { getPayload } from 'payload';
+import React from 'react';
+import { fileURLToPath } from 'url';
+import config from '@/payload.config';
 
-import config from '@/payload.config'
-import './styles.css'
+import MainBanner from '@/components/blocks/MainBanner';
+import KeyMetrics from '@/components/blocks/KeyMetrics';
+import Cards from '@/components/blocks/Cards';
+import CardsOverflowSlider from '@/components/blocks/CardsOverflowSlider';
+import TestimonialSlider from '@/components/blocks/TestimonialSlider';
+import TwoColumnCard from '@/components/blocks/TwoColumnCard';
+import LogoSlider from '@/components/blocks/LogoSlider';
+import Subscription from '@/components/blocks/Subscription';
+
+import Student from '@/graphics/Student';
+import Employees from '@/graphics/Employees';
+import Teacher from '@/graphics/Teacher';
+import PeopleChatting from '@/graphics/PeopleChatting';
 
 export default async function HomePage() {
-  const headers = await getHeaders()
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
+  const headers = await getHeaders();
+  const payloadConfig = await config;
+  const payload = await getPayload({ config: payloadConfig });
+  const { user } = await payload.auth({ headers });
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`;
+
+  const keyMetrics = {
+    heading: {
+      content: [
+        {
+          format: 'normal',
+          text: 'In Pakistan, more than 95% of deaf children ',
+        },
+        {
+          format: 'break',
+        },
+        {
+          format: 'normal',
+          text: 'of school-going age are deprived of their right to education.',
+        },
+      ],
+    },
+    description: {
+      content: [
+        {
+          format: 'bold',
+          text: 'Deaf Education Initiative is striving to ensure that no deaf child goes without literacy and learning.',
+        },
+        {
+          format: 'break',
+        },
+        {
+          format: 'normal',
+          text: ' We are a non-profit organization committed to empowering disadvantaged deaf children and youth in Pakistan. We support the Deaf Reach Program in Pakistan, which is working to empower the Deaf community by providing a full circle solution from education and skills training, teacher development and parent training, to job placement and community inclusion.',
+        },
+      ],
+    },
+
+    metrics: [
+      {
+        icon: <Student />,
+        numbers: '2400+',
+        text: 'Currently',
+      },
+      {
+        icon: <Employees />,
+        numbers: '50,000+',
+        text: 'Direct Beneficiaries',
+      },
+      {
+        icon: <Teacher />,
+        numbers: '2750+',
+        text: 'Deaf Persons Employed',
+      },
+      {
+        icon: <PeopleChatting />,
+        numbers: '7500+',
+        text: 'Words PSL Dictionary',
+      },
+    ],
+  };
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
-        </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
-    </div>
-  )
+    <>
+      <MainBanner />
+      <KeyMetrics keyMetrics={keyMetrics} />
+      <Cards />
+      <CardsOverflowSlider />
+      <TestimonialSlider />
+      <TwoColumnCard />
+      <LogoSlider />
+      <Subscription />
+    </>
+  );
 }

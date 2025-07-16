@@ -1,0 +1,119 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.mySwiper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  & [class*='swiper-wrapper'] {
+    align-items: stretch;
+    // justify-content: center;
+  }
+}
+.mySwiperSlide {
+  width: 100%;
+  max-width: 1150px;
+  height: auto;
+  overflow: hidden;
+  box-shadow: 0 4px 25px 0 rgba($ebony, 5%);
+  &:first-child {
+    border-radius: 12px 0 0 12px;
+  }
+  &:last-child {
+    border-radius: 0 12px 12px 0;
+  }
+}
+.swiperNavButtons {
+  position: absolute;
+  bottom: 16px;
+  right: -4px;
+  display: flex;
+  gap: 2.6rem;
+  z-index: 1;
+  @media (min-width: 768px) {
+    top: -120px;
+    bottom: auto;
+    right: 28px;
+    z-index: 0;
+  }
+}
+.swiperNavButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  cursor: pointer;
+  border: 1px solid $athens-gray;
+  background-color: $white;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: $white;
+}
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+.colOne {
+  order: 1;
+  padding: 2.5rem;
+  width: 100%;
+  @media (min-width: 768px) {
+    order: 0;
+    padding: 5.5rem;
+    width: 50%;
+  }
+}
+.colTwo {
+  order: 0;
+  width: 100%;
+  @media (min-width: 768px) {
+    order: 1;
+    width: 50%;
+  }
+}
+.imageHolder {
+  width: 100%;
+  height: 300px;
+  max-height: 50.8rem;
+  @media (min-width: 768px) {
+    height: 50.8rem;
+  }
+}
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.quote {
+  font-size: 2.6rem;
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  margin-bottom: 4rem;
+  overflow: hidden;
+  @media (min-width: 768px) {
+    font-size: 3.6rem;
+  }
+}
+.author {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: $ebony;
+}
+.designation {
+  font-family: var(--font-ubuntu-sans);
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 2.4rem;
+  color: rgba($ebony, 72%);
+}

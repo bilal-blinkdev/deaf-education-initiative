@@ -1,0 +1,40 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.cardsOverflowSlider {
+  padding: 9.5rem 0 11.5rem;
+  // background-color: $dark-blue;
+  background:
+    0 940px / contain repeat-x url('/line-pattern.svg'),
+    $dark-blue;
+  & .ctaButton {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin: 0 auto;
+    padding: 4rem 0;
+    width: fit-content;
+    border: none;
+    &:hover {
+      background-color: transparent;
+    }
+    & > span {
+      color: $white;
+    }
+  }
+}
+.heading {
+  margin-bottom: 8rem;
+  text-align: center;
+  color: $white;
+}
+.subHeading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.2rem;
+  text-align: center;
+  color: $yellow;
+}
+.slider {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4rem;
+}

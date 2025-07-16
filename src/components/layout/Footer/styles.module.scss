@@ -1,0 +1,56 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.footer {
+  padding: 5.6rem 0 0;
+  background-color: $woodsmoke;
+}
+.gridBlock {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 2rem;
+  row-gap: 3rem;
+  padding-bottom: 4.5rem;
+  @media (min-width: 600px) {
+    row-gap: 0;
+    grid-template-columns: 2fr repeat(2, 1fr);
+  }
+  @media (min-width: 767px) {
+    row-gap: 0;
+    grid-template-columns: 2fr repeat(4, 1fr);
+  }
+}
+.logo {
+  margin-bottom: 2.4rem;
+}
+.tagLine {
+  font-size: 1.6rem;
+  margin-bottom: 2.4rem;
+  color: rgba($white, 56%);
+}
+.socialLinks {
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
+}
+.menuItemHeading {
+  font-size: 1.4rem;
+  margin-bottom: 1.6rem;
+  line-height: 170%;
+  letter-spacing: 0.8px;
+  color: rgba($white, 40%);
+}
+.menuItemList {
+  list-style-type: none;
+}
+.menuItemLink {
+  display: block;
+  padding: 0.8rem 0;
+  color: $white;
+}
+.copyrights {
+  font-size: 1.6rem;
+  padding: 3.6rem 0 2.4rem;
+  text-align: center;
+  border-top: 1px solid rgba($white, 12%);
+  color: rgba($white, 56%);
+}

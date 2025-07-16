@@ -1,0 +1,35 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.logoSliderBlock {
+  padding: 7.4rem 0 10rem;
+}
+.heading {
+  font-size: 3.2rem;
+  text-align: center;
+  line-height: 140%;
+}
+.mySwiper {
+  user-select: none;
+  overflow: visible;
+  & [class*='swiper-wrapper'] {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    flex-grow: 1;
+    & + [class*='swiper-pagination'] {
+      bottom: var(--swiper-pagination-bottom, -70px);
+      & [class*='swiper-pagination-bullet'] {
+        margin: 0 8px;
+        width: 10px;
+        height: 10px;
+      }
+      & [class*='swiper-pagination-bullet-active'] {
+        background-color: $ebony;
+      }
+    }
+  }
+}
+.image {
+  height: 80px;
+  object-fit: cover;
+}

@@ -1,0 +1,100 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.keyMetrics {
+  position: relative;
+  padding: 5rem 0;
+  background-color: $dark-blue;
+  @media (min-width: 768px) {
+    padding: 11rem 15rem 0 15rem;
+  }
+}
+
+.heading {
+  text-align: center;
+  color: $white;
+}
+.subHeading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.2rem;
+  text-align: center;
+  color: $white;
+}
+.description {
+  text-align: center;
+  color: $white;
+  & .bold {
+    font-weight: bold;
+  }
+  @media (min-width: 768px) {
+    padding: 0 8rem;
+  }
+}
+.metrics {
+  // position: absolute;
+  // left: 50%;
+  // bottom: -140px;
+  // transform: translateX(-50%);
+  position: relative;
+  bottom: -60px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3.5rem 4.5rem;
+  width: 100%;
+  max-width: 1175px;
+  border-radius: 12px;
+  background-color: $white;
+  box-shadow: 0 20px 50px 0 rgba($ebony, 8%);
+  @media (min-width: 768px) {
+    bottom: -140px;
+  }
+}
+.metric {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 240px;
+}
+.metricIcon {
+  height: 70px;
+}
+.metricFigure {
+  font-size: 4.54rem;
+  font-weight: bold;
+  line-height: 140%;
+  color: $sandy-brown;
+}
+.metricName {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: auto;
+  max-width: 250px;
+  color: $mine-shaft;
+}
+
+// White color scheme
+.keyMetrics {
+  &.white {
+    background-color: $white;
+    .heading,
+    .description,
+    .metricName {
+      color: $black;
+    }
+    .subHeading {
+      color: $dodger-blue;
+    }
+  }
+}
+
+// Page specific styles
+.about {
+  padding: 5rem 0 30rem;
+  .metrics {
+    bottom: -70px;
+  }
+}

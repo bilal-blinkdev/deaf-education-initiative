@@ -1,0 +1,28 @@
+$background: #fff;
+
+.header {
+  width: 100%;
+  background-color: $background;
+}
+.flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.navMenu {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+  & ul {
+    list-style-type: none;
+    display: flex;
+    gap: 4rem;
+  }
+  & a {
+    font-size: 1.8rem;
+    font-weight: bold;
+    display: block;
+    padding: 2rem 0;
+  }
+}

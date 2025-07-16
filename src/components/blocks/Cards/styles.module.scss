@@ -1,0 +1,47 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.cards {
+  padding: 10rem 0 5rem;
+  background-color: $white;
+  @media (min-width: 768px) {
+    padding: 20rem 0 11.5rem;
+  }
+}
+.heading {
+  text-align: center;
+}
+.subHeading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.2rem;
+  text-align: center;
+  color: $dodger-blue;
+}
+.description {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.cardsBox {
+  padding: 7rem 0 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  @media (min-width: 768px) {
+  }
+}
+.card {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 25px 0 rgba($ebony, 5%);
+}
+.cardTitle {
+  padding: 2.4rem 2.4rem 0.4rem;
+  color: $flamingo;
+}
+.cardDescription {
+  padding: 0 2.4rem 5rem;
+  color: rgba($ebony, 72%);
+}

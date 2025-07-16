@@ -1,0 +1,21 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.cardsOverflowSlider {
+  padding: 9.5rem 0 11.5rem;
+  background-color: $alabaster;
+}
+.heading {
+  text-align: center;
+}
+.subHeading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.2rem;
+  text-align: center;
+  color: $dodger-blue;
+}
+.slider {
+  padding: 4rem 0 0;
+  display: flex;
+  justify-content: center;
+}

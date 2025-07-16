@@ -1,0 +1,59 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.subscriptionBlock {
+  padding: 4.5rem 0;
+  background-color: $alabaster;
+}
+.flexBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  @media (min-width: 900px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+.colOne {
+  flex-basis: 50%;
+}
+.colTwo {
+  flex-basis: 50%;
+}
+.heading {
+  font-size: 3.6rem;
+  line-height: 4.4rem;
+}
+.description {
+  font-size: 2rem;
+  line-height: 3rem;
+}
+.subscriptionForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.inputGroup {
+  display: flex;
+  gap: 1.6rem;
+}
+.input {
+  font-family: var(--font-ubuntu-sans);
+  font-size: 1.6rem;
+  font-weight: 600;
+  flex-grow: 1;
+  padding: 1.4rem 1.2rem;
+  height: 48px;
+  line-height: 2.4rem;
+  border-radius: 8px;
+  border: 1px solid $mischka;
+  &::placeholder {
+    color: rgba($ebony, 50%);
+  }
+}
+.privacyPolicy {
+  font-size: 1.4rem;
+  color: rgba($ebony, 30%);
+}
+.privacyPolicyLink {
+  text-decoration: underline;
+}
