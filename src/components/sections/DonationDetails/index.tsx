@@ -1,6 +1,11 @@
+'use client';
+
 import { ReactNode, useEffect, useState } from 'react';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
+import DonatingHand from '@/assets/hand-donating.webp';
 import styles from './styles.module.scss';
 
 type Project = {
@@ -13,11 +18,11 @@ type DonationDetailsProps = {
   project: Project;
   setProject: any;
   projects: Project[];
-  step: number;
+  step?: number;
   handleClick: () => void;
   donationDetails: any;
   setDonationDetails: any;
-  setIsValid: any;
+  setIsValid?: any;
 };
 type customRadioProps = {
   children: ReactNode;
@@ -40,6 +45,8 @@ export default function DonationDetails({
   setDonationDetails,
   setIsValid,
 }: DonationDetailsProps) {
+  const pathname = usePathname();
+
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
@@ -76,12 +83,12 @@ export default function DonationDetails({
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setIsValid(false);
+      if (pathname === '/donate') setIsValid(false);
       return false;
     }
 
     // no errors
-    setIsValid(true);
+    if (pathname === '/donate') setIsValid(true);
     setErrors({});
     // proceed to next step
     // e.g. setStep(2) or navigate
@@ -113,21 +120,26 @@ export default function DonationDetails({
     <section className={[styles.donationDetails, customClass && styles[customClass]].join(' ')}>
       <div className={styles.donationCard}>
         <section className={styles.donationCardHeader}>
-          {/* <Image
-            src={DonatingHand}
-            className={styles.donatingHandIcon}
-            alt="Donating Hand"
-          /> */}
-          <h2 className={[styles.donationCardHeading, step !== 1 && styles.marginBottom].join(' ')}>
-            {step !== 1 && (
-              <span className={[styles.stepCompletionIcon].join(' ')}>
-                <CheckVerified />
-              </span>
-            )}
-            <span>Donation Details</span>
-          </h2>
+          {pathname === '/' && (
+            <>
+              <Image src={DonatingHand} className={styles.donatingHandIcon} alt="Donating Hand" />
+              <h1 className={styles.donationCardHeadingHome}>Take Action for Deaf Education</h1>
+            </>
+          )}
+          {pathname === '/donate' && (
+            <h2
+              className={[styles.donationCardHeading, step !== 1 && styles.marginBottom].join(' ')}
+            >
+              {step !== 1 && (
+                <span className={[styles.stepCompletionIcon].join(' ')}>
+                  <CheckVerified />
+                </span>
+              )}
+              <span>Donation Details</span>
+            </h2>
+          )}
         </section>
-        {step == 1 && (
+        {(pathname === '/' || step == 1) && (
           <form action="" className={styles.donationForm}>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Project Supported </p>
@@ -236,7 +248,7 @@ export default function DonationDetails({
                 if (validate()) handleClick();
               }}
             >
-              Continue to Personal Details
+              {pathname === '/donate' ? 'Continue to Personal Details' : 'Donate Now'}
             </Button>
           </form>
         )}

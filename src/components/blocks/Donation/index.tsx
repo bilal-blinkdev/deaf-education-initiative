@@ -12,6 +12,7 @@ import Button from '@/components/elements/Button';
 import HandDrawnTwinkle from '@/graphics/HandDrawnTwinkle';
 import HandDrawnSmily from '@/graphics/HandDrawnSmily';
 import ArrowLeft from '@/graphics/ArrowLeft';
+import { PROJECTS } from '@/app/constants';
 import styles from './styles.module.scss';
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
@@ -40,74 +41,6 @@ export default function Donation() {
   const [donationDetailsValid, setDonationDetailsValid] = useState(false);
   const [paymentSucceeded, setPaymentSucceeded] = useState<boolean>(false);
 
-  const projects = [
-    {
-      name: 'Where most needed',
-      hint: 'This is a hint text to help user.',
-      amountOptions: [
-        { symbol: '£', amount: '100', period: '' },
-        { symbol: '£', amount: '250', period: '' },
-        { symbol: '£', amount: '500', period: '' },
-        { symbol: '£', amount: '1000', period: '' },
-      ],
-    },
-    {
-      name: 'Sponsor a Student',
-      hint: '🙌  Your generous support can enable Deaf students fulfill their dreams',
-      amountOptions: [
-        { symbol: '£', amount: '50', period: '' },
-        { symbol: '£', amount: '600', period: '' },
-      ],
-    },
-    {
-      name: 'Sponsor a Classroom',
-      hint: '🙌  Your generous support can enable a whole classroom of 15 Deaf students turn their dreams into reality',
-      amountOptions: [
-        { symbol: '£', amount: '750', period: 'month' },
-        { symbol: '£', amount: '9000', period: 'year' },
-      ],
-    },
-    {
-      name: 'Sponsor Healthy Lunch',
-      hint: '🍲 Your generous support can provide healthy, nutritious meals to our Deaf students',
-      amountOptions: [
-        { symbol: '£', amount: '1300', period: 'month' },
-        { symbol: '£', amount: '15000', period: 'year' },
-      ],
-    },
-    {
-      name: 'Sponsor a Section',
-      hint: '🙌 Your generous support can make quality education a reality for a section of 50 Deaf students',
-      amountOptions: [
-        { symbol: '£', amount: '2500', period: 'month' },
-        { symbol: '£', amount: '30000', period: 'year' },
-      ],
-    },
-    {
-      name: 'Sponsor a Wing',
-      hint: '🙌 Your generous support can make quality education a reality for a wing of 100 Deaf students',
-      amountOptions: [
-        { symbol: '£', amount: '5000', period: 'month' },
-        { symbol: '£', amount: '60000', period: 'year' },
-      ],
-    },
-    {
-      name: 'Sponsor a School',
-      hint: '🙌 Your generous support can make quality education a reality for a school of 250 Deaf students',
-      amountOptions: [
-        { symbol: '£', amount: '12500', period: 'month' },
-        { symbol: '£', amount: '150000', period: 'year' },
-      ],
-    },
-    {
-      name: 'Sponsor a Satellite School',
-      hint: '🙌 Your generous support can make quality education accessible to Deaf children through our Satellite schools',
-      amountOptions: [
-        { symbol: '£', amount: '25000', period: 'setup school' },
-        { symbol: '£', amount: '15000', period: 'yearly' },
-      ],
-    },
-  ];
   const appearance = {
     theme: 'stripe' as const,
     rules: {
@@ -130,7 +63,7 @@ export default function Donation() {
       borderRadius: '6px',
     },
   };
-  const [project, setProject] = useState(projects[0]);
+  const [project, setProject] = useState(PROJECTS[0]);
 
   const handleStepChange = () => {
     console.log(donationDetailsValid);
@@ -162,7 +95,7 @@ export default function Donation() {
               <DonationDetails
                 project={project}
                 setProject={setProject}
-                projects={projects}
+                projects={PROJECTS}
                 handleClick={handleStepChange}
                 step={step}
                 donationDetails={donationDetails}
@@ -172,7 +105,7 @@ export default function Donation() {
               <UserDetails
                 project={project}
                 setProject={setProject}
-                projects={projects}
+                projects={PROJECTS}
                 handleClick={handleStepChange}
                 step={step}
                 setUserDetails={setUserDetails}
@@ -189,7 +122,7 @@ export default function Donation() {
                 <PaymentDetails
                   project={project}
                   setProject={setProject}
-                  projects={projects}
+                  projects={PROJECTS}
                   handleClick={handleStepChange}
                   step={step}
                   amount={Number(paymentDetails.amount)}
