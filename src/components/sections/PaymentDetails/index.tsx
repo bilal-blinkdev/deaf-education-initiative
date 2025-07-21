@@ -16,7 +16,7 @@ type PaymentDetailsProps = {
   projects: Project[];
   step: number;
   amount: number;
-  handleClick: () => void;
+  handleClick: (jumpToStep?: number) => void;
   setPaymentDetails: any;
   setPaymentSucceeded: any;
 };
@@ -265,14 +265,11 @@ export default function PaymentDetails({
   const handleChange = (e: any) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(name);
-    console.log(value);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    console.log('hit');
 
     if (!stripe || !elements) return;
 

@@ -3,9 +3,11 @@
 import { ReactNode, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import axios from 'axios';
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
 import DonatingHand from '@/assets/hand-donating.webp';
+import { useRouter } from 'next/navigation';
 import styles from './styles.module.scss';
 
 type Project = {
@@ -19,7 +21,7 @@ type DonationDetailsProps = {
   setProject: any;
   projects: Project[];
   step?: number;
-  handleClick: () => void;
+  handleClick: (jumpToStep?: number) => void;
   donationDetails: any;
   setDonationDetails: any;
   setIsValid?: any;
@@ -45,13 +47,25 @@ export default function DonationDetails({
   setDonationDetails,
   setIsValid,
 }: DonationDetailsProps) {
+  const router = useRouter();
   const pathname = usePathname();
-
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [selectedProject, setSelectedProject] = useState<Project>();
+  const [shouldValidateAndSubmit, setShouldValidateAndSubmit] = useState(false);
 
   useEffect(() => {
-    if (projects && projects.length > 0) {
-      setProject(projects[0]);
+    console.log(donationDetails);
+
+    if (donationDetails?.donationFixedAmount > 1) {
+      console.log('yt');
+      const selectedProject = projects.find((p) => p.name === donationDetails.projectType);
+      console.log('selectedProject', selectedProject);
+
+      setSelectedProject(selectedProject);
+    } else if (projects && projects.length > 0) {
+      console.log('yt2');
+      setSelectedProject(projects[0]);
+
       setDonationDetails((prev: any) => ({
         ...prev,
         projectType: projects[0].name,
@@ -60,6 +74,22 @@ export default function DonationDetails({
     }
   }, []);
 
+  useEffect(() => {
+    if (shouldValidateAndSubmit) {
+      const isValid = validate();
+
+      if (isValid) {
+        if (pathname === '/donate') {
+          handleClick();
+        } else if (pathname === '/') {
+          // Handle form submission logic here
+          router.push('/donate');
+        }
+      }
+
+      setShouldValidateAndSubmit(false);
+    }
+  }, [donationDetails, shouldValidateAndSubmit]);
   const validate = () => {
     let newErrors: { [key: string]: string } = {};
 
@@ -78,8 +108,6 @@ export default function DonationDetails({
     if (!donationDetails.donationType) {
       newErrors.donationType = 'Please choose donation type.';
     }
-    console.log(donationDetails.donationType);
-    console.log(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -101,7 +129,7 @@ export default function DonationDetails({
 
     if (name === 'projectType') {
       const selectedProject = projects.find((p) => p.name === value);
-      setProject(selectedProject);
+      setSelectedProject(selectedProject);
       setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
     } else setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
   };
@@ -111,13 +139,44 @@ export default function DonationDetails({
 
     if (name === 'projectType') {
       const selectedProject = projects.find((p) => p.name === value);
-      setProject(selectedProject);
+      setSelectedProject(selectedProject);
       setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
     } else setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const isValid = validate();
+
+    if (isValid) {
+      if (pathname === '/donate') {
+        setShouldValidateAndSubmit(true);
+      } else if (pathname === '/') {
+        const form = e.currentTarget;
+        const formData = new FormData(form);
+        console.log('formData', formData);
+
+        try {
+          await axios.post('/donation-form', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+
+          router.push('/donate');
+        } catch (error) {
+          console.error('Donation form submission failed:', error);
+        }
+      }
+    }
+  };
+
   return (
-    <section className={[styles.donationDetails, customClass && styles[customClass]].join(' ')}>
+    <section
+      className={[styles.donationDetails, customClass && styles[customClass]].join(' ')}
+      onClick={() => handleClick(1)}
+    >
       <div className={styles.donationCard}>
         <section className={styles.donationCardHeader}>
           {pathname === '/' && (
@@ -140,7 +199,7 @@ export default function DonationDetails({
           )}
         </section>
         {(pathname === '/' || step == 1) && (
-          <form action="" className={styles.donationForm}>
+          <form className={styles.donationForm} onSubmit={handleSubmit}>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Project Supported </p>
               <select
@@ -156,7 +215,7 @@ export default function DonationDetails({
                 ))}
               </select>{' '}
               {errors.projectType && <p className={styles.inputError}>{errors.projectType}</p>}{' '}
-              {!errors.projectType && <p className={styles.inputHint}>{project.hint}</p>}
+              {!errors.projectType && <p className={styles.inputHint}>{selectedProject?.hint}</p>}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Choose support type</p>
@@ -187,26 +246,27 @@ export default function DonationDetails({
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Choose an amount to give once</p>
               <div className={styles.donationFixedAmounts}>
-                {project.amountOptions.map((amount, index) => (
-                  <CustomRadio
-                    inputType="radio"
-                    inputId={amount.amount}
-                    inputName="donationFixedAmount"
-                    inputValue={amount.amount}
-                    handleChange={handleInputChange}
-                    checked={donationDetails.donationFixedAmount}
-                    key={index}
-                  >
-                    {amount.symbol} {amount.amount}
-                    {amount?.period &&
-                    amount.period.includes('month') &&
-                    amount.period.includes('year')
-                      ? '/' + amount.period
-                      : amount.period && amount.period.includes('')
-                        ? ' - ' + amount.period
-                        : null}
-                  </CustomRadio>
-                ))}
+                {selectedProject &&
+                  selectedProject?.amountOptions.map((amount, index) => (
+                    <CustomRadio
+                      inputType="radio"
+                      inputId={amount.amount}
+                      inputName="donationFixedAmount"
+                      inputValue={amount.amount}
+                      handleChange={handleInputChange}
+                      checked={donationDetails.donationFixedAmount}
+                      key={index}
+                    >
+                      {amount.symbol} {amount.amount}
+                      {amount?.period &&
+                      amount.period.includes('month') &&
+                      amount.period.includes('year')
+                        ? '/' + amount.period
+                        : amount.period && amount.period.includes('')
+                          ? ' - ' + amount.period
+                          : null}
+                    </CustomRadio>
+                  ))}
               </div>
               {errors.donationFixedAmount && (
                 <p className={styles.inputError}>{errors.donationFixedAmount}</p>
@@ -217,6 +277,7 @@ export default function DonationDetails({
               <input
                 type="number"
                 name="otherAmount"
+                value={donationDetails.otherAmount ?? 0}
                 className={styles.input}
                 placeholder="£ 500"
                 onChange={handleInputChange}
@@ -239,15 +300,7 @@ export default function DonationDetails({
                 <p className={styles.inputHint}>This is a hint text to help user.</p>
               )}
             </div>
-            <Button
-              size="large"
-              width="full"
-              icons={{ leading: true }}
-              onClick={(e: any) => {
-                e.preventDefault();
-                if (validate()) handleClick();
-              }}
-            >
+            <Button type="submit" size="large" width="full" icons={{ leading: true }}>
               {pathname === '/donate' ? 'Continue to Personal Details' : 'Donate Now'}
             </Button>
           </form>

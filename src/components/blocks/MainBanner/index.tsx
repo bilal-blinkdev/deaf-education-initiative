@@ -36,7 +36,10 @@ export default function MainBanner() {
             project={project}
             setProject={setProject}
             projects={PROJECTS}
-            handleClick={() => router.push('/donate')}
+            handleClick={() => {
+              console.log('test');
+              //router.push('/donate')
+            }}
             donationDetails={donationDetails}
             setDonationDetails={setDonationDetails}
           />

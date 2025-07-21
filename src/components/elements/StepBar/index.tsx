@@ -1,4 +1,4 @@
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 type StepBarProps = {
   numOfSteps: number;
@@ -6,11 +6,7 @@ type StepBarProps = {
   successMessage?: string;
 };
 
-export default function StepBar({
-  numOfSteps,
-  step,
-  successMessage,
-}: StepBarProps) {
+export default function StepBar({ numOfSteps, step, successMessage }: StepBarProps) {
   const BAR_WIDTH = 840;
   const THUMB_WIDTH = 280;
   return (
@@ -20,7 +16,7 @@ export default function StepBar({
       </p>
       <div className={styles.stepbar__bar} style={{ width: BAR_WIDTH }}>
         <div
-          className={[styles.stepbar__thumb].join(" ")}
+          className={[styles.stepbar__thumb].join(' ')}
           style={{ width: THUMB_WIDTH * step }}
         ></div>
       </div>

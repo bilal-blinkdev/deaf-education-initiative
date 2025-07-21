@@ -14,7 +14,7 @@ type DonationFormProps = {
   setProject: Function;
   projects: Project[];
   step: number;
-  handleClick: () => void;
+  handleClick: (jumpToStep?: number) => void;
   setUserDetails: any;
 };
 type customRadioProps = {
@@ -241,12 +241,19 @@ export default function UserDetails({
   const handleChange = (e: any) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(name);
-    console.log(value);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    handleClick();
   };
 
   return (
-    <section className={[styles.donation, customClass && styles[customClass]].join(' ')}>
+    <section
+      className={[styles.donation, customClass && styles[customClass]].join(' ')}
+      onClick={() => handleClick(2)}
+    >
       <div className={styles.donationCard}>
         <section className={styles.donationCardHeader}>
           <h2 className={[styles.donationCardHeading, step !== 2 && styles.marginBottom].join(' ')}>
@@ -259,7 +266,7 @@ export default function UserDetails({
           </h2>
         </section>
         {step == 2 && (
-          <form action="" className={styles.userDetails}>
+          <form onSubmit={handleSubmit} className={styles.userDetails}>
             <div className={styles.twoColumnInput}>
               <div className={styles.inputGroup}>
                 <p className={styles.inputGroupLabel}>
@@ -372,7 +379,7 @@ export default function UserDetails({
                 rows={6}
               ></textarea>
             </div>
-            <Button size="large" width="full" icons={{ leading: true }} onClick={handleClick}>
+            <Button size="large" width="full" icons={{ leading: true }}>
               Continue to Payment Details
             </Button>
           </form>

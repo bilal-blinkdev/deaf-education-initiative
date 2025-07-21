@@ -21,26 +21,33 @@ if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 const NUMBER_OF_STEPS = 3;
 
-export default function Donation() {
+export default function Donation({ donationDetailsFormData }: any) {
   const [step, setStep] = useState(1);
-  const [donationDetails, setDonationDetails] = useState({
-    projectType: '',
-    supportType: 'Give Once',
-    otherAmount: 0,
-    donationType: 'Zakat',
-    donationFixedAmount: '1',
-  });
+  const [donationDetails, setDonationDetails] = useState(
+    donationDetailsFormData?.donationFixedAmount > 0
+      ? donationDetailsFormData
+      : {
+          projectType: '',
+          supportType: 'Give Once',
+          otherAmount: 0,
+          donationType: 'Zakat',
+          donationFixedAmount: '1',
+        },
+  );
   const [userDetails, setUserDetails] = useState({});
-  const totalAmount =
-    donationDetails.otherAmount > 0
-      ? donationDetails.otherAmount
-      : donationDetails.donationFixedAmount;
+  // const totalAmount =
+  //   donationDetails.otherAmount > 0
+  //     ? donationDetails.otherAmount
+  //     : donationDetails.donationFixedAmount;
   const [paymentDetails, setPaymentDetails] = useState({
-    amount: totalAmount,
+    amount: donationDetails.otherAmount
+      ? donationDetails.otherAmount > 0
+      : donationDetails.donationFixedAmount,
   });
   const [donationDetailsValid, setDonationDetailsValid] = useState(false);
   const [paymentSucceeded, setPaymentSucceeded] = useState<boolean>(false);
 
+  const [project, setProject] = useState(PROJECTS[0]);
   const appearance = {
     theme: 'stripe' as const,
     rules: {
@@ -63,10 +70,10 @@ export default function Donation() {
       borderRadius: '6px',
     },
   };
-  const [project, setProject] = useState(PROJECTS[0]);
+  console.log('paymentDetails', paymentDetails);
 
-  const handleStepChange = () => {
-    console.log(donationDetailsValid);
+  const handleStepChange = (jumpToStep: number = 0) => {
+    console.log('jumpToStep', jumpToStep);
 
     if (donationDetailsValid) {
       setStep((prev) => {
@@ -79,8 +86,25 @@ export default function Donation() {
       });
     }
   };
+  const handleStepBack = () => {
+    setStep(() => {
+      if (step >= 2) return step - 1;
+      else return step;
+    });
+  };
+  useEffect(() => {
+    console.log('Donation', donationDetailsFormData);
+    if (donationDetailsFormData?.donationFixedAmount > 0) {
+      setDonationDetails(donationDetailsFormData);
+    }
+    setPaymentDetails({
+      amount:
+        donationDetails.otherAmount && donationDetails.otherAmount > 0
+          ? donationDetails.otherAmount
+          : donationDetails.donationFixedAmount,
+    });
+  }, []);
 
-  useEffect(() => {}, [donationDetails]);
   return (
     <section className={styles.donation}>
       <Container>
@@ -89,6 +113,11 @@ export default function Donation() {
           step={step}
           successMessage={paymentSucceeded ? 'All Done! 🎉' : ''}
         />
+        {step > 1 && (
+          <Button onClick={handleStepBack} customClass={styles.btnStepBack}>
+            Back
+          </Button>
+        )}
         {!paymentSucceeded && (
           <div className={styles.flex}>
             <div className={styles.flexCol}>
@@ -139,7 +168,7 @@ export default function Donation() {
                     <h3>{project.name}</h3>
                     <p>
                       {project.amountOptions
-                        .filter((opt) => opt.amount == totalAmount.toString())
+                        .filter((opt) => Number(opt.amount) === Number(paymentDetails.amount))
                         .map((opt, index) => (
                           <span key={index}>
                             {opt.symbol} {opt.amount}
@@ -166,7 +195,7 @@ export default function Donation() {
                   <div className={styles.total}>
                     <h3>Total</h3>
                     <p>
-                      {project.amountOptions[0].symbol} {totalAmount}
+                      {project.amountOptions[0].symbol} {paymentDetails.amount}
                     </p>
                   </div>
                 </div>
