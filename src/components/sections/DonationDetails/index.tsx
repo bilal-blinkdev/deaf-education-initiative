@@ -173,10 +173,7 @@ export default function DonationDetails({
   };
 
   return (
-    <section
-      className={[styles.donationDetails, customClass && styles[customClass]].join(' ')}
-      onClick={() => handleClick(1)}
-    >
+    <section className={[styles.donationDetails, customClass && styles[customClass]].join(' ')}>
       <div className={styles.donationCard}>
         <section className={styles.donationCardHeader}>
           {pathname === '/' && (

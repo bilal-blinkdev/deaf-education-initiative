@@ -250,10 +250,7 @@ export default function UserDetails({
   };
 
   return (
-    <section
-      className={[styles.donation, customClass && styles[customClass]].join(' ')}
-      onClick={() => handleClick(2)}
-    >
+    <section className={[styles.donation, customClass && styles[customClass]].join(' ')}>
       <div className={styles.donationCard}>
         <section className={styles.donationCardHeader}>
           <h2 className={[styles.donationCardHeading, step !== 2 && styles.marginBottom].join(' ')}>
