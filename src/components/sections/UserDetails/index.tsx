@@ -8,13 +8,14 @@ type Project = {
   hint: string;
   amountOptions: { symbol: string; amount: string; period?: string | null }[];
 };
-type DonationFormProps = {
+type UserDetailsFormProps = {
   customClass?: string;
   project: Project;
   setProject: Function;
   projects: Project[];
   step: number;
   handleClick: (jumpToStep?: number) => void;
+  userDetails: any;
   setUserDetails: any;
 };
 type customRadioProps = {
@@ -33,8 +34,11 @@ export default function UserDetails({
   projects,
   step,
   handleClick,
+  userDetails,
   setUserDetails,
-}: DonationFormProps) {
+}: UserDetailsFormProps) {
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
   const countries = [
     'Afghanistan',
     'Albania',
@@ -237,16 +241,62 @@ export default function UserDetails({
   useEffect(() => {
     setProject(projects[0]);
   }, []);
+  useEffect(() => {
+    console.log(errors);
+  });
+
+  const validate = () => {
+    let newErrors: { [key: string]: string } = {};
+
+    if (!userDetails.firstName) {
+      newErrors.firstName = 'Please enter your first name.';
+    }
+    if (!userDetails.lastName) {
+      newErrors.lastName = 'Please enter your last name.';
+    }
+    if (!userDetails.email) {
+      newErrors.email = 'Please enter a valid email address.';
+    }
+    if (!userDetails.country) {
+      newErrors.country = 'Please select your country.';
+    }
+    if (!userDetails.city) {
+      newErrors.city = 'Please enter your city.';
+    }
+    if (!userDetails.address) {
+      newErrors.address = 'Please enter your full address.';
+    }
+    if (!userDetails.zipCode) {
+      newErrors.zipCode = 'Please enter your zip or postal code.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      // if (pathname === '/donate') setIsValid(false);
+      return false;
+    } else {
+      // no errors
+      // if (pathname === '/donate') setIsValid(true);
+      setErrors({});
+      // proceed to next step
+      // e.g. setStep(2) or navigate
+      return true;
+    }
+  };
 
   const handleChange = (e: any) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
+
+    setErrors((prev) => ({ ...prev, [name]: '' }));
+    setUserDetails((prev: any) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const isValid = validate();
+    console.log('isValid', isValid);
 
-    handleClick();
+    if (isValid) handleClick();
   };
 
   return (
@@ -272,10 +322,12 @@ export default function UserDetails({
                 <input
                   type="text"
                   name="firstName"
+                  value={userDetails.firstName}
                   className={styles.input}
                   placeholder="First name"
                   onChange={handleChange}
                 />
+                {errors.firstName && <p className={styles.inputError}>{errors.firstName}</p>}{' '}
               </div>
               <div className={styles.inputGroup}>
                 <p className={styles.inputGroupLabel}>
@@ -284,10 +336,12 @@ export default function UserDetails({
                 <input
                   type="text"
                   name="lastName"
+                  value={userDetails.lastName}
                   className={styles.input}
                   placeholder="Last name"
                   onChange={handleChange}
                 />
+                {errors.lastName && <p className={styles.inputError}>{errors.lastName}</p>}{' '}
               </div>
             </div>
             <div className={styles.inputGroup}>
@@ -297,10 +351,12 @@ export default function UserDetails({
               <input
                 type="email"
                 name="email"
+                value={userDetails.email}
                 className={styles.input}
                 placeholder="john@gmail.com"
                 onChange={handleChange}
               />
+              {errors.email && <p className={styles.inputError}>{errors.email}</p>}{' '}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>
@@ -309,6 +365,7 @@ export default function UserDetails({
               <input
                 type="tel"
                 name="phoneNumber"
+                value={userDetails.phoneNumber}
                 className={styles.input}
                 placeholder="+44 01539 702257"
                 onChange={handleChange}
@@ -318,8 +375,12 @@ export default function UserDetails({
               <p className={styles.inputGroupLabel}>
                 Country<span className={styles.required}>*</span>
               </p>
-
-              <select className={styles.input} onChange={handleChange}>
+              <select
+                className={styles.input}
+                name="country"
+                value={userDetails.country}
+                onChange={handleChange}
+              >
                 <option value="">Select a country</option>
                 {countries.map((country, index) => (
                   <option value={country} key={index}>
@@ -327,13 +388,18 @@ export default function UserDetails({
                   </option>
                 ))}
               </select>
+              {errors.country && <p className={styles.inputError}>{errors.country}</p>}{' '}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>
                 City<span className={styles.required}>*</span>
               </p>
-
-              <select className={styles.input} onChange={handleChange}>
+              <select
+                className={styles.input}
+                name="city"
+                value={userDetails.city}
+                onChange={handleChange}
+              >
                 <option value="">Select a city</option>
                 {countries.map((country, index) => (
                   <option value={country} key={index}>
@@ -341,6 +407,7 @@ export default function UserDetails({
                   </option>
                 ))}
               </select>
+              {errors.city && <p className={styles.inputError}>{errors.city}</p>}{' '}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>
@@ -349,10 +416,12 @@ export default function UserDetails({
               <input
                 type="text"
                 name="address"
+                value={userDetails.address}
                 className={styles.input}
                 placeholder="Enter your address here"
                 onChange={handleChange}
               />
+              {errors.address && <p className={styles.inputError}>{errors.address}</p>}{' '}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>
@@ -361,22 +430,25 @@ export default function UserDetails({
               <input
                 type="text"
                 name="zipCode"
+                value={userDetails.zipCode}
                 className={styles.input}
                 placeholder="N1C 4AB"
                 onChange={handleChange}
               />
+              {errors.zipCode && <p className={styles.inputError}>{errors.zipCode}</p>}{' '}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Leave comment</p>
               <textarea
                 name="comments"
+                value={userDetails.comments}
                 className={styles.input}
                 placeholder="Type here"
                 onChange={handleChange}
                 rows={6}
               ></textarea>
             </div>
-            <Button size="large" width="full" icons={{ leading: true }}>
+            <Button type="submit" size="large" width="full" icons={{ leading: true }}>
               Continue to Payment Details
             </Button>
           </form>

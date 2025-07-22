@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import axios from 'axios';
@@ -34,6 +34,7 @@ type customRadioProps = {
   inputValue: string;
   handleChange: any;
   checked: any;
+  disabled?: boolean;
 };
 
 export default function DonationDetails({
@@ -52,18 +53,16 @@ export default function DonationDetails({
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [selectedProject, setSelectedProject] = useState<Project>();
   const [shouldValidateAndSubmit, setShouldValidateAndSubmit] = useState(false);
+  const [disableAmountOptions, setDisableAmountOptions] = useState(false);
+  const amountOptionsRef = useRef(null);
+  const otherAmountRef = useRef(null);
 
   useEffect(() => {
-    console.log(donationDetails);
-
-    if (donationDetails?.donationFixedAmount > 1) {
-      console.log('yt');
+    if (donationDetails?.donationFixedAmount > 0) {
       const selectedProject = projects.find((p) => p.name === donationDetails.projectType);
-      console.log('selectedProject', selectedProject);
 
       setSelectedProject(selectedProject);
     } else if (projects && projects.length > 0) {
-      console.log('yt2');
       setSelectedProject(projects[0]);
 
       setDonationDetails((prev: any) => ({
@@ -72,24 +71,25 @@ export default function DonationDetails({
         donationFixedAmount: projects[0].amountOptions[0]?.amount || '',
       }));
     }
+    // if (otherAmountRef.current && Number(otherAmountRef?.current.value) > 0) {
+    //   setDisableAmountOptions(false);
+    // }
   }, []);
 
-  useEffect(() => {
-    if (shouldValidateAndSubmit) {
-      const isValid = validate();
-
-      if (isValid) {
-        if (pathname === '/donate') {
-          handleClick();
-        } else if (pathname === '/') {
-          // Handle form submission logic here
-          router.push('/donate');
-        }
-      }
-
-      setShouldValidateAndSubmit(false);
-    }
-  }, [donationDetails, shouldValidateAndSubmit]);
+  // useEffect(() => {
+  //   if (shouldValidateAndSubmit) {
+  //     const isValid = validate();
+  //     if (isValid) {
+  //       if (pathname === '/donate') {
+  //         handleClick();
+  //       } else if (pathname === '/') {
+  //         // Handle form submission logic here
+  //         router.push('/donate');
+  //       }
+  //     }
+  //     setShouldValidateAndSubmit(false);
+  //   }
+  // }, [donationDetails, shouldValidateAndSubmit]);
   const validate = () => {
     let newErrors: { [key: string]: string } = {};
 
@@ -99,12 +99,11 @@ export default function DonationDetails({
     if (!donationDetails.supportType) {
       newErrors.supportType = 'Please choose a support type.';
     }
-    if (
-      !donationDetails.donationFixedAmount &&
-      (!donationDetails.otherAmount || donationDetails.otherAmount <= 0)
-    ) {
+    if (donationDetails.donationFixedAmount <= 1 && donationDetails.otherAmount <= 1) {
       newErrors.donationFixedAmount = 'Please select or enter a valid donation amount.';
+      newErrors.otherAmount = 'Please select or enter a valid donation amount.';
     }
+
     if (!donationDetails.donationType) {
       newErrors.donationType = 'Please choose donation type.';
     }
@@ -125,13 +124,19 @@ export default function DonationDetails({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
-    setErrors((prev) => ({ ...prev, [name]: '' }));
 
     if (name === 'projectType') {
       const selectedProject = projects.find((p) => p.name === value);
       setSelectedProject(selectedProject);
-      setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
-    } else setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
+    }
+    if (name === 'otherAmount' && Number(value) > 0) {
+      setDisableAmountOptions(true);
+    } else {
+      setDisableAmountOptions(false);
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: '' }));
+    setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
   };
   const handleSelectChange = (e: any) => {
     let { name, value } = e.target;
@@ -148,14 +153,15 @@ export default function DonationDetails({
     e.preventDefault();
 
     const isValid = validate();
+    console.log(isValid);
 
     if (isValid) {
       if (pathname === '/donate') {
-        setShouldValidateAndSubmit(true);
+        // setIsValid(true);
+        handleClick();
       } else if (pathname === '/') {
         const form = e.currentTarget;
         const formData = new FormData(form);
-        console.log('formData', formData);
 
         try {
           await axios.post('/donation-form', formData, {
@@ -242,7 +248,7 @@ export default function DonationDetails({
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Choose an amount to give once</p>
-              <div className={styles.donationFixedAmounts}>
+              <div className={styles.donationFixedAmounts} ref={amountOptionsRef}>
                 {selectedProject &&
                   selectedProject?.amountOptions.map((amount, index) => (
                     <CustomRadio
@@ -252,6 +258,7 @@ export default function DonationDetails({
                       inputValue={amount.amount}
                       handleChange={handleInputChange}
                       checked={donationDetails.donationFixedAmount}
+                      disabled={disableAmountOptions}
                       key={index}
                     >
                       {amount.symbol} {amount.amount}
@@ -278,6 +285,7 @@ export default function DonationDetails({
                 className={styles.input}
                 placeholder="£ 500"
                 onChange={handleInputChange}
+                // ref={otherAmountRef}
               />
               {errors.otherAmount && <p className={styles.inputError}>{errors.otherAmount}</p>}{' '}
             </div>
@@ -315,6 +323,7 @@ function CustomRadio({
   inputValue,
   handleChange,
   checked,
+  disabled,
 }: customRadioProps) {
   return (
     <div className={styles.customRadio}>
@@ -325,6 +334,7 @@ function CustomRadio({
         value={inputValue}
         onChange={handleChange}
         checked={checked === inputValue}
+        disabled={disabled}
       />
       <label htmlFor={inputId} className={styles.donationCustomLabel}>
         {children}

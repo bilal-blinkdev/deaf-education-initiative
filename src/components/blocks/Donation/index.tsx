@@ -5,9 +5,9 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import Container from '@/components/layout/Container';
 import StepBar from '@/components/elements/StepBar';
-import DonationDetails from '@/components/sections/DonationDetails';
-import UserDetails from '@/components/sections/UserDetails';
-import PaymentDetails from '@/components/sections/PaymentDetails';
+import DonationDetailsBox from '@/components/sections/DonationDetails';
+import UserDetailsBox from '@/components/sections/UserDetails';
+import PaymentDetailsBox from '@/components/sections/PaymentDetails';
 import Button from '@/components/elements/Button';
 import HandDrawnTwinkle from '@/graphics/HandDrawnTwinkle';
 import HandDrawnSmily from '@/graphics/HandDrawnSmily';
@@ -27,22 +27,29 @@ export default function Donation({ donationDetailsFormData }: any) {
     donationDetailsFormData?.donationFixedAmount > 0
       ? donationDetailsFormData
       : {
-          projectType: '',
+          projectType: PROJECTS[0].name,
           supportType: 'Give Once',
           otherAmount: 0,
           donationType: 'Zakat',
           donationFixedAmount: '1',
         },
   );
-  const [userDetails, setUserDetails] = useState({});
-  // const totalAmount =
-  //   donationDetails.otherAmount > 0
-  //     ? donationDetails.otherAmount
-  //     : donationDetails.donationFixedAmount;
+  const [userDetails, setUserDetails] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    country: '',
+    city: '',
+    address: '',
+    zipCode: '',
+    comments: '',
+  });
   const [paymentDetails, setPaymentDetails] = useState({
-    amount: donationDetails.otherAmount
-      ? donationDetails.otherAmount > 0
-      : donationDetails.donationFixedAmount,
+    amount:
+      Number(donationDetails.otherAmount) > 0
+        ? Number(donationDetails.otherAmount)
+        : Number(donationDetails.donationFixedAmount),
   });
   const [donationDetailsValid, setDonationDetailsValid] = useState(false);
   const [paymentSucceeded, setPaymentSucceeded] = useState<boolean>(false);
@@ -70,21 +77,16 @@ export default function Donation({ donationDetailsFormData }: any) {
       borderRadius: '6px',
     },
   };
-  console.log('paymentDetails', paymentDetails);
 
   const handleStepChange = (jumpToStep: number = 0) => {
-    console.log('jumpToStep', jumpToStep);
+    setStep((prev) => {
+      let step = prev;
 
-    if (donationDetailsValid) {
-      setStep((prev) => {
-        let step = prev;
+      if (step >= NUMBER_OF_STEPS) step = NUMBER_OF_STEPS;
+      else step = prev + 1;
 
-        if (step >= NUMBER_OF_STEPS) step = NUMBER_OF_STEPS;
-        else step = prev + 1;
-
-        return step;
-      });
-    }
+      return step;
+    });
   };
   const handleStepBack = () => {
     setStep(() => {
@@ -93,17 +95,19 @@ export default function Donation({ donationDetailsFormData }: any) {
     });
   };
   useEffect(() => {
-    console.log('Donation', donationDetailsFormData);
     if (donationDetailsFormData?.donationFixedAmount > 0) {
       setDonationDetails(donationDetailsFormData);
     }
+  }, []);
+
+  useEffect(() => {
     setPaymentDetails({
       amount:
-        donationDetails.otherAmount && donationDetails.otherAmount > 0
-          ? donationDetails.otherAmount
-          : donationDetails.donationFixedAmount,
+        Number(donationDetails.otherAmount) > 0
+          ? Number(donationDetails.otherAmount)
+          : Number(donationDetails.donationFixedAmount),
     });
-  }, []);
+  }, [donationDetails]);
 
   return (
     <section className={styles.donation}>
@@ -121,7 +125,7 @@ export default function Donation({ donationDetailsFormData }: any) {
         {!paymentSucceeded && (
           <div className={styles.flex}>
             <div className={styles.flexCol}>
-              <DonationDetails
+              <DonationDetailsBox
                 project={project}
                 setProject={setProject}
                 projects={PROJECTS}
@@ -131,12 +135,13 @@ export default function Donation({ donationDetailsFormData }: any) {
                 setDonationDetails={setDonationDetails}
                 setIsValid={setDonationDetailsValid}
               />
-              <UserDetails
+              <UserDetailsBox
                 project={project}
                 setProject={setProject}
                 projects={PROJECTS}
                 handleClick={handleStepChange}
                 step={step}
+                userDetails={userDetails}
                 setUserDetails={setUserDetails}
               />
               <Elements
@@ -144,11 +149,11 @@ export default function Donation({ donationDetailsFormData }: any) {
                 options={{
                   mode: 'payment',
                   amount: Number(paymentDetails.amount) * 100,
-                  currency: 'usd',
+                  currency: 'gbp',
                   appearance: appearance,
                 }}
               >
-                <PaymentDetails
+                <PaymentDetailsBox
                   project={project}
                   setProject={setProject}
                   projects={PROJECTS}
