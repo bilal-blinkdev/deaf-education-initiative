@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     donationType: formData.get('donationType'),
   };
 
-  const response = NextResponse.redirect(new URL('/donate', req.url));
+  const response = NextResponse.json({ success: true });
 
   response.cookies.set('donationData', JSON.stringify(data), {
     httpOnly: true,
