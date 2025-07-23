@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
@@ -52,6 +52,8 @@ export default function DonationDetails({
   const [selectedProject, setSelectedProject] = useState<Project | undefined>(projects[0]);
   const [disableAmountOptions, setDisableAmountOptions] = useState(false);
   const otherAmountRef = useRef<HTMLInputElement>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (donationDetails?.donationFixedAmount > 0 || donationDetails?.otherAmount > 0) {
@@ -145,7 +147,11 @@ export default function DonationDetails({
             },
           });
 
-          window.location.href = '/donate';
+          router.refresh();
+          router.push('/donate');
+          const t = setInterval(() => {
+            router.push('/donate');
+          }, 1000);
         } catch (error) {
           console.error('Donation form submission failed:', error);
         }
