@@ -51,6 +51,7 @@ export default function DonationDetails({
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [selectedProject, setSelectedProject] = useState<Project | undefined>(projects[0]);
   const [disableAmountOptions, setDisableAmountOptions] = useState(false);
+  const [redirect, setRedirect] = useState(false);
   const otherAmountRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
@@ -75,6 +76,12 @@ export default function DonationDetails({
       setDisableAmountOptions(false);
     }
   }, []);
+  useEffect(() => {
+    if (redirect) {
+      router.refresh();
+      router.push('/donate');
+    }
+  }, [redirect]);
 
   const validate = () => {
     let newErrors: { [key: string]: string } = {};
@@ -147,11 +154,7 @@ export default function DonationDetails({
             },
           });
 
-          router.refresh();
-          router.push('/donate');
-          const t = setInterval(() => {
-            router.push('/donate');
-          }, 1000);
+          setRedirect(true);
         } catch (error) {
           console.error('Donation form submission failed:', error);
         }
