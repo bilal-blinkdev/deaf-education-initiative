@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
-  console.log(formData);
 
   const data = {
     projectType: formData.get('projectType'),
@@ -12,8 +11,9 @@ export async function POST(req: NextRequest) {
     donationType: formData.get('donationType'),
   };
 
-  const response = NextResponse.redirect(new URL('/donate', req.url));
-
+  // const response = NextResponse.redirect(new URL('/donate', req.url));
+  const response = NextResponse.json({ success: true });
+  
   response.cookies.set('donationData', JSON.stringify(data), {
     httpOnly: true,
     secure: true,
