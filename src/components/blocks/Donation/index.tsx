@@ -23,8 +23,9 @@ const NUMBER_OF_STEPS = 3;
 
 export default function Donation({ donationDetailsFormData }: any) {
   const [step, setStep] = useState(1);
+
   const [donationDetails, setDonationDetails] = useState(
-    donationDetailsFormData?.donationFixedAmount > 0
+    donationDetailsFormData?.donationFixedAmount > 0 || donationDetailsFormData?.otherAmount > 0
       ? donationDetailsFormData
       : {
           projectType: PROJECTS[0].name,
@@ -49,7 +50,9 @@ export default function Donation({ donationDetailsFormData }: any) {
     amount:
       Number(donationDetails.otherAmount) > 0
         ? Number(donationDetails.otherAmount)
-        : Number(donationDetails.donationFixedAmount),
+        : Number(donationDetails.donationFixedAmount) > 0
+          ? Number(donationDetails.donationFixedAmount)
+          : 1,
   });
   const [donationDetailsValid, setDonationDetailsValid] = useState(false);
   const [paymentSucceeded, setPaymentSucceeded] = useState<boolean>(false);
@@ -95,7 +98,10 @@ export default function Donation({ donationDetailsFormData }: any) {
     });
   };
   useEffect(() => {
-    if (donationDetailsFormData?.donationFixedAmount > 0) {
+    if (
+      donationDetailsFormData?.donationFixedAmount > 0 ||
+      donationDetailsFormData?.otherAmount > 0
+    ) {
       setDonationDetails(donationDetailsFormData);
     }
   }, []);
@@ -105,7 +111,9 @@ export default function Donation({ donationDetailsFormData }: any) {
       amount:
         Number(donationDetails.otherAmount) > 0
           ? Number(donationDetails.otherAmount)
-          : Number(donationDetails.donationFixedAmount),
+          : Number(donationDetails.donationFixedAmount) > 0
+            ? Number(donationDetails.donationFixedAmount)
+            : 1,
     });
   }, [donationDetails]);
 

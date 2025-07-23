@@ -1,25 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import Banner from '@/assets/girl-standing.webp';
 import DonationDetails from '@/components/sections/DonationDetails';
 import Container from '@/components/layout/Container';
 import { PROJECTS } from '@/app/constants';
-import { useRouter } from 'next/navigation';
 import styles from './styles.module.scss';
 
 export default function MainBanner() {
-  const router = useRouter();
-
   const [project, setProject] = useState(PROJECTS[0]);
   const [donationDetails, setDonationDetails] = useState({
-    projectType: '',
+    projectType: PROJECTS[0].name,
     supportType: 'Give Once',
     otherAmount: 0,
     donationType: 'Zakat',
     donationFixedAmount: '1',
   });
+
   return (
     <section
       className={styles.banner}
@@ -38,7 +35,6 @@ export default function MainBanner() {
             projects={PROJECTS}
             handleClick={() => {
               console.log('test');
-              //router.push('/donate')
             }}
             donationDetails={donationDetails}
             setDonationDetails={setDonationDetails}
