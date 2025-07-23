@@ -126,6 +126,12 @@ select.input {
       color: $label-selected-fg;
       background-color: $label-selected-bg;
     }
+    &:disabled + label {
+      border: 1px solid $mercury;
+      color: darken($mercury, 25) !important;
+      background-color: $mercury;
+      pointer-events: none;
+    }
   }
 }
 .donationCustomLabel {
