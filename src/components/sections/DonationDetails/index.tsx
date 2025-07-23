@@ -56,24 +56,27 @@ export default function DonationDetails({
 
   useEffect(() => {
     if (donationDetails?.donationFixedAmount > 0 || donationDetails?.otherAmount > 0) {
-      const selectedProject = projects.find((p) => p.name === donationDetails.projectType);
+      const proj = projects.find((p) => p.name === donationDetails.projectType);
 
-      setSelectedProject(selectedProject);
-      setProject(selectedProject);
+      setSelectedProject(proj);
+      setProject(proj);
     } else if (projects && projects.length > 0) {
       setSelectedProject(projects[0]);
+      setProject(projects[0]);
       setDonationDetails((prev: any) => ({
         ...prev,
         projectType: projects[0].name,
         donationFixedAmount: projects[0].amountOptions[0]?.amount || '',
       }));
     }
+  }, []);
+  useEffect(() => {
     if (otherAmountRef.current && Number(otherAmountRef.current.value) > 0) {
       setDisableAmountOptions(true);
     } else {
       setDisableAmountOptions(false);
     }
-  }, []);
+  }, [selectedProject]);
   useEffect(() => {
     if (redirect) {
       console.log('redirecting');
@@ -120,8 +123,9 @@ export default function DonationDetails({
     let { name, value } = e.target;
 
     if (name === 'projectType') {
-      const selectedProject = projects.find((p) => p.name === value);
-      setSelectedProject(selectedProject);
+      const proj = projects.find((p) => p.name === value);
+      setSelectedProject(proj);
+      setProject(proj);
     }
     if (name === 'otherAmount' && Number(value) > 0) {
       setDisableAmountOptions(true);

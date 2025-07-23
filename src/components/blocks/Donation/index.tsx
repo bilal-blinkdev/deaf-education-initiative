@@ -181,7 +181,9 @@ export default function Donation({ donationDetailsFormData }: any) {
                     <h3>{project.name}</h3>
                     <p>
                       {project.amountOptions
-                        .filter((opt) => Number(opt.amount) === Number(paymentDetails.amount))
+                        .filter((opt) => {
+                          return Number(opt.amount) === Number(paymentDetails.amount);
+                        })
                         .map((opt, index) => (
                           <span key={index}>
                             {opt.symbol} {opt.amount}
