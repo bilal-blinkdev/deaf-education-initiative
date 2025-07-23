@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import axios from 'axios';
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
@@ -54,8 +54,6 @@ export default function DonationDetails({
   const [redirect, setRedirect] = useState(false);
   const otherAmountRef = useRef<HTMLInputElement>(null);
 
-  const router = useRouter();
-
   useEffect(() => {
     if (donationDetails?.donationFixedAmount > 0 || donationDetails?.otherAmount > 0) {
       const selectedProject = projects.find((p) => p.name === donationDetails.projectType);
@@ -78,8 +76,9 @@ export default function DonationDetails({
   }, []);
   useEffect(() => {
     if (redirect) {
-      router.refresh();
-      router.push('/donate');
+      console.log('redirecting');
+      window.location.href = '/donate';
+      console.log('redirected');
     }
   }, [redirect]);
 
