@@ -256,7 +256,7 @@ export default function DonationDetails({
               <input
                 type="number"
                 name="otherAmount"
-                value={donationDetails.otherAmount ? donationDetails.otherAmount : 1}
+                value={donationDetails.otherAmount ? donationDetails.otherAmount : 0}
                 className={styles.input}
                 placeholder="£ 500"
                 onChange={handleInputChange}
