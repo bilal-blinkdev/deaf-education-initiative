@@ -28,6 +28,34 @@ type customRadioProps = {
   inputValue: string;
   handleChange: any;
 };
+type Country = {
+  id: number;
+  name: string;
+  iso3: string;
+  iso2: string;
+  numeric_code: string;
+  phone_code: number;
+  capital: string;
+  currency: string;
+  currency_name: string;
+  currency_symol: string;
+  native: string;
+  region: string;
+  subregion: string;
+  emoji: string;
+  tld: string;
+  latitude: string;
+  longitude: string;
+  hasStates: boolean;
+};
+type State = {
+  id: number;
+  name: string;
+  state_code: string;
+  latitude: string;
+  longitude: string;
+  hasCities: boolean;
+};
 
 export default function UserDetails({
   customClass,
@@ -39,8 +67,8 @@ export default function UserDetails({
   userDetails,
   setUserDetails,
 }: UserDetailsFormProps) {
-  const [country, setCountry] = useState(null);
-  const [currentState, setCurrentState] = useState(null);
+  const [country, setCountry] = useState<Country | null>(null);
+  const [currentState, setCurrentState] = useState<State | null>(null);
   const [currentCity, setCurrentCity] = useState(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -217,7 +245,7 @@ export default function UserDetails({
                 State<span className={styles.required}>*</span>
               </p>
               <StateSelect
-                countryid={country?.id}
+                countryid={country?.id ?? 0}
                 containerClassName={styles.cccInputGroup}
                 inputClassName={styles.cccInput}
                 onChange={handleChange2}
@@ -234,8 +262,8 @@ export default function UserDetails({
                 City<span className={styles.required}>*</span>
               </p>
               <CitySelect
-                countryid={country?.id}
-                stateid={currentState?.id}
+                countryid={country?.id ?? 0}
+                stateid={currentState?.id ?? 0}
                 containerClassName={styles.cccInputGroup}
                 inputClassName={styles.cccInput}
                 onChange={handleChange2}
