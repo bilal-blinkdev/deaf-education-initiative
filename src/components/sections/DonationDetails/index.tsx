@@ -95,7 +95,7 @@ export default function DonationDetails({
     if (!donationDetails.supportType) {
       newErrors.supportType = 'Please choose a support type.';
     }
-    if (donationDetails.donationFixedAmount <= 1 && donationDetails.otherAmount <= 1) {
+    if (donationDetails.donationFixedAmount <= 1 && donationDetails.otherAmount < 1) {
       newErrors.donationFixedAmount = 'Please select or enter a valid donation amount.';
       newErrors.otherAmount = 'Please select or enter a valid donation amount.';
     }
