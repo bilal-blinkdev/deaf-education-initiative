@@ -120,16 +120,18 @@ export default function Donation({ donationDetailsFormData }: any) {
   return (
     <section className={styles.donation}>
       <Container>
-        <StepBar
-          numOfSteps={NUMBER_OF_STEPS}
-          step={step}
-          successMessage={paymentSucceeded ? 'All Done! 🎉' : ''}
-        />
-        {step > 1 && !paymentSucceeded && (
-          <Button onClick={handleStepBack} customClass={styles.btnStepBack}>
-            Back
-          </Button>
-        )}
+        <div className={styles.stepbarWrapper}>
+          <StepBar
+            numOfSteps={NUMBER_OF_STEPS}
+            step={step}
+            successMessage={paymentSucceeded ? 'All Done! 🎉' : ''}
+          />
+          {step > 1 && !paymentSucceeded && (
+            <Button onClick={handleStepBack} customClass={styles.btnStepBack}>
+              Back
+            </Button>
+          )}
+        </div>
         {!paymentSucceeded && (
           <div className={styles.flex}>
             <div className={styles.flexCol}>
@@ -175,7 +177,7 @@ export default function Donation({ donationDetailsFormData }: any) {
             </div>
             <div className={styles.flexCol}>
               <div className={styles.donationCart}>
-                <h2 className={styles.donationCardHeading}>Your Donation </h2>
+                <h2 className={styles.donationCartHeading}>Your Donation </h2>
                 <div className={styles.flex}>
                   <div className={styles.projectName}>
                     <h3>{project.name}</h3>

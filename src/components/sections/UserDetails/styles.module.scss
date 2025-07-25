@@ -18,7 +18,9 @@ $input-focus-outline: rgba($cerulean-blue, 30%);
   // bottom: 0;
   // left: 0;
   width: 100%;
-  max-width: 560px;
+  @media (min-width: 900px) {
+    max-width: 560px;
+  }
 }
 .donationCard {
   position: relative;
@@ -26,10 +28,13 @@ $input-focus-outline: rgba($cerulean-blue, 30%);
   flex-direction: column;
   // align-items: center;
   margin-bottom: 2rem;
-  padding: 4rem;
+  padding: 3rem;
   border-radius: 14px;
   background-color: $white;
   box-shadow: 0 4px 25px 0 rgba($ebony, 25%);
+  @media (min-width: 768px) {
+    padding: 4rem;
+  }
 }
 .stepCompletionIcon {
   position: relative;
@@ -53,15 +58,21 @@ $input-focus-outline: rgba($cerulean-blue, 30%);
   }
 }
 .donationCardHeading {
+  font-size: 2.8rem;
   display: flex;
   align-items: center;
   gap: 2rem;
-  font-size: 4.2rem;
   // max-width: 400px;
   width: 100%;
   // text-align: left;
   &.marginBottom {
     margin-bottom: 0;
+  }
+  @media (min-width: 600px) {
+    font-size: 3.2rem;
+  }
+  @media (min-width: 900px) {
+    font-size: 4.2rem;
   }
 }
 .donatingHandIcon {
@@ -79,10 +90,13 @@ $input-focus-outline: rgba($cerulean-blue, 30%);
   color: $red;
 }
 .inputGroupLabel {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 500;
   margin-bottom: 1rem;
   color: rgba($ebony, 56%);
+  @media (min-width: 768px) {
+    font-size: 1.6rem;
+  }
 }
 .inputHint {
   font-size: 1.2rem;
@@ -128,7 +142,7 @@ select.input {
 .donationCustomLabel {
   font-family: inherit;
   font-weight: bold;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   display: block;
   padding: 1.4rem 2.2rem;
   border: none;
@@ -152,42 +166,14 @@ select.input {
   &:active {
     box-shadow: 0 0 0 4px rgba($label-hover-bg, 30%);
   }
-}
-.donationFixedAmounts {
-  display: flex;
-  & .customRadio {
-    & input:not(checked) + label {
-      border: 1px solid rgba($ebony, 12%);
-      color: rgba($ebony, 30%);
-    }
-    & input:checked + label {
-      color: $label-selected-fg;
-    }
-    &:nth-child(1):not(:last-child) {
-      & .donationCustomLabel {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-    }
-    &:nth-child(2):not(:last-child),
-    &:nth-child(3):not(:last-child) {
-      & .donationCustomLabel {
-        border-radius: 0;
-        border-radius: 0;
-      }
-    }
-    &:last-child {
-      & .donationCustomLabel {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-    }
+  @media (min-width: 768px) {
+    font-size: 1.8rem;
   }
 }
 .input {
   font-family: inherit;
   font-weight: bold;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   display: block;
   padding: 1.4rem 2.2rem;
   width: 100%;
@@ -210,6 +196,9 @@ select.input {
   &::placeholder {
     color: $input-placeholder-fg;
   }
+  @media (min-width: 768px) {
+    font-size: 1.8rem;
+  }
 }
 
 .cccInputGroup {
@@ -225,7 +214,7 @@ select.input {
   & .cccInput {
     font-family: inherit;
     font-weight: bold;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     display: block;
     padding: 1.4rem 2.2rem !important;
     width: 100%;
@@ -246,5 +235,8 @@ select.input {
     &::placeholder {
       color: $input-placeholder-fg;
     }
+  }
+  @media (min-width: 768px) {
+    font-size: 1.8rem;
   }
 }

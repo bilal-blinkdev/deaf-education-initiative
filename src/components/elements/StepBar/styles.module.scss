@@ -2,7 +2,8 @@
 
 .stepbar {
   text-align: center;
-  margin-bottom: 6rem;
+  margin-bottom: 2rem;
+  z-index: 1;
 }
 .stepbar__counter {
   font-size: 2rem;
@@ -12,19 +13,23 @@
 .stepbar__bar {
   display: flex;
   margin: 0 auto;
-  // width: 840px;
+  width: 100%;
+  max-width: 840px;
   height: 20px;
   border-radius: 8px;
   background-color: $athens-gray;
 }
 .stepbar__thumb {
   height: 20px;
-  width: 280px;
+  width: 33.3%;
   border-radius: 8px;
   transition: width 0.3s;
   background-color: $yellow;
+  // @media (min-width: 900px) {
+  //   width: 280px;
+  // }
   &.complete {
-    padding-left: 280px;
+    padding-left: 33.3%;
     background-color: transparent;
   }
 }

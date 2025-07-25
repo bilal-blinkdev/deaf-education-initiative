@@ -389,6 +389,7 @@ export default function PaymentDetails({
               width="full"
               icons={{ leading: true }}
               disabled={!stripe || loading}
+              customClass={styles.btnPayment}
             >
               {!loading ? 'Complete Donation' : 'Processing...'}
             </Button>
