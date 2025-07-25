@@ -71,6 +71,7 @@ export default function DonationDetails({
     }
   }, []);
   useEffect(() => {
+    console.log('Project changed');
     if (otherAmountRef.current && Number(otherAmountRef.current.value) > 0) {
       setDisableAmountOptions(true);
     } else {
@@ -126,15 +127,18 @@ export default function DonationDetails({
       const proj = projects.find((p) => p.name === value);
       setSelectedProject(proj);
       setProject(proj);
-    }
-    if (name === 'otherAmount' && Number(value) > 0) {
+    } else if (name === 'otherAmount' && Number(value) >= 1) {
+      setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
       setDisableAmountOptions(true);
+    } else if (name === 'otherAmount' && Number(value) < 1) {
+      setDonationDetails((prev: any) => ({ ...prev, [name]: '' }));
+      setDisableAmountOptions(false);
     } else {
+      setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
       setDisableAmountOptions(false);
     }
 
     setErrors((prev) => ({ ...prev, [name]: '' }));
-    setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -268,7 +272,7 @@ export default function DonationDetails({
               <input
                 type="number"
                 name="otherAmount"
-                value={donationDetails.otherAmount ? donationDetails.otherAmount : 0}
+                value={donationDetails.otherAmount ? donationDetails.otherAmount : ''}
                 className={styles.input}
                 placeholder="£ 500"
                 onChange={handleInputChange}

@@ -1,4 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react';
+import { CountrySelect, StateSelect, CitySelect } from 'react-country-state-city';
+import 'react-country-state-city/dist/react-country-state-city.css';
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
 import styles from './styles.module.scss';
@@ -37,213 +39,14 @@ export default function UserDetails({
   userDetails,
   setUserDetails,
 }: UserDetailsFormProps) {
+  const [country, setCountry] = useState(null);
+  const [currentState, setCurrentState] = useState(null);
+  const [currentCity, setCurrentCity] = useState(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  const countries = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua and Barbuda',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-    'Bhutan',
-    'Bolivia',
-    'Bosnia and Herzegovina',
-    'Botswana',
-    'Brazil',
-    'Brunei',
-    'Bulgaria',
-    'Burkina Faso',
-    'Burundi',
-    'Cabo Verde',
-    'Cambodia',
-    'Cameroon',
-    'Canada',
-    'Central African Republic',
-    'Chad',
-    'Chile',
-    'China',
-    'Colombia',
-    'Comoros',
-    'Congo (Congo-Brazzaville)',
-    'Costa Rica',
-    'Croatia',
-    'Cuba',
-    'Cyprus',
-    'Czech Republic (Czechia)',
-    'Democratic Republic of the Congo',
-    'Denmark',
-    'Djibouti',
-    'Dominica',
-    'Dominican Republic',
-    'Ecuador',
-    'Egypt',
-    'El Salvador',
-    'Equatorial Guinea',
-    'Eritrea',
-    'Estonia',
-    'Eswatini (fmr. Swaziland)',
-    'Ethiopia',
-    'Fiji',
-    'Finland',
-    'France',
-    'Gabon',
-    'Gambia',
-    'Georgia',
-    'Germany',
-    'Ghana',
-    'Greece',
-    'Grenada',
-    'Guatemala',
-    'Guinea',
-    'Guinea-Bissau',
-    'Guyana',
-    'Haiti',
-    'Honduras',
-    'Hungary',
-    'Iceland',
-    'India',
-    'Indonesia',
-    'Iran',
-    'Iraq',
-    'Ireland',
-    'Israel',
-    'Italy',
-    'Ivory Coast',
-    'Jamaica',
-    'Japan',
-    'Jordan',
-    'Kazakhstan',
-    'Kenya',
-    'Kiribati',
-    'Kuwait',
-    'Kyrgyzstan',
-    'Laos',
-    'Latvia',
-    'Lebanon',
-    'Lesotho',
-    'Liberia',
-    'Libya',
-    'Liechtenstein',
-    'Lithuania',
-    'Luxembourg',
-    'Madagascar',
-    'Malawi',
-    'Malaysia',
-    'Maldives',
-    'Mali',
-    'Malta',
-    'Marshall Islands',
-    'Mauritania',
-    'Mauritius',
-    'Mexico',
-    'Micronesia',
-    'Moldova',
-    'Monaco',
-    'Mongolia',
-    'Montenegro',
-    'Morocco',
-    'Mozambique',
-    'Myanmar (formerly Burma)',
-    'Namibia',
-    'Nauru',
-    'Nepal',
-    'Netherlands',
-    'New Zealand',
-    'Nicaragua',
-    'Niger',
-    'Nigeria',
-    'North Korea',
-    'North Macedonia',
-    'Norway',
-    'Oman',
-    'Pakistan',
-    'Palau',
-    'Palestine State',
-    'Panama',
-    'Papua New Guinea',
-    'Paraguay',
-    'Peru',
-    'Philippines',
-    'Poland',
-    'Portugal',
-    'Qatar',
-    'Romania',
-    'Russia',
-    'Rwanda',
-    'Saint Kitts and Nevis',
-    'Saint Lucia',
-    'Saint Vincent and the Grenadines',
-    'Samoa',
-    'San Marino',
-    'Sao Tome and Principe',
-    'Saudi Arabia',
-    'Senegal',
-    'Serbia',
-    'Seychelles',
-    'Sierra Leone',
-    'Singapore',
-    'Slovakia',
-    'Slovenia',
-    'Solomon Islands',
-    'Somalia',
-    'South Africa',
-    'South Korea',
-    'South Sudan',
-    'Spain',
-    'Sri Lanka',
-    'Sudan',
-    'Suriname',
-    'Sweden',
-    'Switzerland',
-    'Syria',
-    'Taiwan',
-    'Tajikistan',
-    'Tanzania',
-    'Thailand',
-    'Timor-Leste',
-    'Togo',
-    'Tonga',
-    'Trinidad and Tobago',
-    'Tunisia',
-    'Turkey',
-    'Turkmenistan',
-    'Tuvalu',
-    'Uganda',
-    'Ukraine',
-    'United Arab Emirates',
-    'United Kingdom',
-    'United States of America',
-    'Uruguay',
-    'Uzbekistan',
-    'Vanuatu',
-    'Vatican City',
-    'Venezuela',
-    'Vietnam',
-    'Yemen',
-    'Zambia',
-    'Zimbabwe',
-  ];
 
   useEffect(() => {
     setProject(projects[0]);
   }, []);
-  useEffect(() => {
-    console.log(errors);
-  });
 
   const validate = () => {
     let newErrors: { [key: string]: string } = {};
@@ -257,10 +60,13 @@ export default function UserDetails({
     if (!userDetails.email) {
       newErrors.email = 'Please enter a valid email address.';
     }
-    if (!userDetails.country) {
+    if (!userDetails.country || !country) {
       newErrors.country = 'Please select your country.';
     }
-    if (!userDetails.city) {
+    if (!userDetails.state || !currentState) {
+      newErrors.state = 'Please enter your state.';
+    }
+    if (!userDetails.city || !currentCity) {
       newErrors.city = 'Please enter your city.';
     }
     if (!userDetails.address) {
@@ -290,11 +96,28 @@ export default function UserDetails({
     setErrors((prev) => ({ ...prev, [name]: '' }));
     setUserDetails((prev: any) => ({ ...prev, [name]: value }));
   };
+  const handleChange2 = (obj: any) => {
+    let name = '';
+    const { name: value } = obj;
+
+    if (obj?.hasStates) {
+      name = 'country';
+      setCountry(obj);
+    } else if (obj?.hasCities) {
+      name = 'state';
+      setCurrentState(obj);
+    } else {
+      name = 'city';
+      setCurrentCity(obj);
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: '' }));
+    setUserDetails((prev: any) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const isValid = validate();
-    console.log('isValid', isValid);
 
     if (isValid) handleClick();
   };
@@ -375,38 +198,52 @@ export default function UserDetails({
               <p className={styles.inputGroupLabel}>
                 Country<span className={styles.required}>*</span>
               </p>
-              <select
-                className={styles.input}
-                name="country"
-                value={userDetails.country}
-                onChange={handleChange}
-              >
-                <option value="">Select a country</option>
-                {countries.map((country, index) => (
-                  <option value={country} key={index}>
-                    {country}
-                  </option>
-                ))}
-              </select>
+              <CountrySelect
+                containerClassName={styles.cccInputGroup}
+                inputClassName={styles.cccInput}
+                onChange={handleChange2}
+                onTextChange={(txt) => {
+                  console.log(country);
+                  setCountry(null);
+                  setCurrentState(null);
+                  setCurrentCity(null);
+                }}
+                placeHolder="Select Country"
+              />
               {errors.country && <p className={styles.inputError}>{errors.country}</p>}{' '}
+            </div>
+            <div className={styles.inputGroup}>
+              <p className={styles.inputGroupLabel}>
+                State<span className={styles.required}>*</span>
+              </p>
+              <StateSelect
+                countryid={country?.id}
+                containerClassName={styles.cccInputGroup}
+                inputClassName={styles.cccInput}
+                onChange={handleChange2}
+                onTextChange={(txt) => {
+                  setCurrentState(null);
+                  setCurrentCity(null);
+                }}
+                placeHolder="Select State"
+              />
+              {errors.state && <p className={styles.inputError}>{errors.state}</p>}{' '}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>
                 City<span className={styles.required}>*</span>
               </p>
-              <select
-                className={styles.input}
-                name="city"
-                value={userDetails.city}
-                onChange={handleChange}
-              >
-                <option value="">Select a city</option>
-                {countries.map((country, index) => (
-                  <option value={country} key={index}>
-                    {country}
-                  </option>
-                ))}
-              </select>
+              <CitySelect
+                countryid={country?.id}
+                stateid={currentState?.id}
+                containerClassName={styles.cccInputGroup}
+                inputClassName={styles.cccInput}
+                onChange={handleChange2}
+                onTextChange={(txt) => {
+                  setCurrentCity(null);
+                }}
+                placeHolder="Select City"
+              />
               {errors.city && <p className={styles.inputError}>{errors.city}</p>}{' '}
             </div>
             <div className={styles.inputGroup}>

@@ -203,10 +203,48 @@ select.input {
     box-shadow 0.3s;
   color: $input-fg;
   background-color: $input-bg;
+
   &:focus {
     box-shadow: 0 0 0 4px $input-focus-outline;
   }
   &::placeholder {
     color: $input-placeholder-fg;
+  }
+}
+
+.cccInputGroup {
+  padding: 0;
+  & div[class*='stsearch-box'] {
+    padding: 0;
+    border: none;
+  }
+  & div[class*='stdropdown-tool'] {
+    position: relative;
+    right: 8px;
+  }
+  & .cccInput {
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 1.8rem;
+    display: block;
+    padding: 1.4rem 2.2rem !important;
+    width: 100%;
+    line-height: 2.4rem;
+    outline: none;
+    text-align: initial;
+    border: none;
+    border-radius: 6px;
+    transition:
+      background 0.15s,
+      color 0.15s,
+      box-shadow 0.3s;
+    color: $input-fg;
+    background-color: $input-bg;
+    &:focus {
+      box-shadow: 0 0 0 4px $input-focus-outline;
+    }
+    &::placeholder {
+      color: $input-placeholder-fg;
+    }
   }
 }

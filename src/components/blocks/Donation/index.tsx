@@ -125,7 +125,7 @@ export default function Donation({ donationDetailsFormData }: any) {
           step={step}
           successMessage={paymentSucceeded ? 'All Done! 🎉' : ''}
         />
-        {step > 1 && (
+        {step > 1 && !paymentSucceeded && (
           <Button onClick={handleStepBack} customClass={styles.btnStepBack}>
             Back
           </Button>
