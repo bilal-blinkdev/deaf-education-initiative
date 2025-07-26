@@ -210,8 +210,13 @@ select.input {
 .iconSelect {
   position: absolute;
   right: 10px;
-  bottom: 10px;
-  top: 70%;
+  top: 64px;
   transform: translateY(-50%);
   pointer-events: none;
+  svg {
+    color: $dark-blue;
+  }
+  @media (min-width: 768px) {
+    top: 68px;
+  }
 }
