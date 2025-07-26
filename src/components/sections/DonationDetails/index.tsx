@@ -71,7 +71,6 @@ export default function DonationDetails({
     }
   }, []);
   useEffect(() => {
-    console.log('Project changed');
     if (otherAmountRef.current && Number(otherAmountRef.current.value) > 0) {
       setDisableAmountOptions(true);
     } else {
@@ -127,6 +126,7 @@ export default function DonationDetails({
       const proj = projects.find((p) => p.name === value);
       setSelectedProject(proj);
       setProject(proj);
+      setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
     } else if (name === 'otherAmount' && Number(value) >= 1) {
       setDonationDetails((prev: any) => ({ ...prev, [name]: value }));
       setDisableAmountOptions(true);
