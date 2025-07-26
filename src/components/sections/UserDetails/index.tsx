@@ -1,9 +1,11 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { CountrySelect, StateSelect, CitySelect } from 'react-country-state-city';
-import 'react-country-state-city/dist/react-country-state-city.css';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Country, State, City } from 'country-state-city';
+import { ICountry, IState, ICity } from 'country-state-city';
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
+import ChevronDown from '../../../graphics/ChevronDown';
 import styles from './styles.module.scss';
+import { SelectField } from 'payload';
 
 type Project = {
   name: string;
@@ -67,9 +69,10 @@ export default function UserDetails({
   userDetails,
   setUserDetails,
 }: UserDetailsFormProps) {
-  const [country, setCountry] = useState<Country | null>(null);
-  const [currentState, setCurrentState] = useState<State | null>(null);
-  const [currentCity, setCurrentCity] = useState(null);
+  const countries = Country.getAllCountries();
+  const [selectedCountry, setSelectedCountry] = useState<string>('');
+  const [states, setStates] = useState<IState[]>();
+  const [cities, setCities] = useState<ICity[]>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
@@ -88,13 +91,13 @@ export default function UserDetails({
     if (!userDetails.email) {
       newErrors.email = 'Please enter a valid email address.';
     }
-    if (!userDetails.country || !country) {
+    if (!userDetails.country) {
       newErrors.country = 'Please select your country.';
     }
-    if (!userDetails.state || !currentState) {
+    if (!userDetails.state) {
       newErrors.state = 'Please enter your state.';
     }
-    if (!userDetails.city || !currentCity) {
+    if (!userDetails.city) {
       newErrors.city = 'Please enter your city.';
     }
     if (!userDetails.address) {
@@ -106,11 +109,10 @@ export default function UserDetails({
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      // if (pathname === '/donate') setIsValid(false);
+
       return false;
     } else {
       // no errors
-      // if (pathname === '/donate') setIsValid(true);
       setErrors({});
       // proceed to next step
       // e.g. setStep(2) or navigate
@@ -118,25 +120,50 @@ export default function UserDetails({
     }
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
 
     setErrors((prev) => ({ ...prev, [name]: '' }));
     setUserDetails((prev: any) => ({ ...prev, [name]: value }));
   };
-  const handleChange2 = (obj: any) => {
-    let name = '';
-    const { name: value } = obj;
+  const handleCountryStateCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
 
-    if (obj?.hasStates) {
-      name = 'country';
-      setCountry(obj);
-    } else if (obj?.hasCities) {
-      name = 'state';
-      setCurrentState(obj);
-    } else {
-      name = 'city';
-      setCurrentCity(obj);
+    if (name === 'country') {
+      const countryCode = value;
+      if (countryCode === '') {
+        setUserDetails((prev: any) => ({ ...prev, state: '' }));
+        setUserDetails((prev: any) => ({ ...prev, city: '' }));
+      }
+
+      setSelectedCountry(countryCode);
+      setCities([]);
+
+      const fetchedStates = State.getStatesOfCountry(countryCode);
+      setStates(fetchedStates);
+
+      const country = Country.getCountryByCode(countryCode);
+      setUserDetails((prev: any) => ({ ...prev, [name]: country?.name }));
+      return;
+    } else if (name === 'state') {
+      const stateCode = value;
+
+      if (stateCode === '') {
+        setUserDetails((prev: any) => ({ ...prev, city: '' }));
+      }
+
+      const fetchedCities = City.getCitiesOfState(selectedCountry, stateCode);
+      setCities(fetchedCities);
+
+      const state = State.getStateByCodeAndCountry(stateCode, selectedCountry);
+
+      setUserDetails((prev: any) => ({ ...prev, [name]: state?.name }));
+      return;
+    } else if (name === 'city') {
+      setUserDetails((prev: any) => ({ ...prev, [name]: value }));
+      return;
     }
 
     setErrors((prev) => ({ ...prev, [name]: '' }));
@@ -226,52 +253,70 @@ export default function UserDetails({
               <p className={styles.inputGroupLabel}>
                 Country<span className={styles.required}>*</span>
               </p>
-              <CountrySelect
-                containerClassName={styles.cccInputGroup}
-                inputClassName={styles.cccInput}
-                onChange={handleChange2}
-                onTextChange={(txt) => {
-                  console.log(country);
-                  setCountry(null);
-                  setCurrentState(null);
-                  setCurrentCity(null);
-                }}
-                placeHolder="Select Country"
-              />
+              <select
+                className={styles.input}
+                name="country"
+                // value={userDetails.country}
+                onChange={handleCountryStateCityChange}
+              >
+                <option value="">Select a country</option>
+                {countries.map((country) => (
+                  <option value={country.isoCode} key={country.isoCode}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
+              <div className={styles.iconSelect}>
+                <ChevronDown />
+              </div>
               {errors.country && <p className={styles.inputError}>{errors.country}</p>}{' '}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>
                 State<span className={styles.required}>*</span>
               </p>
-              <StateSelect
-                countryid={country?.id ?? 0}
-                containerClassName={styles.cccInputGroup}
-                inputClassName={styles.cccInput}
-                onChange={handleChange2}
-                onTextChange={(txt) => {
-                  setCurrentState(null);
-                  setCurrentCity(null);
-                }}
-                placeHolder="Select State"
-              />
+              <select
+                className={styles.input}
+                name="state"
+                // value={userDetails.state}
+                disabled={!states?.length}
+                onChange={handleCountryStateCityChange}
+              >
+                <option value="">Select a state</option>
+                {states &&
+                  states.map((state) => (
+                    <option value={state.isoCode} key={state.isoCode}>
+                      {state.name}
+                    </option>
+                  ))}
+              </select>
+              <div className={styles.iconSelect}>
+                <ChevronDown />
+              </div>
               {errors.state && <p className={styles.inputError}>{errors.state}</p>}{' '}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>
                 City<span className={styles.required}>*</span>
               </p>
-              <CitySelect
-                countryid={country?.id ?? 0}
-                stateid={currentState?.id ?? 0}
-                containerClassName={styles.cccInputGroup}
-                inputClassName={styles.cccInput}
-                onChange={handleChange2}
-                onTextChange={(txt) => {
-                  setCurrentCity(null);
-                }}
-                placeHolder="Select City"
-              />
+              <select
+                className={styles.input}
+                name="city"
+                // value={userDetails.city}
+                disabled={!cities?.length}
+                onChange={handleCountryStateCityChange}
+              >
+                <option value="">Select a city</option>
+                {cities &&
+                  cities.map((city) => (
+                    <option value={city.name} key={city.name}>
+                      {city.name}
+                    </option>
+                  ))}
+              </select>
+              <div className={styles.iconSelect}>
+                <ChevronDown />
+              </div>
               {errors.city && <p className={styles.inputError}>{errors.city}</p>}{' '}
             </div>
             <div className={styles.inputGroup}>

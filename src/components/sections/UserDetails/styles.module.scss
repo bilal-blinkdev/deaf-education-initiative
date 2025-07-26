@@ -84,6 +84,7 @@ $input-focus-outline: rgba($cerulean-blue, 30%);
   width: 100%;
 }
 .inputGroup {
+  position: relative;
   margin-bottom: 1.8rem;
 }
 .required {
@@ -196,47 +197,21 @@ select.input {
   &::placeholder {
     color: $input-placeholder-fg;
   }
+  &:disabled {
+    border: 1px solid $mercury;
+    pointer-events: none;
+    color: darken($mercury, 25) !important;
+    background-color: $mercury;
+  }
   @media (min-width: 768px) {
     font-size: 1.8rem;
   }
 }
-
-.cccInputGroup {
-  padding: 0;
-  & div[class*='stsearch-box'] {
-    padding: 0;
-    border: none;
-  }
-  & div[class*='stdropdown-tool'] {
-    position: relative;
-    right: 8px;
-  }
-  & .cccInput {
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 1.6rem;
-    display: block;
-    padding: 1.4rem 2.2rem !important;
-    width: 100%;
-    line-height: 2.4rem;
-    outline: none;
-    text-align: initial;
-    border: none;
-    border-radius: 6px;
-    transition:
-      background 0.15s,
-      color 0.15s,
-      box-shadow 0.3s;
-    color: $input-fg;
-    background-color: $input-bg;
-    &:focus {
-      box-shadow: 0 0 0 4px $input-focus-outline;
-    }
-    &::placeholder {
-      color: $input-placeholder-fg;
-    }
-  }
-  @media (min-width: 768px) {
-    font-size: 1.8rem;
-  }
+.iconSelect {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  top: 70%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
