@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 // import Swiper JS
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
 // import Swiper styles
 import 'swiper/css';
 import ArrowRight from '@/graphics/ArrowRight';
@@ -19,14 +21,31 @@ type SwiperTwoColumnCardsProps = {
 };
 
 export default function SwiperTwoColumnCards({ cards }: SwiperTwoColumnCardsProps) {
+  const [isEnd, setIsEnd] = useState(false);
+
+  const handleChange = (swiper: any) => {
+    if (swiper.activeIndex === swiper.slides.length - 1) {
+      setIsEnd(true);
+    } else if (swiper.activeIndex === 0) {
+      setIsEnd(false);
+    }
+  };
+
   return (
     <Swiper
       slidesPerView={'auto'}
       centeredSlides={true}
       grabCursor={true}
+      autoplay={{
+        delay: 3000,
+        disableOnInteraction: false,
+      }}
+      speed={1000}
       className={styles.mySwiper}
+      modules={[Autoplay]}
+      onSlideChange={handleChange}
     >
-      <SwiperNavButtons />
+      <SwiperNavButtons isStart={!isEnd} isEnd={isEnd} />
       {cards.map((card, index) => (
         <SwiperSlide className={styles.mySwiperSlide} key={index}>
           <div className={styles.card}>
@@ -49,14 +68,21 @@ export default function SwiperTwoColumnCards({ cards }: SwiperTwoColumnCardsProp
   );
 }
 
-function SwiperNavButtons() {
+function SwiperNavButtons({ isStart, isEnd }: { isStart: boolean; isEnd: boolean }) {
   const swiper = useSwiper();
+
+  const handlePrev = () => {
+    swiper.slidePrev();
+  };
+  const handleNext = () => {
+    swiper.slideNext();
+  };
   return (
     <div className={styles.swiperNavButtons}>
-      <button className={styles.swiperNavButton} onClick={() => swiper.slidePrev()}>
+      <button className={styles.swiperNavButton} onClick={handlePrev} disabled={isStart}>
         <ArrowLeft />
       </button>
-      <button className={styles.swiperNavButton} onClick={() => swiper.slideNext()}>
+      <button className={styles.swiperNavButton} onClick={handleNext} disabled={isEnd}>
         <ArrowRight />
       </button>
     </div>

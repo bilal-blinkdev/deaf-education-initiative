@@ -42,8 +42,14 @@
   height: 50px;
   border-radius: 100%;
   cursor: pointer;
+  line-height: 1;
   border: 1px solid $athens-gray;
   background-color: $white;
+  &:disabled {
+    cursor: not-allowed;
+    color: darken($mercury, 25) !important;
+    background-color: $mercury;
+  }
 }
 .card {
   display: flex;
