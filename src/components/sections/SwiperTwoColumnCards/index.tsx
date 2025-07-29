@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 // import Swiper JS
+import ArrowRight from '@/graphics/ArrowRight';
+import ArrowLeft from '@/graphics/ArrowLeft';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 // import Swiper styles
 import 'swiper/css';
-import ArrowRight from '@/graphics/ArrowRight';
-import ArrowLeft from '@/graphics/ArrowLeft';
 import styles from './styles.module.scss';
 
 type SwiperTwoColumnCardsProps = {

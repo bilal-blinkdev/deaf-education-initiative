@@ -1,12 +1,11 @@
 'use client';
 
 import Image, { StaticImageData } from 'next/image';
+import Button from '@/components/elements/Button';
 // import Swiper JS
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper styles
 import 'swiper/css';
-// import "swiper/css/free-mode";
-import Button from '@/components/elements/Button';
 import styles from './styles.module.scss';
 
 type SwiperCardsOverflowProps = {
@@ -20,13 +19,7 @@ type SwiperCardsOverflowProps = {
 
 export default function SwiperCardsOverflow({ cards }: SwiperCardsOverflowProps) {
   return (
-    <Swiper
-      slidesPerView={'auto'}
-      // freeMode={true}
-      spaceBetween={24}
-      grabCursor={true}
-      className={styles.mySwiper}
-    >
+    <Swiper slidesPerView={'auto'} spaceBetween={24} grabCursor={true} className={styles.mySwiper}>
       {cards.map((card, index) => (
         <SwiperSlide className={styles.mySwiperSlide} key={index}>
           <div className={styles.card}>
