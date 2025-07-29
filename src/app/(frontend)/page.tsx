@@ -17,6 +17,7 @@ import Student from '@/graphics/Student';
 import Employees from '@/graphics/Employees';
 import Teacher from '@/graphics/Teacher';
 import PeopleChatting from '@/graphics/PeopleChatting';
+import Globe from '@/graphics/Globe';
 
 export default async function HomePage() {
   const headers = await getHeaders();
@@ -53,7 +54,7 @@ export default async function HomePage() {
         },
         {
           format: 'normal',
-          text: ' We are a non-profit organization committed to empowering disadvantaged deaf children and youth in Pakistan. We support the Deaf Reach Program in Pakistan, which is working to empower the Deaf community by providing a full circle solution from education and skills training, teacher development and parent training, to job placement and community inclusion.',
+          text: ' We are a non-profit organization committed to empowering disadvantaged deaf children and youth in Pakistan. We support the Deaf Reach Program in Pakistan, which is working on empowering the deaf community by providing a full circle solution from education and skills training, teacher development and parent training, to job placement and community inclusion.',
         },
       ],
     },
@@ -61,8 +62,8 @@ export default async function HomePage() {
     metrics: [
       {
         icon: <Student />,
-        numbers: '2400+',
-        text: 'Currently',
+        numbers: '2500+',
+        text: 'Students Currently Enrolled',
       },
       {
         icon: <Employees />,
@@ -78,6 +79,11 @@ export default async function HomePage() {
         icon: <PeopleChatting />,
         numbers: '7500+',
         text: 'Words PSL Dictionary',
+      },
+      {
+        icon: <Globe />,
+        numbers: '107',
+        text: 'Sites Across Pakistan',
       },
     ],
   };

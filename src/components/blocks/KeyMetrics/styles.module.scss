@@ -4,7 +4,7 @@
   position: relative;
   padding: 5rem 0;
   background-color: $dark-blue;
-  @media (min-width: 768px) {
+  @media (min-width: 1300px) {
     padding: 11rem 15rem 0 15rem;
   }
 }
@@ -49,6 +49,7 @@
   box-shadow: 0 20px 50px 0 rgba($ebony, 8%);
   @media (min-width: 768px) {
     bottom: -140px;
+    flex-wrap: nowrap;
   }
 }
 .metric {
@@ -60,20 +61,30 @@
   max-width: 240px;
 }
 .metricIcon {
-  height: 70px;
+  margin-bottom: 1rem;
+  height: 60px;
+  svg {
+    height: 100%;
+  }
 }
 .metricFigure {
-  font-size: 4.54rem;
+  font-size: 3.2rem;
   font-weight: bold;
   line-height: 140%;
   color: $sandy-brown;
+  @media (min-width: 768px) {
+    font-size: 3.2rem;
+  }
 }
 .metricName {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: bold;
   margin: auto;
-  max-width: 250px;
+  max-width: 150px;
   color: $mine-shaft;
+  // @media (min-width: 768px) {
+  //   font-size: 1.6rem;
+  // }
 }
 
 // White color scheme
