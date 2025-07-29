@@ -18,7 +18,7 @@ const HEADER_ITEMS: HEADER_ITEMS = {
 export const PROJECTS = [
   {
     name: 'Where most needed',
-    hint: 'This is a hint text to help user.',
+    hint: '',
     amountOptions: [
       { symbol: '£', amount: '100', period: '' },
       { symbol: '£', amount: '250', period: '' },
