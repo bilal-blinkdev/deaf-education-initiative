@@ -3,6 +3,7 @@
 .cardsOverflowSlider {
   padding: 9.5rem 0 11.5rem;
   // background-color: $dark-blue;
+  overflow-x: hidden;
   background:
     0 940px / contain repeat-x url('/line-pattern.svg'),
     $dark-blue;
