@@ -11,7 +11,7 @@
 }
 .mySwiper {
   user-select: none;
-  overflow: visible;
+  overflow: visible !important;
   & [class*='swiper-wrapper'] {
     display: flex;
     align-items: center;

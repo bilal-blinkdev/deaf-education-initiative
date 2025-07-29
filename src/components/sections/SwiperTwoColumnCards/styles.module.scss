@@ -4,7 +4,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  overflow: visible !important;
   & [class*='swiper-wrapper'] {
     align-items: stretch;
     // justify-content: center;
