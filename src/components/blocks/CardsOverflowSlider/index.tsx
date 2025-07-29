@@ -59,7 +59,7 @@ export default function CardsOverflowSlider() {
   return (
     <section className={styles.cardsOverflowSlider}>
       <Container>
-        <p className={styles.subHeading}>Programs That Make a Difference</p>
+        {/* <p className={styles.subHeading}>Programs That Make a Difference</p> */}
         <h2 className={styles.heading}>Our Featured Programs</h2>
         <section className={styles.slider}>
           <SwiperCardsOverflow cards={cards} />

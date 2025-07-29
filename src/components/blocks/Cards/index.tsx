@@ -15,8 +15,8 @@ export default function Cards() {
   return (
     <section className={styles.cards}>
       <Container>
-        <p className={styles.subHeading}>Transforming Lives, One Deaf Child At A Time</p>
-        <h2 className={styles.heading}>How are we making a difference?</h2>
+        {/* <p className={styles.subHeading}>Transforming Lives, One Deaf Child At A Time</p> */}
+        <h2 className={styles.heading}>How we can make a difference?</h2>
         <p className={styles.description}>
           Deaf Education Initiative envisions a future where quality education is a reality for
           every deaf child in Pakistan, as we work together with our local communities to educate,

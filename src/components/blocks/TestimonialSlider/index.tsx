@@ -32,7 +32,7 @@ export default function TestimonialsSlider() {
   return (
     <section className={styles.cardsOverflowSlider}>
       <Container>
-        <p className={styles.subHeading}>Here&rsquo;s How We Create An Impact</p>
+        <p className={styles.subHeading}>Our Impact</p>
         <h2 className={styles.heading}>In Their Own Words</h2>
         <section className={styles.slider}>
           <SwiperCardsTwoColumnOverflow cards={cards} />
