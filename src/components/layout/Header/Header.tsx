@@ -28,7 +28,7 @@ export default function Header() {
               )}
               {HEADER_ITEMS?.buttons &&
                 HEADER_ITEMS?.buttons.map((btn, index) => (
-                  <Button link={{ href: btn.href ?? '' }} key={index}>
+                  <Button size="large" link={{ href: btn.href ?? '' }} key={index}>
                     Donate
                   </Button>
                 ))}
