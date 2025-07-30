@@ -90,6 +90,7 @@ $input-focus-outline: rgba($cerulean-blue, 30%);
   width: 100%;
 }
 .inputGroup {
+  position: relative;
   margin-bottom: 1.8rem;
 }
 .inputGroupLabel {
@@ -247,5 +248,18 @@ select.input {
   }
   @media (min-width: 768px) {
     font-size: 1.8rem;
+  }
+}
+.iconSelect {
+  position: absolute;
+  right: 10px;
+  top: 64px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  svg {
+    color: $dark-blue;
+  }
+  @media (min-width: 768px) {
+    top: 68px;
   }
 }

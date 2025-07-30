@@ -8,6 +8,7 @@ import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
 import DonatingHand from '@/assets/hand-donating.webp';
 import styles from './styles.module.scss';
+import ChevronDown from '@/graphics/ChevronDown';
 
 type Project = {
   name: string;
@@ -207,7 +208,10 @@ export default function DonationDetails({
                     {project.name}
                   </option>
                 ))}
-              </select>{' '}
+              </select>
+              <div className={styles.iconSelect}>
+                <ChevronDown />
+              </div>{' '}
               {errors.projectType && <p className={styles.inputError}>{errors.projectType}</p>}{' '}
               {!errors.projectType && <p className={styles.inputHint}>{selectedProject?.hint}</p>}
             </div>
@@ -288,13 +292,16 @@ export default function DonationDetails({
                 onChange={handleInputChange}
                 value={donationDetails.donationType}
               >
+                <option value="donation">Donation</option>
                 <option value="zakat">Zakat</option>
-                <option value="charity">Charity</option>
               </select>
+              <div className={styles.iconSelect}>
+                <ChevronDown />
+              </div>
               {errors.donationType && <p className={styles.inputError}>{errors.donationType}</p>}{' '}
-              {!errors.donationType && (
+              {/* {!errors.donationType && (
                 <p className={styles.inputHint}>This is a hint text to help user.</p>
-              )}
+              )} */}
             </div>
             <Button type="submit" size="large" width="full" icons={{ leading: true }}>
               {pathname === '/donate' ? 'Continue to Personal Details' : 'Donate Now'}
