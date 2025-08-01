@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Banner from '@/assets/girl-standing.webp';
+import Banner from '@/assets/girl-sitting-in-class-raising-hand.png';
 import DonationDetails from '@/components/sections/DonationDetails';
 import Container from '@/components/layout/Container';
 import { PROJECTS } from '@/app/constants';
