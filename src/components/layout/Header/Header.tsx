@@ -1,7 +1,9 @@
-import LogoWithText from '@/graphics/LogoWithText';
 import Link from 'next/link';
+import Image from 'next/image';
 import Container from '../Container';
 import Button from '@/components/elements/Button';
+import LogoWithText from '@/graphics/LogoWithText';
+import Logo from '@/assets/logo.png';
 import HEADER_ITEMS from '@/app/constants';
 import styles from './styles.module.scss';
 
@@ -11,7 +13,7 @@ export default function Header() {
       <Container>
         <div className={styles.flex}>
           <section className={styles.logo}>
-            <LogoWithText />
+            <Image src={Logo} alt="" className={styles.logo} />
           </section>
           {HEADER_ITEMS && (
             <section className={styles.navMenu}>
