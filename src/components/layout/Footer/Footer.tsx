@@ -1,5 +1,5 @@
 import Container from '../Container';
-import LogoWithText from '@/graphics/LogoWithText';
+import LogoWithText from '@/graphics/LogoV2WithText';
 import Link from 'next/link';
 import Facebook from '@/graphics/Facebook';
 import Twitter from '@/graphics/Twitter';
