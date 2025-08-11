@@ -7,7 +7,7 @@ import config from '@/payload.config';
 import MainBanner from '@/components/blocks/MainBanner';
 import KeyMetrics from '@/components/blocks/KeyMetrics';
 import Cards from '@/components/blocks/Cards';
-import CardsOverflowSlider from '@/components/blocks/CardsOverflowSlider';
+import CardsSlider from '@/components/blocks/CardsSlider';
 import TestimonialSlider from '@/components/blocks/TestimonialSlider';
 import TwoColumnCard from '@/components/blocks/TwoColumnCard';
 import LogoSlider from '@/components/blocks/LogoSlider';
@@ -93,7 +93,7 @@ export default async function HomePage() {
       <MainBanner />
       <KeyMetrics keyMetrics={keyMetrics} />
       <Cards />
-      <CardsOverflowSlider />
+      <CardsSlider />
       <TestimonialSlider />
       <TwoColumnCard />
       <LogoSlider />
