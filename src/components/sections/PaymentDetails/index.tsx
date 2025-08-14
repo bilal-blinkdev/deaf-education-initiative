@@ -327,27 +327,3 @@ export default function PaymentDetails({
     </section>
   );
 }
-
-function CustomRadio({
-  children,
-  inputType,
-  inputId,
-  inputName,
-  inputValue,
-  handleChange,
-}: customRadioProps) {
-  return (
-    <div className={styles.customRadio}>
-      <input
-        type={inputType}
-        id={inputId}
-        name={inputName}
-        value={inputValue}
-        onChange={handleChange}
-      />
-      <label htmlFor={inputId} className={styles.donationCustomLabel}>
-        {children}
-      </label>
-    </div>
-  );
-}
