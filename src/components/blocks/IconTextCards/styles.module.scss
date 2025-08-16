@@ -1,0 +1,38 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.ourCoreValues {
+  padding: 8rem 0;
+  background-color: $sandy-brown;
+}
+.heading {
+  margin-bottom: 6rem;
+  text-align: center;
+  color: $white;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2.6rem;
+}
+.card {
+  display: flex;
+  flex-grow: 1;
+  flex-basis: 25%;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 2rem 3rem;
+  text-align: center;
+  border-radius: 12px;
+  background-color: $white;
+}
+.card__icon {
+  margin-bottom: 2rem;
+}
+.card__title {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+.card__description {
+  font-size: 1.6rem;
+  color: rgba($ebony, 0.72);
+}

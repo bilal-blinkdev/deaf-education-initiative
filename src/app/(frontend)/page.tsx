@@ -28,64 +28,70 @@ export default async function HomePage() {
   const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`;
 
   const keyMetrics = {
-    heading: {
-      content: [
+    content: {
+      heading: {
+        content: [
+          {
+            format: 'normal',
+            text: 'In Pakistan, more than 95% of deaf children ',
+          },
+          {
+            format: 'break',
+          },
+          {
+            format: 'normal',
+            text: 'of school-going age are deprived of their right to education.',
+          },
+        ],
+      },
+      description: {
+        content: [
+          {
+            format: 'bold',
+            text: 'Deaf Education Initiative is striving to ensure that no deaf child goes without literacy and learning.',
+          },
+          {
+            format: 'break',
+          },
+          {
+            format: 'normal',
+            text: ' We are a non-profit organization committed to empowering disadvantaged deaf children and youth in Pakistan. We support the Deaf Reach Program in Pakistan, which is working on empowering the deaf community by providing a full circle solution from education and skills training, teacher development and parent training, to job placement and community inclusion.',
+          },
+        ],
+      },
+      metrics: [
         {
-          format: 'normal',
-          text: 'In Pakistan, more than 95% of deaf children ',
+          icon: <Student />,
+          numbers: '2500+',
+          text: 'Students Currently Enrolled',
         },
         {
-          format: 'break',
+          icon: <Employees />,
+          numbers: '50,000+',
+          text: 'Direct Beneficiaries',
         },
         {
-          format: 'normal',
-          text: 'of school-going age are deprived of their right to education.',
+          icon: <Teacher />,
+          numbers: '2750+',
+          text: 'Deaf Persons Employed',
+        },
+        {
+          icon: <PeopleChatting />,
+          numbers: '7500+',
+          text: 'Words PSL Dictionary',
+        },
+        {
+          icon: <Globe />,
+          numbers: '107',
+          text: 'Sites Across Pakistan',
         },
       ],
     },
-    description: {
-      content: [
-        {
-          format: 'bold',
-          text: 'Deaf Education Initiative is striving to ensure that no deaf child goes without literacy and learning.',
-        },
-        {
-          format: 'break',
-        },
-        {
-          format: 'normal',
-          text: ' We are a non-profit organization committed to empowering disadvantaged deaf children and youth in Pakistan. We support the Deaf Reach Program in Pakistan, which is working on empowering the deaf community by providing a full circle solution from education and skills training, teacher development and parent training, to job placement and community inclusion.',
-        },
-      ],
-    },
-
-    metrics: [
-      {
-        icon: <Student />,
-        numbers: '2500+',
-        text: 'Students Currently Enrolled',
-      },
-      {
-        icon: <Employees />,
-        numbers: '50,000+',
-        text: 'Direct Beneficiaries',
-      },
-      {
-        icon: <Teacher />,
-        numbers: '2750+',
-        text: 'Deaf Persons Employed',
-      },
-      {
-        icon: <PeopleChatting />,
-        numbers: '7500+',
-        text: 'Words PSL Dictionary',
-      },
-      {
-        icon: <Globe />,
-        numbers: '107',
-        text: 'Sites Across Pakistan',
-      },
-    ],
+    // colors: {
+    //   mainSection: { bgColor: 'var(--white)' },
+    //   heading: { textColor: 'var(--ebony)' },
+    //   description: { textColor: 'var(--ebony)' },
+    // },
   };
 
   return (

@@ -19,6 +19,7 @@ type PaymentDetailsProps = {
   handleClick: (jumpToStep?: number) => void;
   setPaymentDetails: any;
   setPaymentSucceeded: any;
+  sendEmail: () => void;
 };
 type customRadioProps = {
   children: ReactNode;
@@ -39,6 +40,7 @@ export default function PaymentDetails({
   handleClick,
   setPaymentDetails,
   setPaymentSucceeded,
+  sendEmail,
 }: PaymentDetailsProps) {
   const stripe = useStripe();
   const elements = useElements();
@@ -292,6 +294,7 @@ export default function PaymentDetails({
     if (paymentIntent?.status == 'succeeded') {
       setLoading(false);
       setPaymentSucceeded(true);
+      sendEmail();
     }
   };
   return (

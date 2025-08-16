@@ -11,7 +11,7 @@ type ButtonProps = {
   type?: 'button' | 'submit' | 'reset';
   style?: 'default' | 'soft' | 'text' | 'outline';
   size?: 'small' | 'medium' | 'large';
-  width?: 'half' | 'full' | 'auto';
+  width?: 'half' | 'full' | 'auto' | 'maxContent';
   icons?: {
     leading?: boolean;
     trailing?: boolean;

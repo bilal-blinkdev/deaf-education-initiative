@@ -171,15 +171,16 @@ export default function DonationDetails({
   };
 
   return (
-    <section className={[styles.donationDetails, customClass && styles[customClass]].join(' ')}>
+    <section className={[styles.donationDetails, customClass && customClass].join(' ')}>
       <div className={styles.donationCard}>
         <section className={styles.donationCardHeader}>
-          {pathname === '/' && (
-            <>
-              <Image src={DonatingHand} className={styles.donatingHandIcon} alt="Donating Hand" />
-              <h1 className={styles.donationCardHeadingHome}>Take Action for Deaf Education</h1>
-            </>
-          )}
+          {pathname === '/' ||
+            (pathname === '/our-programs/internal' && (
+              <>
+                <Image src={DonatingHand} className={styles.donatingHandIcon} alt="Donating Hand" />
+                <h1 className={styles.donationCardHeadingHome}>Take Action for Deaf Education</h1>
+              </>
+            ))}
           {pathname === '/donate' && (
             <h2
               className={[styles.donationCardHeading, step !== 1 && styles.marginBottom].join(' ')}
@@ -193,7 +194,7 @@ export default function DonationDetails({
             </h2>
           )}
         </section>
-        {(pathname === '/' || step == 1) && (
+        {(pathname === '/' || pathname === '/our-programs/internal' || step == 1) && (
           <form className={styles.donationForm} onSubmit={handleSubmit}>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Project Supported </p>

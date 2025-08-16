@@ -1,0 +1,39 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.teamMembers {
+  padding: 7rem 0;
+  text-align: center;
+}
+.heading {
+  text-align: center;
+}
+.teamMembers__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(264px, 264px));
+  justify-content: center;
+  gap: 2rem;
+}
+.businessCard {
+  // width: 264px;
+}
+.businessCard__image {
+  margin-bottom: 2rem;
+  width: 264px;
+  height: 344px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 25px 0 rgba($ebony, 0.25);
+}
+.businessCard__name {
+  font-size: 2.4rem;
+  font-weight: bold;
+  text-align: left;
+}
+.businessCard__role {
+  font-size: 2.2rem;
+  text-align: left;
+  color: $dark-blue;
+}
+.businessCard__icon {
+  text-align: left;
+}

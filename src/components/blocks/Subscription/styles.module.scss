@@ -35,6 +35,12 @@
 .inputGroup {
   display: flex;
   gap: 1.6rem;
+  &:first-child {
+    flex-direction: column;
+    @media (min-width: 600px) {
+      flex-direction: row;
+    }
+  }
 }
 .input {
   font-family: var(--font-ubuntu-sans);

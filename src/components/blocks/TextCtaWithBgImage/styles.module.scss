@@ -1,0 +1,37 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.organizationInfo {
+  padding: 10rem 0 60rem;
+  // background-size: cover;
+  // background-position: center;
+  // background-repeat: no-repeat;
+  // background-image: url('/deaf-reach-campus.webp');
+}
+.container {
+  position: relative;
+}
+.flexBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.flexCol {
+}
+.heading {
+  text-align: center;
+}
+.subHeading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.2rem;
+  text-align: center;
+  color: $dodger-blue;
+}
+.description {
+  margin-bottom: 5rem;
+  max-width: 550px;
+  text-align: center;
+}
+.link {
+  text-decoration: underline;
+}

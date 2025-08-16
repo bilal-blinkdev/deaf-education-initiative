@@ -1,0 +1,71 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.awardsAndRecognition {
+  padding: 10rem 0;
+}
+.container {
+  position: relative;
+}
+.flexBox {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10rem;
+  @media (min-width: 992px) {
+    flex-direction: row;
+  }
+}
+.flexCol {
+  flex-grow: 1;
+  flex-basis: 100%;
+  @media (min-width: 992px) {
+    flex-basis: 50%;
+  }
+  &:first-child {
+    order: 2;
+    @media (min-width: 992px) {
+      order: 1;
+    }
+  }
+  &:last-child {
+    order: 1;
+    @media (min-width: 992px) {
+      order: 2;
+    }
+  }
+}
+.medalImage {
+  position: absolute;
+  top: -100px;
+  right: 0px;
+  width: auto;
+  height: 200px;
+}
+.heading {
+  text-align: left;
+}
+.subHeading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.2rem;
+  text-align: left;
+  color: $dodger-blue;
+}
+.description {
+  margin-bottom: 3rem;
+  text-align: left;
+}
+.image {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+.quote {
+}
+.quoteAuthor {
+  font-weight: 600;
+  margin-bottom: 6rem;
+}
+.quoteCite {
+  font-weight: normal;
+}

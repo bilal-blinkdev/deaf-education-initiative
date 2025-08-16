@@ -1,0 +1,116 @@
+@use '../../colors.scss' as *;
+
+.donation {
+  padding: 10rem 0 0;
+  background-color: $dark-blue;
+}
+.donationForm {
+  margin-bottom: 5rem;
+}
+.forPrograms {
+  width: 100%;
+  max-width: 100% !important;
+}
+.imagesGrid {
+  position: relative;
+  // left: -170px;
+  display: flex;
+  flex-direction: row;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  align-items: end;
+  gap: 2rem;
+  @media (min-width: 768px) {
+  }
+}
+.imagesGrid__gridItem {
+  flex-basis: 25%;
+  max-width: 25%;
+  & .imagesGrid__imageContainer {
+    // width: 100%;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  &:first-child {
+    & .imagesGrid__imageContainer {
+      height: 230px;
+      @media (min-width: 768px) {
+        height: 430px;
+      }
+    }
+  }
+  &:nth-child(2) {
+    & .imagesGrid__imageContainer {
+      height: 260px;
+      @media (min-width: 768px) {
+        height: 160px;
+      }
+    }
+  }
+  &:nth-child(3) {
+    & .imagesGrid__imageContainer {
+      height: 200px;
+      @media (min-width: 768px) {
+        height: 400px;
+      }
+    }
+    @media (min-width: 768px) {
+    }
+  }
+  &:nth-child(4) {
+    & .imagesGrid__imageContainer {
+      height: 330px;
+      @media (min-width: 768px) {
+        height: 530px;
+      }
+    }
+    @media (min-width: 768px) {
+    }
+  }
+}
+.imageText {
+  font-size: 1rem;
+  text-align: center;
+  color: $white;
+  & svg {
+    width: 100%;
+  }
+  @media (min-width: 768px) {
+    font-size: 1.6rem;
+  }
+}
+
+// Features
+.features {
+  padding: 10rem 0;
+}
+.featureCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+.featureCard {
+  border-radius: 12px;
+  box-shadow: 0 4px 25px 0 rgba($ebony, 25%);
+}
+.featureCardFigure {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 3rem;
+}
+.featureCardImage {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+.featureCardBody {
+  padding: 0 3rem;
+}
+.featureCardTitle {
+  margin-bottom: 2rem;
+}
+
+// Video
+.video {
+  padding: 10rem 0;
+}

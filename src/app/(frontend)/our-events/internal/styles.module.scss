@@ -1,0 +1,56 @@
+@use '../../colors.scss' as *;
+
+.mainBanner {
+  padding: 4rem 0;
+}
+.mainBanner__figure {
+  line-height: 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 25px 0 rgba($ebony, 25%);
+}
+.mainBanner__image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.eventDetail {
+  padding: 8rem 0;
+}
+.eventDetail__container {
+  max-width: 800px;
+}
+.eventDetail__meta {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  color: $ebony;
+}
+.eventDetail__calendar {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.eventDetail__time {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.eventDetail__location {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.eventDetail__cta {
+  margin: 4rem auto 0;
+}
+
+.eventLocation__figure {
+  line-height: 0;
+  border-radius: 12px;
+}
+.eventLocation__image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}

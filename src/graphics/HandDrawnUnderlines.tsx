@@ -1,15 +1,17 @@
-import React from "react";
+import React from 'react';
 
 type SvgProps = {
   width?: string;
   height?: string;
   color?: string;
+  svgClass?: string;
 };
 
 export default function HandDrawnUnderlines({
-  width = "278",
-  height = "16",
-  color = "#FFFF00",
+  width = '278',
+  height = '16',
+  color = '#FFFF00',
+  svgClass,
 }: SvgProps) {
   return (
     <svg
@@ -17,6 +19,7 @@ export default function HandDrawnUnderlines({
       height={height}
       viewBox="0 0 278 16"
       fill="none"
+      className={svgClass ?? ''}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

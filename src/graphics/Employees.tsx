@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 type SvgProps = {
   width?: string;
@@ -8,10 +8,10 @@ type SvgProps = {
 };
 
 export default function Employees({
-  width = "73",
-  height = "59",
-  primaryColor = "#0000CC",
-  SecondaryColor = "#3399FF",
+  width = '73',
+  height = '59',
+  primaryColor = '#0000CC',
+  SecondaryColor = '#3399FF',
 }: SvgProps) {
   return (
     <svg

@@ -14,6 +14,7 @@ import HandDrawnSmily from '@/graphics/HandDrawnSmily';
 import ArrowLeft from '@/graphics/ArrowLeft';
 import { PROJECTS } from '@/app/constants';
 import styles from './styles.module.scss';
+import { sendEmail } from '@/app/lib/email/sendgrid/send';
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
   throw new Error('NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined');
@@ -38,7 +39,7 @@ export default function Donation({ donationDetailsFormData }: any) {
   const [userDetails, setUserDetails] = useState({
     firstName: '',
     lastName: '',
-    email: '',
+    email: 'bilal@blinkco.io',
     phoneNumber: '',
     country: '',
     city: '',
@@ -96,6 +97,20 @@ export default function Donation({ donationDetailsFormData }: any) {
       if (step >= 2) return step - 1;
       else return step;
     });
+  };
+  const handleEmail = async () => {
+    console.log('hit');
+
+    if (userDetails)
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: userDetails.email,
+          templateName: 'userDetailsSubmission',
+          dynamicTemplateData: userDetails,
+        }),
+      });
   };
   useEffect(() => {
     if (
@@ -172,6 +187,7 @@ export default function Donation({ donationDetailsFormData }: any) {
                   amount={Number(paymentDetails.amount)}
                   setPaymentDetails={setPaymentDetails}
                   setPaymentSucceeded={setPaymentSucceeded}
+                  sendEmail={handleEmail}
                 />
               </Elements>
             </div>

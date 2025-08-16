@@ -2,32 +2,10 @@
 
 .keyMetrics {
   position: relative;
-  padding: 5rem 0;
-  background-color: $dark-blue;
+  padding: 8rem 0;
+  background-color: $white;
   @media (min-width: 1300px) {
     padding: 11rem 15rem 0 15rem;
-  }
-}
-
-.heading {
-  text-align: center;
-  color: $white;
-}
-.subHeading {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1.2rem;
-  text-align: center;
-  color: $white;
-}
-.description {
-  text-align: center;
-  color: $white;
-  & .bold {
-    font-weight: bold;
-  }
-  @media (min-width: 768px) {
-    padding: 0 8rem;
   }
 }
 .metrics {
@@ -80,7 +58,7 @@
   font-size: 1.6rem;
   font-weight: bold;
   margin: auto;
-  max-width: 150px;
+  // max-width: 150px;
   color: $mine-shaft;
   // @media (min-width: 768px) {
   //   font-size: 1.6rem;
