@@ -4,7 +4,7 @@ import Student from '@/graphics/Student';
 import Employees from '@/graphics/Employees';
 import Teacher from '@/graphics/Teacher';
 import KeyMetrics from '@/components/blocks/KeyMetrics';
-import OurVision from '@/components/blocks/OurVision';
+// import OurVision from '@/components/blocks/OurVision';
 import TextImageCta from '@/components/blocks/TextImageCta';
 import IconTextCards from '@/components/blocks/IconTextCards';
 import LogoSliderBlock from '@/components/blocks/LogoSlider';
@@ -67,7 +67,7 @@ export default function About() {
     <>
       <Banner src={ChildrenSmiling} alt="Children Smiling" />
       <KeyMetrics keyMetrics={keyMetrics} />
-      <OurVision />
+      {/* <OurVision /> */}
       <TextImageCta sectionClass="awardsAndRecognition" />
       <IconTextCards sectionClass="ourCoreValues" />
       <TextCtaWithBgImage sectionClass="organizationInfo" />
