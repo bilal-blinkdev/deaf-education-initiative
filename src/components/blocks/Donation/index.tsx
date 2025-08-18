@@ -39,7 +39,7 @@ export default function Donation({ donationDetailsFormData }: any) {
   const [userDetails, setUserDetails] = useState({
     firstName: '',
     lastName: '',
-    email: 'bilal@blinkco.io',
+    email: '',
     phoneNumber: '',
     country: '',
     city: '',
@@ -99,18 +99,31 @@ export default function Donation({ donationDetailsFormData }: any) {
     });
   };
   const handleEmail = async () => {
-    console.log('hit');
-
-    if (userDetails)
-      await fetch('/api/send-email', {
+    if (userDetails) {
+      const response = await fetch('api/email/send', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           to: userDetails.email,
-          templateName: 'userDetailsSubmission',
-          dynamicTemplateData: userDetails,
+          data: userDetails,
         }),
       });
+
+      if (response.status == 200) {
+      }
+    }
+
+    // await fetch('/api/send-email', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     to: userDetails.email,
+    //     templateName: 'userDetailsSubmission',
+    //     dynamicTemplateData: userDetails,
+    //   }),
+    // });
   };
   useEffect(() => {
     if (
