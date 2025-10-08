@@ -52,7 +52,7 @@ export default function SignupForm() {
         theme: 'colored',
         transition: Bounce,
       });
-      router.push('dashboard');
+      router.push('/');
     } else {
       toast.dismiss();
       toast.error(result.error || 'An error occurred', {
