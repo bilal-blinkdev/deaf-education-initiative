@@ -1,0 +1,43 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+$input-fg: $dark-blue;
+$input-bg: $white;
+$input-placeholder-fg: rgba($ebony, 30%);
+$input-focus-outline: rgba($cerulean-blue, 30%);
+
+.input {
+  font-family: inherit;
+  font-weight: normal;
+  font-size: 1.6rem;
+  display: block;
+  padding: 1.4rem 2.2rem;
+  width: 100%;
+  border: none;
+  line-height: 2.4rem;
+  outline: none;
+  text-align: initial;
+  border: 1px solid rgba($ebony, 12%);
+  border-radius: 6px;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    box-shadow 0.3s;
+  color: $input-fg;
+  background-color: $input-bg;
+
+  &:focus {
+    box-shadow: 0 0 0 4px $input-focus-outline;
+  }
+  &::placeholder {
+    color: $input-placeholder-fg;
+  }
+  &:disabled {
+    border: 1px solid $mercury;
+    pointer-events: none;
+    color: darken($mercury, 25) !important;
+    background-color: $mercury;
+  }
+  @media (min-width: 768px) {
+    font-size: 1.8rem;
+  }
+}

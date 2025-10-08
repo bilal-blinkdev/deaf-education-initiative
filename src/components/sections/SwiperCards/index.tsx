@@ -14,7 +14,12 @@ import styles from './styles.module.scss';
 
 type SwiperCardsProps = {
   cards: {
-    image: { src: StaticImageData; alt: string };
+    image: {
+      src: string | StaticImageData; // Allow string for CMS URLs
+      alt: string | null | undefined;
+      width: number;
+      height: number;
+    };
     title: string;
     description: string;
     cta: { text: string; url: string };
@@ -58,12 +63,19 @@ export default function SwiperCards({ cards }: SwiperCardsProps) {
         <SwiperSlide className={styles.mySwiperSlide} key={index}>
           <div className={styles.card}>
             <div className={styles.imageHolder}>
-              <Image src={card.image.src} alt={card.image.alt} className={styles.image} />
+              <Image
+                src={card.image.src}
+                width={card.image.width}
+                height={card.image.height}
+                alt={card.image.alt ?? ''}
+                className={styles.image}
+              />
             </div>
             <div className={styles.cardBody}>
               <h3 className={styles.cardTitle}>{card.title}</h3>
               <p className={styles.cardDescription}>{card.description}</p>
               <Button
+                link={{ href: card.cta.url }}
                 size="small"
                 icons={{
                   leading: true,

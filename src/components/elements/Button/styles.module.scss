@@ -8,21 +8,25 @@ $btn-default-fg: $dark-blue;
 $btn-default-bg: $yellow;
 $btn-default-hover-fg: $white;
 $btn-default-hover-bg: $cerulean-blue;
+$btn-default-loader-color: $dark-blue;
 
 $btn-soft-fg: $cerulean-blue;
 $btn-soft-bg: $titan-white;
 $btn-soft-hover-fg: $white;
 $btn-soft-hover-bg: $cerulean-blue;
+$btn-soft-loader-color: $cerulean-blue;
 
 $btn-text-fg: $ebony;
 $btn-text-bg: transparent;
 $btn-text-hover-fg: $white;
 $btn-text-hover-bg: $cerulean-blue;
+$btn-text-loader-color: $ebony;
 
 $btn-outline-fg: $dark-blue;
 $btn-outline-bg: transparent;
 $btn-outline-hover-fg: $white;
 $btn-outline-hover-bg: $cerulean-blue;
+$btn-outline-loader-color: $dark-blue;
 
 $btn-disabled-fg: rgba($ebony, 0.5);
 $btn-disabled-bg: $mischka;
@@ -30,7 +34,7 @@ $btn-disabled-bg: $mischka;
 .button,
 .link {
   font-family: inherit;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 1.6rem;
   display: flex;
   justify-content: center;
@@ -71,6 +75,9 @@ $btn-disabled-bg: $mischka;
     &:active {
       box-shadow: 0 0 0 4px rgba($btn-default-hover-bg, 30%);
     }
+    & .loadingIcon path {
+      fill: $btn-default-loader-color;
+    }
   }
   &.soft {
     color: $btn-soft-fg;
@@ -84,6 +91,9 @@ $btn-disabled-bg: $mischka;
     }
     &:active {
       box-shadow: 0 0 0 4px rgba($btn-soft-hover-bg, 30%);
+    }
+    & .loadingIcon path {
+      fill: $btn-soft-loader-color;
     }
   }
   &.text {
@@ -99,6 +109,9 @@ $btn-disabled-bg: $mischka;
     &:active {
       box-shadow: 0 0 0 4px rgba($btn-text-hover-bg, 30%);
     }
+    & .loadingIcon path {
+      fill: $btn-text-loader-color;
+    }
   }
   &.outline {
     border: 1px solid rgba($ebony, 12%);
@@ -113,6 +126,9 @@ $btn-disabled-bg: $mischka;
     }
     &:active {
       box-shadow: 0 0 0 4px rgba($btn-outline-hover-bg, 30%);
+    }
+    & .loadingIcon path {
+      fill: $btn-outline-loader-color;
     }
   }
   &[disabled] {
@@ -133,5 +149,18 @@ $btn-disabled-bg: $mischka;
   }
   @media (min-width: 768px) {
     font-size: 1.8rem;
+  }
+}
+
+.loadingIcon {
+  animation: animate 1s ease infinite;
+}
+
+@keyframes animate {
+  0% {
+    transform: rotate(0turn);
+  }
+  100% {
+    transform: rotate(1turn);
   }
 }

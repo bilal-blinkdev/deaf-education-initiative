@@ -1,0 +1,63 @@
+@use '../colors.scss' as *;
+
+.ourJourneySubscription {
+  padding: 10rem 0;
+}
+.ourJourneySubscription__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 4rem;
+  align-items: center;
+  @media (min-width: 920px) {
+    gap: 8rem;
+  }
+}
+.ourJourneySubscription__gridItem {
+  &:last-child {
+    @media (min-width: 920px) {
+      justify-self: end;
+    }
+  }
+}
+.ourJourneySubscription__flex {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  & > .ourJourneySubscription__cta {
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+}
+.ourJourneySubscription__privacyPolicy {
+  font-size: 1.4rem;
+  margin-top: 0.4rem;
+  color: rgba($ebony, 0.5);
+}
+.ourJourneySubscription__privacyPolicyLink {
+  text-decoration: underline;
+}
+.ourJourneySubscription__description {
+  @media (min-width: 920px) {
+    max-width: 300px;
+  }
+}
+
+.ourJourneySubscription__video {
+  position: relative;
+  padding: 10rem 0;
+  background-color: $dark-blue;
+  overflow: hidden;
+}
+.ourJourneySubscription__videoHeading {
+  margin-bottom: 8rem;
+}
+.ourJourneySubscription__videoBottomLeft {
+  position: absolute;
+  bottom: -60px;
+  left: -50px;
+}
+.ourJourneySubscription__videoTopRight {
+  position: absolute;
+  top: -66px;
+  right: -136px;
+}

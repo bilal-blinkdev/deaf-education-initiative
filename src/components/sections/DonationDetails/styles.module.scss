@@ -104,15 +104,26 @@ $input-focus-outline: rgba($cerulean-blue, 30%);
 }
 .inputHint {
   font-size: 1.4rem;
-  font-weight: 500;
+  font-weight: normal;
   margin-top: 1rem;
   color: rgba($ebony, 56%);
 }
 .inputError {
   font-size: 1.4rem;
-  font-weight: 500;
+  font-weight: normal;
   margin-top: 1rem;
   color: $red;
+}
+.loginMessage {
+  font-size: 1.4rem;
+  font-weight: normal;
+  margin-top: 1rem;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  background-color: $pattens-blue;
+}
+.loginLink {
+  color: $dark-blue;
 }
 .donationButtons {
   display: flex;
@@ -157,7 +168,7 @@ select.input {
 }
 .donationCustomLabel {
   font-family: inherit;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 1.6rem;
   display: block;
   padding: 1.4rem 2.2rem;
@@ -261,5 +272,18 @@ select.input {
   }
   @media (min-width: 768px) {
     top: 68px;
+  }
+}
+
+.loadingIcon {
+  animation: animate 1s ease infinite;
+}
+
+@keyframes animate {
+  0% {
+    transform: rotate(0turn);
+  }
+  100% {
+    transform: rotate(1turn);
   }
 }

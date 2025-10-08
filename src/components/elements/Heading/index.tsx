@@ -17,7 +17,7 @@ const Heading: React.FC<HeadingProps> = ({
   children,
   level = 1,
   align = 'left',
-  color = 'var(--ebony)',
+  color,
   bold = true,
   className = '',
 }) => {

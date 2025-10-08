@@ -1,0 +1,110 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.tabsWithCards {
+  padding: 5rem 0 10rem;
+}
+.tabsWithCards__tabs {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  & .tabsWithCards__tab {
+    font-weight: normal;
+    color: rgba($ebony, 0.5);
+    &:hover {
+      color: $dark-blue;
+      background-color: rgba($cerulean-blue, 0.08);
+    }
+    &.active {
+      color: $dark-blue;
+      background-color: rgba($cerulean-blue, 0.15);
+    }
+  }
+}
+
+.tabsWithCards__articleCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 3rem;
+  padding: 8rem 0 0;
+  @media (min-width: 880px) {
+    grid-template-columns: repeat(2, minmax(400px, 1fr));
+  }
+}
+.articleCard {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid $mischka;
+}
+.articleCard__body {
+  padding: 0 3rem 2rem;
+}
+.articleCard__figure {
+  margin-bottom: 3rem;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+.articleCard__image {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+.articleCard__tags {
+  font-size: 1.4rem;
+  gap: 0.4rem;
+  display: flex;
+  margin-bottom: 3rem;
+  padding: 0.4rem;
+  width: max-content;
+  border-radius: 2rem;
+  color: $dark-blue;
+  background-color: $athens-gray;
+}
+.articleCard__tag {
+  padding: 0.5rem 1.2rem;
+  border-radius: 2rem;
+  &:first-child {
+    background-color: $white;
+  }
+}
+.articleCard__title__wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.articleCard__title {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+.articleCard__description {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+.articleCard__footer {
+  margin-top: auto;
+  padding: 0 3rem 2rem;
+}
+.articleCard__meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  p {
+    margin: 0;
+  }
+}
+.articleCard__authorImage {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 100%;
+}
+.articleCard__authorName {
+  font-size: 1.4rem;
+  color: $ebony;
+}
+.articleCard__publishDate {
+  font-size: 1.4rem;
+  color: rgba($ebony, 0.5);
+}

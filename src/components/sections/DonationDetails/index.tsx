@@ -2,18 +2,20 @@
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
 import DonatingHand from '@/assets/hand-donating.webp';
 import styles from './styles.module.scss';
 import ChevronDown from '@/graphics/ChevronDown';
+import CircleNotch from '@/graphics/CircleNotch';
+import Link from 'next/link';
 
 type Project = {
   name: string;
   hint: string;
-  amountOptions: { symbol: string; amount: string; period?: string | null }[];
+  amountOptions: { id: string; symbol: string; amount: string; period?: string | null }[];
 };
 type DonationDetailsProps = {
   customClass?: string;
@@ -24,7 +26,11 @@ type DonationDetailsProps = {
   handleClick: (jumpToStep?: number) => void;
   donationDetails: any;
   setDonationDetails: any;
-  setIsValid?: any;
+  setClientSecret?: (secret: string) => void;
+  paymentDetails?: any;
+  isFetchingUser: boolean;
+  isLoggedIn: boolean;
+  slug?: string;
 };
 type customRadioProps = {
   children: ReactNode;
@@ -46,12 +52,18 @@ export default function DonationDetails({
   handleClick,
   donationDetails,
   setDonationDetails,
-  setIsValid,
+  paymentDetails,
+  setClientSecret,
+  isFetchingUser = false,
+  isLoggedIn = false,
+  slug = 'home',
 }: DonationDetailsProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [selectedProject, setSelectedProject] = useState<Project | undefined>(projects[0]);
   const [disableAmountOptions, setDisableAmountOptions] = useState(false);
+  const [isStripeIntentLoading, SetIsStripeIntentLoading] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const otherAmountRef = useRef<HTMLInputElement>(null);
 
@@ -78,13 +90,6 @@ export default function DonationDetails({
       setDisableAmountOptions(false);
     }
   }, [selectedProject]);
-  useEffect(() => {
-    if (redirect) {
-      console.log('redirecting');
-      window.location.href = '/donate';
-      console.log('redirected');
-    }
-  }, [redirect]);
 
   const validate = () => {
     let newErrors: { [key: string]: string } = {};
@@ -106,13 +111,11 @@ export default function DonationDetails({
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      if (pathname === '/donate') setIsValid(false);
-      return false;
+      if (pathname === '/donate') return false;
     }
 
     // no errors
-    if (pathname === '/donate') setIsValid(true);
-    setErrors({});
+    if (pathname === '/donate') setErrors({});
     // proceed to next step
     // e.g. setStep(2) or navigate
     return true;
@@ -145,27 +148,79 @@ export default function DonationDetails({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const isValid = validate();
+    if (!validate()) {
+      return;
+    }
+    console.log(selectedProject);
 
-    if (isValid) {
-      if (pathname === '/donate') {
-        // setIsValid(true);
-        handleClick();
-      } else if (pathname === '/') {
-        const form = e.currentTarget;
-        const formData = new FormData(form);
+    if (pathname === '/donate' && typeof setClientSecret === 'function' && paymentDetails) {
+      SetIsStripeIntentLoading(true);
+      try {
+        let priceId: string | null = null;
+        let endpoint = '/api/stripe/create-payment-intent';
+        let body: object;
 
-        try {
-          await axios.post('/donation-form', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
+        if (donationDetails.supportType === 'Recurring') {
+          if (!isLoggedIn) {
+            setErrors({ supportType: 'Please log in for recurring donations.' });
+            return;
+          }
+          console.log(project);
 
-          setRedirect(true);
-        } catch (error) {
-          console.error('Donation form submission failed:', error);
+          const selectedOption = selectedProject?.amountOptions.find(
+            (opt) => opt.amount === donationDetails.donationFixedAmount,
+          );
+
+          if (!selectedOption?.id) {
+            // We check for 'id' which is your priceId
+            setErrors({ donationFixedAmount: 'Please select a valid recurring plan.' });
+            return;
+          }
+          priceId = selectedOption.id;
+          console.log(priceId);
+
+          endpoint = '/api/stripe/create-setup-intent';
+          body = { priceId };
+        } else {
+          body = { amount: Number(paymentDetails.amount) * 100 };
         }
+        console.log(body);
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+
+        const data = await response.json();
+
+        if (data.clientSecret) {
+          setClientSecret(data.clientSecret);
+          handleClick();
+        } else {
+          // Handle cases where the API call fails
+          setErrors({ projectType: data.error || 'Failed to initialize payment.' });
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        setErrors({ projectType: 'An unknown error occurred.' });
+      } finally {
+        SetIsStripeIntentLoading(false);
+      }
+    } else if (pathname === '/' || pathname.includes(slug)) {
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+
+      try {
+        await axios.post('/donation-form', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        router.push('/donate');
+      } catch (error) {
+        console.error('Donation form submission failed:', error);
       }
     }
   };
@@ -174,13 +229,12 @@ export default function DonationDetails({
     <section className={[styles.donationDetails, customClass && customClass].join(' ')}>
       <div className={styles.donationCard}>
         <section className={styles.donationCardHeader}>
-          {pathname === '/' ||
-            (pathname === '/our-programs/internal' && (
-              <>
-                <Image src={DonatingHand} className={styles.donatingHandIcon} alt="Donating Hand" />
-                <h1 className={styles.donationCardHeadingHome}>Take Action for Deaf Education</h1>
-              </>
-            ))}
+          {pathname === '/' || pathname.includes(slug) || pathname.includes('/our-programs/') ? (
+            <>
+              <Image src={DonatingHand} className={styles.donatingHandIcon} alt="Donating Hand" />
+              <h1 className={styles.donationCardHeadingHome}>Take Action for Deaf Education</h1>
+            </>
+          ) : null}
           {pathname === '/donate' && (
             <h2
               className={[styles.donationCardHeading, step !== 1 && styles.marginBottom].join(' ')}
@@ -194,7 +248,10 @@ export default function DonationDetails({
             </h2>
           )}
         </section>
-        {(pathname === '/' || pathname === '/our-programs/internal' || step == 1) && (
+        {(pathname === '/' ||
+          pathname.includes(slug) ||
+          pathname.includes('/our-programs/') ||
+          step == 1) && (
           <form className={styles.donationForm} onSubmit={handleSubmit}>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Project Supported </p>
@@ -236,11 +293,25 @@ export default function DonationDetails({
                   inputValue="Recurring"
                   handleChange={handleInputChange}
                   checked={donationDetails.supportType}
+                  disabled={!isLoggedIn}
                 >
-                  Recurring Donation
+                  {isFetchingUser ? (
+                    <CircleNotch color="var(--dark-blue)" className={styles.loadingIcon} />
+                  ) : (
+                    'Recurring Donation'
+                  )}
                 </CustomRadio>
               </div>
               {errors.supportType && <p className={styles.inputError}>{errors.supportType}</p>}{' '}
+              {!isLoggedIn && (
+                <p className={styles.loginMessage}>
+                  Please{' '}
+                  <Link href="/login" className={styles.loginLink}>
+                    login
+                  </Link>{' '}
+                  for recurring payments
+                </p>
+              )}{' '}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Choose an amount to give once</p>
@@ -304,7 +375,14 @@ export default function DonationDetails({
                 <p className={styles.inputHint}>This is a hint text to help user.</p>
               )} */}
             </div>
-            <Button type="submit" size="large" width="full" icons={{ leading: true }}>
+            <Button
+              type="submit"
+              size="large"
+              width="full"
+              icons={{ leading: true }}
+              loading={isStripeIntentLoading}
+              disabled={isStripeIntentLoading}
+            >
               {pathname === '/donate' ? 'Continue to Personal Details' : 'Donate Now'}
             </Button>
           </form>

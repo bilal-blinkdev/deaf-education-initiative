@@ -172,7 +172,7 @@ export default function UserDetails({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const isValid = validate();
+    const isValid = true;
 
     if (isValid) handleClick();
   };

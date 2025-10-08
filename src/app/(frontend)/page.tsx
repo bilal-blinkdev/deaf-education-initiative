@@ -7,7 +7,7 @@ import config from '@/payload.config';
 import MainBanner from '@/components/blocks/MainBanner';
 import KeyMetrics from '@/components/blocks/KeyMetrics';
 import Cards from '@/components/blocks/Cards';
-import CardsSlider from '@/components/blocks/CardsSlider';
+import CardsSlider, { Card } from '@/components/blocks/CardsSlider';
 import TestimonialSlider from '@/components/blocks/TestimonialSlider';
 import TwoColumnCard from '@/components/blocks/TwoColumnCard';
 import LogoSlider from '@/components/blocks/LogoSlider';
@@ -18,6 +18,8 @@ import Employees from '@/graphics/Employees';
 import Teacher from '@/graphics/Teacher';
 import PeopleChatting from '@/graphics/PeopleChatting';
 import Globe from '@/graphics/Globe';
+import { fetchPrograms } from './our-programs/page';
+import { notFound } from 'next/navigation';
 
 export default async function HomePage() {
   const headers = await getHeaders();
@@ -26,6 +28,11 @@ export default async function HomePage() {
   const { user } = await payload.auth({ headers });
 
   const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`;
+
+  const programs = await fetchPrograms();
+  if (!programs) {
+    notFound();
+  }
 
   const keyMetrics = {
     content: {
@@ -94,12 +101,41 @@ export default async function HomePage() {
     // },
   };
 
+  const cards = programs.reduce<Card[]>((acc, program) => {
+    const { title, slug, shortDescription, featuredImage } = program;
+
+    // Check if the image is valid
+    if (
+      typeof featuredImage === 'object' &&
+      featuredImage?.url &&
+      featuredImage.width &&
+      featuredImage.height
+    ) {
+      // If valid, create the card object and push it to the array
+      acc.push({
+        image: {
+          src: featuredImage.url,
+          alt: featuredImage.alt ?? '',
+          width: featuredImage.width,
+          height: featuredImage.height,
+        },
+        title,
+        description: shortDescription,
+        cta: {
+          text: 'Learn More',
+          url: `/our-programs/${slug}`,
+        },
+      });
+    }
+
+    return acc;
+  }, []);
   return (
     <>
       <MainBanner />
       <KeyMetrics keyMetrics={keyMetrics} />
       <Cards />
-      <CardsSlider />
+      <CardsSlider cards={cards} />
       <TestimonialSlider />
       <TwoColumnCard />
       <LogoSlider />

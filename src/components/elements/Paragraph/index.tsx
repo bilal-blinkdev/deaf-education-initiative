@@ -12,7 +12,7 @@ type ParagraphProps = {
 const Paragraph: React.FC<ParagraphProps> = ({
   children,
   align = 'left',
-  color = 'var(--ebony)',
+  color,
   bold = false,
   className = '',
 }) => {

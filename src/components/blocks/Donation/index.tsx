@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
 import Container from '@/components/layout/Container';
 import StepBar from '@/components/elements/StepBar';
 import DonationDetailsBox from '@/components/sections/DonationDetails';
@@ -12,9 +12,9 @@ import Button from '@/components/elements/Button';
 import HandDrawnTwinkle from '@/graphics/HandDrawnTwinkle';
 import HandDrawnSmily from '@/graphics/HandDrawnSmily';
 import ArrowLeft from '@/graphics/ArrowLeft';
-import { PROJECTS } from '@/app/constants';
+import { PROJECTS_TEST as PROJECTS } from '@/app/constants';
 import styles from './styles.module.scss';
-import { sendEmail } from '@/app/lib/email/sendgrid/send';
+import { useAuth } from '@/hooks/useAuth';
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
   throw new Error('NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined');
@@ -23,6 +23,8 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 const NUMBER_OF_STEPS = 3;
 
 export default function Donation({ donationDetailsFormData }: any) {
+  const { isFetching: isFetchingUser, isLoggedIn } = useAuth();
+
   const [step, setStep] = useState(1);
 
   const [donationDetails, setDonationDetails] = useState(
@@ -55,8 +57,10 @@ export default function Donation({ donationDetailsFormData }: any) {
           ? Number(donationDetails.donationFixedAmount)
           : 1,
   });
-  const [donationDetailsValid, setDonationDetailsValid] = useState(false);
   const [paymentSucceeded, setPaymentSucceeded] = useState<boolean>(false);
+
+  const [clientSecret, setClientSecret] = useState('');
+  const [elementsOptions, setElementsOptions] = useState<StripeElementsOptions>({});
 
   const [project, setProject] = useState(PROJECTS[0]);
   const appearance = {
@@ -145,6 +149,30 @@ export default function Donation({ donationDetailsFormData }: any) {
     });
   }, [donationDetails]);
 
+  // useEffect(() => {
+  //   configureStripeOptions();
+  //   // 👇 The dependency array is correct and won't cause a loop.
+  // }, [paymentDetails.amount, donationDetails.supportType]);
+
+  useEffect(() => {
+    if (clientSecret) {
+      if (donationDetails.supportType === 'Recurring') {
+        setElementsOptions({
+          appearance,
+          mode: 'setup',
+          currency: 'gbp',
+        });
+      } else {
+        setElementsOptions({
+          appearance,
+          mode: 'payment',
+          amount: Number(paymentDetails.amount) * 100,
+          currency: 'gbp',
+        });
+      }
+    }
+  }, [clientSecret, donationDetails.supportType, paymentDetails.amount]);
+
   return (
     <section className={styles.donation}>
       <Container>
@@ -171,7 +199,10 @@ export default function Donation({ donationDetailsFormData }: any) {
                 step={step}
                 donationDetails={donationDetails}
                 setDonationDetails={setDonationDetails}
-                setIsValid={setDonationDetailsValid}
+                isFetchingUser={isFetchingUser}
+                isLoggedIn={isLoggedIn}
+                setClientSecret={setClientSecret}
+                paymentDetails={paymentDetails}
               />
               <UserDetailsBox
                 project={project}
@@ -182,24 +213,17 @@ export default function Donation({ donationDetailsFormData }: any) {
                 userDetails={userDetails}
                 setUserDetails={setUserDetails}
               />
-              <Elements
-                stripe={stripePromise}
-                options={{
-                  mode: 'payment',
-                  amount: Number(paymentDetails.amount) * 100,
-                  currency: 'gbp',
-                  appearance: appearance,
-                }}
-              >
+              <Elements stripe={stripePromise} options={elementsOptions}>
                 <PaymentDetailsBox
                   project={project}
                   setProject={setProject}
                   projects={PROJECTS}
                   handleClick={handleStepChange}
                   step={step}
-                  amount={Number(paymentDetails.amount)}
                   setPaymentDetails={setPaymentDetails}
                   setPaymentSucceeded={setPaymentSucceeded}
+                  donationDetails={donationDetails}
+                  clientSecret={clientSecret}
                   sendEmail={handleEmail}
                 />
               </Elements>

@@ -1,0 +1,30 @@
+@use '../../../app/\(frontend\)/colors' as *;
+
+.faqs {
+  padding: 2rem 0 10rem;
+}
+.faqs__subtext {
+  margin-bottom: 2rem;
+  text-align: center;
+  color: rgba($ebony, 0.7);
+}
+.faqs__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 4rem 0;
+}
+.faqs__icon {
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+.faqs__faq {
+  display: flex;
+  gap: 2rem;
+}
+.faq__question {
+  margin-bottom: 1.4rem;
+}
+.faq__answer {
+  color: rgba($ebony, 0.4);
+}

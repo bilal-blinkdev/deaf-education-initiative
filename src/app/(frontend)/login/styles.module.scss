@@ -1,0 +1,19 @@
+@use '../colors.scss' as *;
+
+.login {
+  padding: 10rem 0;
+  background-color: $athens-gray;
+}
+.loginContainer {
+  max-width: 500px;
+}
+.signupMessage {
+  padding: 1rem 0;
+  text-align: right;
+}
+.signupLink {
+  color: $dark-blue;
+  &:hover {
+    text-decoration: underline;
+  }
+}

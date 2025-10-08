@@ -41,6 +41,45 @@
   align-items: center;
   gap: 0.8rem;
 }
+.eventDetail__content {
+  & a {
+    color: $cerulean-blue;
+  }
+  & h3 {
+    margin: 4rem 0 2rem;
+  }
+  figure {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+  }
+  figcaption {
+    font-size: 1.4rem;
+    margin-top: 0.4rem;
+    width: 100%;
+    color: rgba($ebony, 0.5);
+    text-align: left;
+  }
+  & ol {
+    font-size: 1.8rem;
+    list-style: decimal;
+    list-style-position: outside;
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+    & li {
+      margin-bottom: 1rem;
+    }
+  }
+  & ul {
+    font-size: 1.8rem;
+    list-style: disc;
+    list-style-position: outside;
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+    & li {
+      margin-bottom: 1rem;
+    }
+  }
+}
 .eventDetail__cta {
   margin: 4rem auto 0;
 }

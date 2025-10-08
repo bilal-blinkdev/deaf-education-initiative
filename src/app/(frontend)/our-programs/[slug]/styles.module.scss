@@ -17,7 +17,7 @@
   display: flex;
   flex-direction: row;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  align-items: end;
+  align-items: flex-end;
   gap: 2rem;
   @media (min-width: 768px) {
   }
@@ -112,5 +112,17 @@
 
 // Video
 .video {
+  position: relative;
   padding: 10rem 0;
+  overflow: hidden;
+}
+.video__videoBottomLeft {
+  position: absolute;
+  bottom: -60px;
+  left: -50px;
+}
+.video__videoTopRight {
+  position: absolute;
+  top: -66px;
+  right: -136px;
 }

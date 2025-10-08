@@ -126,7 +126,7 @@
 }
 .iconAndContent {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   gap: 1rem;
   & svg {
     flex-shrink: 0;
