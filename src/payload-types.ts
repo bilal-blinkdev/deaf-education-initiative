@@ -64,11 +64,20 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    donors: DonorAuthOperations;
   };
   blocks: {};
   collections: {
     users: User;
     media: Media;
+    pages: Page;
+    donors: Donor;
+    categories: Category;
+    authors: Author;
+    publications: Publication;
+    events: Event;
+    programs: Program;
+    'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -77,6 +86,14 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    donors: DonorsSelect<false> | DonorsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    authors: AuthorsSelect<false> | AuthorsSelect<true>;
+    publications: PublicationsSelect<false> | PublicationsSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
+    programs: ProgramsSelect<false> | ProgramsSelect<true>;
+    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -84,18 +101,52 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  globals: {};
-  globalsSelect: {};
-  locale: null;
-  user: User & {
-    collection: 'users';
+  globals: {
+    header: Header;
+    footer: Footer;
   };
+  globalsSelect: {
+    header: HeaderSelect<false> | HeaderSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
+  };
+  locale: null;
+  user:
+    | (User & {
+        collection: 'users';
+      })
+    | (Donor & {
+        collection: 'donors';
+      });
   jobs: {
-    tasks: unknown;
+    tasks: {
+      schedulePublish: TaskSchedulePublish;
+      inline: {
+        input: unknown;
+        output: unknown;
+      };
+    };
     workflows: unknown;
   };
 }
 export interface UserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface DonorAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -119,6 +170,8 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
+  name?: string | null;
+  roles?: ('admin' | 'editor' | 'viewer')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -143,7 +196,22 @@ export interface User {
  */
 export interface Media {
   id: string;
-  alt: string;
+  alt?: string | null;
+  caption?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -155,6 +223,748 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    square?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    small?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    medium?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    large?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    xlarge?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    og?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: string;
+  title: string;
+  hero: {
+    type: 'none' | 'simpleImage' | 'donationForm';
+    media?: (string | null) | Media;
+  };
+  layout: (CardGrid | ImageGrid | KeyMetricsBlock)[];
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardGrid".
+ */
+export interface CardGrid {
+  heading: string;
+  subheading?: string | null;
+  description?: string | null;
+  cards: {
+    image: string | Media;
+    iconType?: ('predefined' | 'custom') | null;
+    predefinedIcon?: ('GraduationCap' | 'Monitor' | 'SheetSigning') | null;
+    customIcon?: (string | null) | Media;
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  paddingTop?:
+    | (
+        | '0x'
+        | '1x'
+        | '2x'
+        | '3x'
+        | '4x'
+        | '5x'
+        | '6x'
+        | '7x'
+        | '8x'
+        | '9x'
+        | '10x'
+        | '11x'
+        | '12x'
+        | '13x'
+        | '14x'
+        | '15x'
+        | '16x'
+        | '17x'
+        | '18x'
+        | '19x'
+        | '20x'
+        | '21x'
+        | '22x'
+        | '23x'
+        | '24x'
+        | '25x'
+        | '26x'
+        | '27x'
+        | '28x'
+        | '29x'
+        | '30x'
+        | '31x'
+        | '32x'
+        | '33x'
+        | '34x'
+        | '35x'
+        | '36x'
+        | '37x'
+        | '38x'
+        | '39x'
+        | '40x'
+      )
+    | null;
+  paddingBottom?:
+    | (
+        | '0x'
+        | '1x'
+        | '2x'
+        | '3x'
+        | '4x'
+        | '5x'
+        | '6x'
+        | '7x'
+        | '8x'
+        | '9x'
+        | '10x'
+        | '11x'
+        | '12x'
+        | '13x'
+        | '14x'
+        | '15x'
+        | '16x'
+        | '17x'
+        | '18x'
+        | '19x'
+        | '20x'
+        | '21x'
+        | '22x'
+        | '23x'
+        | '24x'
+        | '25x'
+        | '26x'
+        | '27x'
+        | '28x'
+        | '29x'
+        | '30x'
+        | '31x'
+        | '32x'
+        | '33x'
+        | '34x'
+        | '35x'
+        | '36x'
+        | '37x'
+        | '38x'
+        | '39x'
+        | '40x'
+      )
+    | null;
+  colors?: {
+    backgroundColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+    headingColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+    descriptionColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+    cardTitleColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+    cardDescriptionColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageGrid".
+ */
+export interface ImageGrid {
+  imageText: string;
+  images: {
+    image: string | Media;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "KeyMetricsBlock".
+ */
+export interface KeyMetricsBlock {
+  heading: string;
+  description?: string | null;
+  metrics: {
+    iconType: 'predefined' | 'custom';
+    predefinedIcon?: ('Student' | 'Employees' | 'Teacher' | 'PeopleChatting' | 'Globe') | null;
+    customIcon?: (string | null) | Media;
+    numbers: string;
+    text: string;
+    id?: string | null;
+  }[];
+  paddingTop?:
+    | (
+        | '0x'
+        | '1x'
+        | '2x'
+        | '3x'
+        | '4x'
+        | '5x'
+        | '6x'
+        | '7x'
+        | '8x'
+        | '9x'
+        | '10x'
+        | '11x'
+        | '12x'
+        | '13x'
+        | '14x'
+        | '15x'
+        | '16x'
+        | '17x'
+        | '18x'
+        | '19x'
+        | '20x'
+        | '21x'
+        | '22x'
+        | '23x'
+        | '24x'
+        | '25x'
+        | '26x'
+        | '27x'
+        | '28x'
+        | '29x'
+        | '30x'
+        | '31x'
+        | '32x'
+        | '33x'
+        | '34x'
+        | '35x'
+        | '36x'
+        | '37x'
+        | '38x'
+        | '39x'
+        | '40x'
+      )
+    | null;
+  paddingBottom?:
+    | (
+        | '0x'
+        | '1x'
+        | '2x'
+        | '3x'
+        | '4x'
+        | '5x'
+        | '6x'
+        | '7x'
+        | '8x'
+        | '9x'
+        | '10x'
+        | '11x'
+        | '12x'
+        | '13x'
+        | '14x'
+        | '15x'
+        | '16x'
+        | '17x'
+        | '18x'
+        | '19x'
+        | '20x'
+        | '21x'
+        | '22x'
+        | '23x'
+        | '24x'
+        | '25x'
+        | '26x'
+        | '27x'
+        | '28x'
+        | '29x'
+        | '30x'
+        | '31x'
+        | '32x'
+        | '33x'
+        | '34x'
+        | '35x'
+        | '36x'
+        | '37x'
+        | '38x'
+        | '39x'
+        | '40x'
+      )
+    | null;
+  colors?: {
+    mainBackgroundColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+    headingTextColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+    descriptionTextColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'keyMetrics';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donors".
+ */
+export interface Donor {
+  id: string;
+  name?: string | null;
+  stripeCustomerId?: string | null;
+  subscriptionStatus?:
+    | (
+        | 'active'
+        | 'canceled'
+        | 'incomplete'
+        | 'incomplete_expired'
+        | 'past_due'
+        | 'trialing'
+        | 'unpaid'
+        | 'paused'
+        | 'none'
+      )
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors".
+ */
+export interface Author {
+  id: string;
+  name: string;
+  photo: string | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publications".
+ */
+export interface Publication {
+  id: string;
+  title: string;
+  slug: string;
+  publishedDate: string;
+  category: string | Category;
+  author: string | Author;
+  featuredImage: string | Media;
+  excerpt: string;
+  readingDuration: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: string;
+  title: string;
+  slug: string;
+  eventDate: string;
+  time: string;
+  registrationLink?: string | null;
+  featuredImage: string | Media;
+  location: {
+    name: string;
+    /**
+     * Go to Google Maps, find the location, and click Share > Embed a map. Copy ONLY the URL from the 'src' attribute of the iframe code and paste it here.
+     */
+    googleMapsEmbedUrl: string;
+  };
+  details?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "programs".
+ */
+export interface Program {
+  id: string;
+  title: string;
+  slug: string;
+  featuredImage: string | Media;
+  shortDescription: string;
+  layout?: (ImageGrid | CardGrid)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs".
+ */
+export interface PayloadJob {
+  id: string;
+  /**
+   * Input data provided to the job
+   */
+  input?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  taskStatus?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  completedAt?: string | null;
+  totalTried?: number | null;
+  /**
+   * If hasError is true this job will not be retried
+   */
+  hasError?: boolean | null;
+  /**
+   * If hasError is true, this is the error that caused it
+   */
+  error?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Task execution log
+   */
+  log?:
+    | {
+        executedAt: string;
+        completedAt: string;
+        taskSlug: 'inline' | 'schedulePublish';
+        taskID: string;
+        input?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        output?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        state: 'failed' | 'succeeded';
+        error?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  taskSlug?: ('inline' | 'schedulePublish') | null;
+  queue?: string | null;
+  waitUntil?: string | null;
+  processing?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -170,12 +980,49 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: string | Page;
+      } | null)
+    | ({
+        relationTo: 'donors';
+        value: string | Donor;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: string | Category;
+      } | null)
+    | ({
+        relationTo: 'authors';
+        value: string | Author;
+      } | null)
+    | ({
+        relationTo: 'publications';
+        value: string | Publication;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: string | Event;
+      } | null)
+    | ({
+        relationTo: 'programs';
+        value: string | Program;
+      } | null)
+    | ({
+        relationTo: 'payload-jobs';
+        value: string | PayloadJob;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'donors';
+        value: string | Donor;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -185,10 +1032,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'donors';
+        value: string | Donor;
+      };
   key?: string | null;
   value?:
     | {
@@ -218,6 +1070,8 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  roles?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -241,6 +1095,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -252,6 +1107,321 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        square?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        small?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        medium?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        large?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        xlarge?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        og?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  hero?:
+    | T
+    | {
+        type?: T;
+        media?: T;
+      };
+  layout?:
+    | T
+    | {
+        cardGrid?: T | CardGridSelect<T>;
+        imageGrid?: T | ImageGridSelect<T>;
+        keyMetrics?: T | KeyMetricsBlockSelect<T>;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  publishedAt?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardGrid_select".
+ */
+export interface CardGridSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  description?: T;
+  cards?:
+    | T
+    | {
+        image?: T;
+        iconType?: T;
+        predefinedIcon?: T;
+        customIcon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  paddingTop?: T;
+  paddingBottom?: T;
+  colors?:
+    | T
+    | {
+        backgroundColor?: T;
+        headingColor?: T;
+        descriptionColor?: T;
+        cardTitleColor?: T;
+        cardDescriptionColor?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageGrid_select".
+ */
+export interface ImageGridSelect<T extends boolean = true> {
+  imageText?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "KeyMetricsBlock_select".
+ */
+export interface KeyMetricsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  metrics?:
+    | T
+    | {
+        iconType?: T;
+        predefinedIcon?: T;
+        customIcon?: T;
+        numbers?: T;
+        text?: T;
+        id?: T;
+      };
+  paddingTop?: T;
+  paddingBottom?: T;
+  colors?:
+    | T
+    | {
+        mainBackgroundColor?: T;
+        headingTextColor?: T;
+        descriptionTextColor?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donors_select".
+ */
+export interface DonorsSelect<T extends boolean = true> {
+  name?: T;
+  stripeCustomerId?: T;
+  subscriptionStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors_select".
+ */
+export interface AuthorsSelect<T extends boolean = true> {
+  name?: T;
+  photo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publications_select".
+ */
+export interface PublicationsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  publishedDate?: T;
+  category?: T;
+  author?: T;
+  featuredImage?: T;
+  excerpt?: T;
+  readingDuration?: T;
+  content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  eventDate?: T;
+  time?: T;
+  registrationLink?: T;
+  featuredImage?: T;
+  location?:
+    | T
+    | {
+        name?: T;
+        googleMapsEmbedUrl?: T;
+      };
+  details?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "programs_select".
+ */
+export interface ProgramsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  featuredImage?: T;
+  shortDescription?: T;
+  layout?:
+    | T
+    | {
+        imageGrid?: T | ImageGridSelect<T>;
+        cardGrid?: T | CardGridSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs_select".
+ */
+export interface PayloadJobsSelect<T extends boolean = true> {
+  input?: T;
+  taskStatus?: T;
+  completedAt?: T;
+  totalTried?: T;
+  hasError?: T;
+  error?: T;
+  log?:
+    | T
+    | {
+        executedAt?: T;
+        completedAt?: T;
+        taskSlug?: T;
+        taskID?: T;
+        input?: T;
+        output?: T;
+        state?: T;
+        error?: T;
+        id?: T;
+      };
+  taskSlug?: T;
+  queue?: T;
+  waitUntil?: T;
+  processing?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -284,6 +1454,199 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header".
+ */
+export interface Header {
+  id: string;
+  navItems?:
+    | {
+        linkText: string;
+        linkType: 'internal' | 'custom';
+        internalPage?:
+          | ({
+              relationTo: 'pages';
+              value: string | Page;
+            } | null)
+          | ({
+              relationTo: 'programs';
+              value: string | Program;
+            } | null)
+          | ({
+              relationTo: 'events';
+              value: string | Event;
+            } | null)
+          | ({
+              relationTo: 'publications';
+              value: string | Publication;
+            } | null);
+        customUrl?: string | null;
+        openInNewTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  buttons?:
+    | {
+        linkText: string;
+        linkType: 'internal' | 'custom';
+        internalPage?:
+          | ({
+              relationTo: 'pages';
+              value: string | Page;
+            } | null)
+          | ({
+              relationTo: 'programs';
+              value: string | Program;
+            } | null)
+          | ({
+              relationTo: 'events';
+              value: string | Event;
+            } | null)
+          | ({
+              relationTo: 'publications';
+              value: string | Publication;
+            } | null);
+        customUrl?: string | null;
+        openInNewTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: string;
+  tagline: string;
+  socialLinks?: {
+    facebookUrl?: string | null;
+    twitterUrl?: string | null;
+    instagramUrl?: string | null;
+    linkedinUrl?: string | null;
+    youtubeUrl?: string | null;
+  };
+  navMenus?:
+    | {
+        title: string;
+        links?:
+          | {
+              linkText: string;
+              linkType: 'internal' | 'custom';
+              internalPage?:
+                | ({
+                    relationTo: 'pages';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'programs';
+                    value: string | Program;
+                  } | null)
+                | ({
+                    relationTo: 'events';
+                    value: string | Event;
+                  } | null)
+                | ({
+                    relationTo: 'publications';
+                    value: string | Publication;
+                  } | null);
+              customUrl?: string | null;
+              openInNewTab?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  copyrightText: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header_select".
+ */
+export interface HeaderSelect<T extends boolean = true> {
+  navItems?:
+    | T
+    | {
+        linkText?: T;
+        linkType?: T;
+        internalPage?: T;
+        customUrl?: T;
+        openInNewTab?: T;
+        id?: T;
+      };
+  buttons?:
+    | T
+    | {
+        linkText?: T;
+        linkType?: T;
+        internalPage?: T;
+        customUrl?: T;
+        openInNewTab?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  tagline?: T;
+  socialLinks?:
+    | T
+    | {
+        facebookUrl?: T;
+        twitterUrl?: T;
+        instagramUrl?: T;
+        linkedinUrl?: T;
+        youtubeUrl?: T;
+      };
+  navMenus?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              linkText?: T;
+              linkType?: T;
+              internalPage?: T;
+              customUrl?: T;
+              openInNewTab?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  copyrightText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskSchedulePublish".
+ */
+export interface TaskSchedulePublish {
+  input: {
+    type?: ('publish' | 'unpublish') | null;
+    locale?: string | null;
+    doc?: {
+      relationTo: 'pages';
+      value: string | Page;
+    } | null;
+    global?: string | null;
+    user?: (string | null) | User;
+  };
+  output?: unknown;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 type SvgProps = {
   width?: string;
@@ -6,11 +6,7 @@ type SvgProps = {
   color?: string;
 };
 
-export default function ArrowLeft({
-  width = "22",
-  height = "22",
-  color = "#344054",
-}: SvgProps) {
+export default function ArrowLeft({ width = '22', height = '22', color = '#344054' }: SvgProps) {
   return (
     <svg
       width={width}
