@@ -43,7 +43,6 @@ export const Pages: CollectionConfig = {
               name: 'layout',
               type: 'blocks',
               blocks: [CardGrid, ImageGrid, KeyMetrics],
-              required: true,
               admin: {
                 initCollapsed: true,
               },
