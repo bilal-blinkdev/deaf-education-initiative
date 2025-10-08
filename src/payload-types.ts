@@ -293,7 +293,7 @@ export interface Page {
     type: 'none' | 'simpleImage' | 'donationForm';
     media?: (string | null) | Media;
   };
-  layout?: (CardGrid | ImageGrid | KeyMetricsBlock)[] | null;
+  layout: (CardGrid | ImageGrid | KeyMetricsBlock)[];
   meta?: {
     title?: string | null;
     /**
