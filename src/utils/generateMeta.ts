@@ -25,8 +25,8 @@ export const generateMeta = async (args: { doc: Partial<Page> | null }): Promise
   const ogImage = getImageURL(doc?.meta?.image);
 
   const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Payload Website Template'
-    : 'Payload Website Template';
+    ? doc?.meta?.title + ' |  Deaf Education Initiative'
+    : 'Deaf Education Initiative';
 
   return {
     description: doc?.meta?.description,
