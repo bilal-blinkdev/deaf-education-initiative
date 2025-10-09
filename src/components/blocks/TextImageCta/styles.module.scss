@@ -1,7 +1,15 @@
 @use '../../../app/\(frontend\)/colors' as *;
 
 .awardsAndRecognition {
-  padding: 10rem 0;
+  padding: 8rem 0 10rem;
+  @media (min-width: 768px) {
+    padding: 16rem 0 10rem;
+    flex-direction: row;
+  }
+  @media (min-width: 1300px) {
+    padding: 24rem 0 10rem;
+    flex-direction: row;
+  }
 }
 .container {
   position: relative;
