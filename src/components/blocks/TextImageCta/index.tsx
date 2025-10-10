@@ -24,7 +24,7 @@ export default function TextImageCta({ sectionClass, customClass }: TextImageCta
                 &ldquo;If we view the Deaf community not as a disability group, but as a minority
                 culture that speaks another language (sign language), our perception changes. We
                 then realize that to succeed, the Deaf simply need empowerment through education;
-                same opportunity that is everyone&pos;s right.&rdquo;
+                same opportunity that is everyone&apos;s right.&rdquo;
               </p>
             </blockquote>
             <p className={styles.quoteAuthor}>
