@@ -11,6 +11,7 @@ import LogoSliderBlock from '@/components/blocks/LogoSlider';
 import SubscriptionBlock from '@/components/blocks/Subscription';
 import TwoColumnCard from '@/components/blocks/TwoColumnCard';
 import TextCtaWithBgImage from '@/components/blocks/TextCtaWithBgImage';
+import OurVision from '@/components/blocks/OurVision';
 
 export default function About() {
   const keyMetrics = {
@@ -67,7 +68,7 @@ export default function About() {
     <>
       <Banner src={ChildrenSmiling} alt="Children Smiling" />
       <KeyMetrics keyMetrics={keyMetrics} />
-      {/* <OurVision /> */}
+      <OurVision />
       <TextImageCta sectionClass="awardsAndRecognition" />
       <IconTextCards sectionClass="ourCoreValues" />
       <TextCtaWithBgImage sectionClass="organizationInfo" />

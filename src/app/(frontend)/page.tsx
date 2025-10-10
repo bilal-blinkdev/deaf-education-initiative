@@ -62,7 +62,7 @@ export default async function HomePage() {
           },
           {
             format: 'normal',
-            text: ' We are a non-profit organization committed to empowering disadvantaged deaf children and youth in Pakistan. We support the Deaf Reach Program in Pakistan, which is working on empowering the deaf community by providing a full circle solution from education and skills training, teacher development and parent training, to job placement and community inclusion.',
+            text: ' We are a non-profit organization, registered with the Charity Commission UK, which is working to empower underserved deaf children and youth in Pakistan. We support the Deaf Reach Program in Pakistan, which is working on empowering the deaf community by providing a full circle solution from education, skills training, and teacher development to parent training and job placements.',
           },
         ],
       },
