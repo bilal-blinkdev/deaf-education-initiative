@@ -822,6 +822,7 @@ export interface Publication {
   };
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -859,6 +860,7 @@ export interface Event {
   } | null;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -873,6 +875,7 @@ export interface Program {
   layout?: (ImageGrid | CardGrid)[] | null;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1352,6 +1355,7 @@ export interface PublicationsSelect<T extends boolean = true> {
   content?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1373,6 +1377,7 @@ export interface EventsSelect<T extends boolean = true> {
   details?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1391,6 +1396,7 @@ export interface ProgramsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1463,8 +1469,9 @@ export interface Header {
   id: string;
   navItems?:
     | {
-        linkText: string;
-        linkType: 'internal' | 'custom';
+        title: string;
+        hasSubMenu?: boolean | null;
+        linkType?: ('internal' | 'custom') | null;
         internalPage?:
           | ({
               relationTo: 'pages';
@@ -1484,6 +1491,32 @@ export interface Header {
             } | null);
         customUrl?: string | null;
         openInNewTab?: boolean | null;
+        subMenu?:
+          | {
+              linkText: string;
+              linkType: 'internal' | 'custom';
+              internalPage?:
+                | ({
+                    relationTo: 'pages';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'programs';
+                    value: string | Program;
+                  } | null)
+                | ({
+                    relationTo: 'events';
+                    value: string | Event;
+                  } | null)
+                | ({
+                    relationTo: 'publications';
+                    value: string | Publication;
+                  } | null);
+              customUrl?: string | null;
+              openInNewTab?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -1574,11 +1607,22 @@ export interface HeaderSelect<T extends boolean = true> {
   navItems?:
     | T
     | {
-        linkText?: T;
+        title?: T;
+        hasSubMenu?: T;
         linkType?: T;
         internalPage?: T;
         customUrl?: T;
         openInNewTab?: T;
+        subMenu?:
+          | T
+          | {
+              linkText?: T;
+              linkType?: T;
+              internalPage?: T;
+              customUrl?: T;
+              openInNewTab?: T;
+              id?: T;
+            };
         id?: T;
       };
   buttons?:
@@ -1639,10 +1683,23 @@ export interface TaskSchedulePublish {
   input: {
     type?: ('publish' | 'unpublish') | null;
     locale?: string | null;
-    doc?: {
-      relationTo: 'pages';
-      value: string | Page;
-    } | null;
+    doc?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'publications';
+          value: string | Publication;
+        } | null)
+      | ({
+          relationTo: 'events';
+          value: string | Event;
+        } | null)
+      | ({
+          relationTo: 'programs';
+          value: string | Program;
+        } | null);
     global?: string | null;
     user?: (string | null) | User;
   };

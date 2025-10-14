@@ -32,11 +32,39 @@ export default async function Header() {
             <section className={styles.navMenu}>
               <nav>
                 <ul>
-                  {navItems.map((item, index) => (
-                    <li key={index}>
-                      <SmartLink link={item} />
-                    </li>
-                  ))}
+                  {navItems?.map((item) => {
+                    if (!item) return null;
+                    return (
+                      <li key={item.id} className={item.hasSubMenu ? styles.hasSubMenu : ''}>
+                        {item.hasSubMenu ? (
+                          <>
+                            <span className={styles.navItemTitle}>{item.title}</span>
+                            <ul className={styles.subMenu}>
+                              {item.subMenu?.map((subItem) => {
+                                if (!subItem) return null;
+                                return (
+                                  <li key={subItem.id}>
+                                    <SmartLink link={subItem} />
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </>
+                        ) : (
+                          // Create the link object for SmartLink on the fly
+                          <SmartLink
+                            link={{
+                              linkText: item.title,
+                              linkType: item.linkType ?? 'custom',
+                              internalPage: item.internalPage,
+                              customUrl: item.customUrl,
+                              openInNewTab: item.openInNewTab,
+                            }}
+                          />
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </nav>
               <div className={styles.userProfileBtn}>
@@ -69,9 +97,7 @@ export default async function Header() {
                 {navItems &&
                   navItems.map((item, index) => (
                     <li key={index}>
-                      <label htmlFor="mobile-menu-toggle">
-                        <SmartLink link={item} />
-                      </label>
+                      <label htmlFor="mobile-menu-toggle">{/* <SmartLink link={item} /> */}</label>
                     </li>
                   ))}
               </ul>

@@ -23,6 +23,11 @@ export const linkFields: Field[] = [
     type: 'relationship',
     relationTo: ['pages', 'programs', 'events', 'publications'],
     required: true,
+    filterOptions: () => {
+      return {
+        _status: { equals: 'published' },
+      };
+    },
     admin: {
       condition: (_, siblingData) => siblingData.linkType === 'internal',
     },
