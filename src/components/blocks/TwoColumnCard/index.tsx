@@ -12,11 +12,11 @@ export default function TwoColumnCard() {
           <div className={styles.cardBody}>
             <div className={styles.colOne}>
               <h3 className={styles.title}>
-                Less Than 5% Of The One Million Deaf Children In Pakistan Attend School
+                Less Than 5% of the One Million Deaf Children in Pakistan Attend School
               </h3>
               <p className={styles.description}>
-                Your donations can ensure that Deaf Education is made available to more children.
-                Together, we can make education a reality for deaf children.
+                Your donations can help make quality Deaf Education accessible to more children.
+                Together, we can make education a reality for deaf children across Pakistan.
               </p>
               <Button size="large" width="maxContent" link={{ href: '/donate' }}>
                 Donate Now

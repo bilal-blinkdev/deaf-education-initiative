@@ -44,17 +44,17 @@ export default function About() {
         {
           icon: <Student />,
           numbers: '2380+',
-          text: 'students currently enrolled across our 9 campuses',
+          text: 'Students currently enrolled across our 9 campuses',
         },
         {
           icon: <Employees />,
           numbers: '50,000+',
-          text: 'direct beneficiaries to date',
+          text: 'Direct beneficiaries to date',
         },
         {
           icon: <Teacher />,
           numbers: '2750+',
-          text: 'deaf youth and adults found meaningful employment',
+          text: 'Deaf youth and adults found meaningful employment',
         },
       ],
     },

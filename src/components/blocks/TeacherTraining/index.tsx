@@ -22,19 +22,24 @@ export default function TeacherTraining() {
             <Heading level={2}>Teacher Training</Heading>
             <Paragraph>
               Our Teacher Training Program ensures that all our educators are well-equipped to meet
-              the unique learning needs of our students by regular trainings. In addition to
-              building capacity in local teachers of the Deaf, we also work on developing new
-              student teacher trainees. Over 50% of Deaf Reach teaching staff are deaf.
+              the unique learning needs of our students through regular training. In addition to
+              building the capacity of local teachers of the Deaf, we also work to develop new
+              student-teacher trainees. Over 50% of the Deaf Reach teaching staff are deaf.
             </Paragraph>
             <div className={styles.iconAndContent}>
               <PersonalDevelopment />
               <div className={styles.content}>
                 <Heading level={3}>Teacher Development</Heading>
                 <Paragraph>
-                  There is a critical need for trained teachers of the Deaf capacitated to educate
-                  students in Pakistan Sign Language with visual learning methodologies tailored to
-                  the learning needs of deaf students. Deaf Reach identifies high achieving deaf
-                  students and provides training for them to pursue a career in Deaf education.
+                  Teacher Development There is a critical need for trained teachers of the Deaf
+                  capacitated to educate students in Pakistan Sign Language with visual learning
+                  methodologies tailored to the learning needs of deaf students. Deaf Reach
+                  identifies high achieving deaf students and provides training for them to pursue a
+                  career in Deaf education. There is a critical need for trained teachers of the
+                  Deaf who are equipped to educate students in Pakistan Sign Language using visual
+                  learning methodologies tailored to deaf students' needs. Deaf Reach identifies
+                  high-achieving deaf students and provides training for them to pursue careers in
+                  Deaf Education.
                 </Paragraph>
               </div>
             </div>
@@ -43,11 +48,9 @@ export default function TeacherTraining() {
               <div className={styles.content}>
                 <Heading level={3}>Training Sessions</Heading>
                 <Paragraph>
-                  Regular training sessions are conducted throughout the year to provide teachers
-                  with ongoing training and support in their career development. Trainees gain
-                  hands-on experience by interning with leading teachers, with many growing into
-                  positions of leadership. Currently, 50 percent of Deaf Reach’s teaching staff are
-                  deaf.
+                  Regular training sessions throughout the year provide teachers with ongoing
+                  professional development and support. Trainees gain hands-on experience by
+                  interning with lead teachers, and many grow into leadership positions.
                 </Paragraph>
               </div>
             </div>

@@ -22,15 +22,16 @@ export default function TextImageCta({ sectionClass, customClass }: TextImageCta
             <blockquote className={styles.quote}>
               <p className={styles.description}>
                 &ldquo;If we view the Deaf community not as a disability group, but as a minority
-                culture that speaks another language (sign language), our perception changes. We
-                then realize that to succeed, the Deaf simply need empowerment through education;
-                same opportunity that is everyone&apos;s right.&rdquo;
+                culture that speaks another language (Sign Language), our perception changes. We
+                then realize that to succeed, the Deaf simply need empowerment through education —
+                the same opportunity that is everyone&apos;s right.&rdquo;
               </p>
             </blockquote>
             <p className={styles.quoteAuthor}>
               — Richard Geary,{' '}
               <cite className={styles.quoteCite}>
-                Recipient of the 2020 civil award of Sitara-i-Khidmat by the President of Pakistan.
+                recipient of the Sitara-i-Khidmat civil award in 2020, presented by the President of
+                Pakistan
               </cite>
             </p>
             <Button style="outline" size="large" icons={{ leading: true }}>

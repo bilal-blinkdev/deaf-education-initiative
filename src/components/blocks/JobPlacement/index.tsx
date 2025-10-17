@@ -22,8 +22,8 @@ export default function JobPlacement() {
             <Paragraph>
               Deaf Education Initiative is driven by the overarching goal of empowering individuals
               holistically and creating opportunities for them to thrive, not just academically but
-              also economically.To fulfill this, our Job Placement program actively works to locate
-              and facilitate employment for both its graduates and the wider Deaf community,
+              also economically. To fulfill this goal, our Job Placement Program actively works to
+              locate and facilitate employment for both its graduates and the wider Deaf Community,
               ensuring a pathway to financial independence and success.
             </Paragraph>
             <div className={styles.iconAndContent}>

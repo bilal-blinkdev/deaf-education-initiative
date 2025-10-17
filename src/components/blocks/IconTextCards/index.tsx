@@ -16,25 +16,25 @@ export default function IconTextCards({ sectionClass, customClass }: IconTextCar
       icon: <HandsShake />,
       title: 'Respect',
       description:
-        'We respect all people, and support and advocate for children and youth who face challenges due to disability.',
+        'We respect all people and support and advocate for the Deaf community, ensuring that they have the opportunities and resources to thrive.',
     },
     {
       icon: <Inclusion />,
       title: 'Inclusiveness',
       description:
-        'We succeed by effectively working with others, both internal and external, to our organization and schools. We come together in common cause to create and implement solutions in our local communities.',
+        'We succeed by working effectively with others, both internal and external to our organization and schools. We come together in a common cause to create and implement solutions in our local communities.',
     },
     {
       icon: <RaisedFist />,
       title: 'Empowerment',
       description:
-        'We believe that every child deserves access to language and education that will empower them to reach their full potential, be socially engaged, and experience an improved quality of life.',
+        'We believe every child deserves access to language and education that empowers them to reach their full potential, engage socially, and enjoy a better quality of life.',
     },
     {
       icon: <HandsHoldingGlobe />,
       title: 'Lasting Impact',
       description:
-        'We strive to achieve significant and lasting impact in the lives of the children and youth we serve. We embrace innovation, responsiveness, and technology to become agents of development and change.',
+        'We strive to make a lasting impact on the children and youth we serve, using innovation, responsiveness, and technology to drive change.',
     },
   ];
   return (

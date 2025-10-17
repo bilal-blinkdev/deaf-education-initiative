@@ -13,7 +13,7 @@ export default function OurPartners() {
     description: {
       content: [
         {
-          text: 'Catch up on our  latest reports, publications, blogs and awards and upcoming events.',
+          text: 'Catch up on our latest reports, publications, blogs, awards, and upcoming events.',
         },
       ],
     },
@@ -46,10 +46,10 @@ export default function OurPartners() {
       <PageTitle
         title="Our Generous Partners"
         breadcrumbs="About > Partners"
-        description="Through continued and generous support from our partners, we are able to transform lives and create lasting change for the deaf community."
+        description="With the continued support of our partners, we are transforming lives and creating lasting change for the Deaf Community."
       />
       <LogosGrid />
-      <TextCtaAndTwoCards content={content} />
+      {/* <TextCtaAndTwoCards content={content} /> */}
       <TwoColumnCard />
       <SubscriptionBlock />
     </>

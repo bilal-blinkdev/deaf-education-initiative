@@ -27,7 +27,7 @@ export default async function OurPrograms() {
     heading: { text: 'So Here’s What We Do...', align: 'center' },
     headingOverline: { text: 'Our Programs', align: 'center', color: 'var(--dodger-blue)' },
     description: {
-      text: 'Through the Deaf Reach Program, DEI works to address the critical need for Deaf education and empowerment in Pakistan. Deaf Reach is continually expanding its programs to empower marginalized urban and rural deaf youth, the majority of whom are economically challenged, to provide them a brighter future.',
+      text: 'Through the Deaf Reach Program, DEI works to address the critical need for Deaf Education and empowerment in Pakistan. Deaf Reach is continually expanding its programs to empower marginalized urban and rural deaf youth, most of whom face economic challenges, to give them a brighter future.',
       align: 'center',
     },
   } as const;

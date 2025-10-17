@@ -22,10 +22,10 @@ export default function DigitalSignTraining() {
             <Heading level={2}>Digital Sign Language Resources</Heading>
             <Paragraph>
               DEI has leveraged digital technology to document Pakistan Sign Language (PSL),
-              producing the first-ever 6,000-word PSL dictionary, PSL curricular resources, stories,
-              and teacher training tutorials. Our PSL Learning Portal, the first resource of its
-              kind in Pakistan, provides country-wide access to these educational resources for the
-              Deaf, their teachers and families free of cost.
+              creating the first ever 7,500-word PSL dictionary along with curricular resources,
+              stories, and teacher training tutorials. Our PSL Learning Portal, the first of its
+              kind in Pakistan, offers free, nationwide access to these educational resources for
+              the Deaf Community, their teachers, and their families.
             </Paragraph>
             <Button size="large" width="maxContent" icons={{ leading: true }} link={{ href: '#' }}>
               Learn about PSL
@@ -35,7 +35,7 @@ export default function DigitalSignTraining() {
             <div className={styles.imagesGrid}>
               <div className={styles.imagesGrid__gridItem}>
                 <p className={styles.imageText}>
-                  <span>Over 6000+ signs documented and digitized </span>
+                  <span>Over 7500+ signs documented and digitized </span>
                   <span>
                     <HandDrawnUnderlines
                       color="var(--sandy-brown)"

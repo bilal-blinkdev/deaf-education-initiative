@@ -24,7 +24,7 @@ export default async function OurEvents() {
     heading: { text: 'Upcoming Events', align: 'center' },
     headingOverline: { text: 'Save the Date', align: 'center', color: 'var(--dodger-blue)' },
     description: {
-      text: 'Join us to discover more about the deaf community, learn more about Deaf Reach’s transformative work, and support our mission to create lasting change.',
+      text: 'Join us to learn more about the Deaf Community, explore Deaf Reach’s transformative work, and support our mission to create lasting change.',
       align: 'center',
     },
   } as const;

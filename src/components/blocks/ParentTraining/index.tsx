@@ -83,10 +83,10 @@ export default function ParentTraining() {
           <div className={styles.flexCol}>
             <Heading level={2}>Parent Training</Heading>
             <Paragraph>
-              Through the Parent Training Program, parents are provided with training in Pakistan
-              Sign Language (PSL). This initiative empowers parents, enabling them to establish
-              stronger connections and effective communication with their Deaf children while
-              actively participating in their child’s development.
+              Through the Parent Training Program, parents receive training in Pakistan Sign
+              Language (PSL). This initiative empowers them to establish stronger connections and
+              communicate effectively with their deaf children, enabling them to participate
+              actively in their child&apos;s development.
             </Paragraph>
             <Button size="large" width="maxContent" icons={{ leading: true }} link={{ href: '#' }}>
               Learn about PSL
