@@ -64,7 +64,7 @@ export default async function OurPrograms() {
     <>
       <Banner src={MainBanner} alt="Student sitting in the class smiling" />
       <Text content={textBlockContent} />
-      <CardsSlider cards={cards} />
+      <CardsSlider cards={cards} enableReadMore={false} />
       <JobPlacement />
       <TeacherTraining />
       <ParentTraining />

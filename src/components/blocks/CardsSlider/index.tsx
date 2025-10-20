@@ -24,10 +24,11 @@ export type Card = {
 // 2. Define the props for the main component
 type CardsSliderProps = {
   cards: Card[];
+  enableReadMore?: boolean;
 };
 
 // 3. Accept 'cards' as a prop instead of hardcoding it
-export default function CardsSlider({ cards }: CardsSliderProps) {
+export default function CardsSlider({ cards, enableReadMore = true }: CardsSliderProps) {
   // The old hardcoded 'cards' array is now gone.
 
   return (
@@ -38,14 +39,16 @@ export default function CardsSlider({ cards }: CardsSliderProps) {
           {/* 4. Pass the dynamic cards down to the Swiper component */}
           <SwiperCards cards={cards} />
         </section>
-        <Button
-          style="text"
-          customClass={styles.ctaButton}
-          link={{ href: '/our-programs' }}
-          icons={{ leading: true, width: '28', height: '28', color: '#fff' }}
-        >
-          <span>Read more about our programs</span>
-        </Button>
+        {enableReadMore && (
+          <Button
+            style="text"
+            customClass={styles.ctaButton}
+            link={{ href: '/our-programs' }}
+            icons={{ leading: true, width: '28', height: '28', color: '#fff' }}
+          >
+            <span>Read more about our programs</span>
+          </Button>
+        )}
       </Container>
     </section>
   );
