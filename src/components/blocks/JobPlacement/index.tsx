@@ -18,6 +18,69 @@ export default function JobPlacement() {
       <Container customClass={styles.container}>
         <div className={styles.flexBox}>
           <div className={styles.flexCol}>
+            <div className={styles.imagesGrid}>
+              <div className={styles.imagesGrid__gridItem}>
+                <div
+                  className={styles.imagesGrid__imageContainer}
+                  style={{
+                    backgroundImage: `url(${Image1.src})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                  }}
+                ></div>
+              </div>
+              <div className={styles.imagesGrid__gridItem}>
+                <p className={styles.imageText}>
+                  <span>
+                    Since 2015, we have helped 2,500+ deaf men and women find meaningful employment
+                  </span>
+                  <span>
+                    <HandDrawnUnderlines
+                      color="var(--sandy-brown)"
+                      svgClass={styles.handDrawnLinesIcon}
+                    />
+                  </span>
+                </p>
+                <div
+                  className={styles.imagesGrid__imageContainer}
+                  style={{
+                    backgroundImage: `url(${Image2.src})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                  }}
+                ></div>
+              </div>
+              <div className={styles.imagesGrid__gridItem}>
+                <div
+                  className={styles.imagesGrid__imageContainer}
+                  style={{
+                    backgroundImage: `url(${Image3.src})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                  }}
+                ></div>
+              </div>
+              <div className={styles.imagesGrid__gridItem}>
+                <div
+                  className={styles.imagesGrid__imageContainer}
+                  style={{
+                    backgroundImage: `url(${Image4.src})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                  }}
+                >
+                  {/* <span className={styles.imageIcon}>
+                    <HandDrawnTwinkle />
+                  </span> */}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.flexCol}>
             <Heading level={2}>Job Placement</Heading>
             <Paragraph>
               Deaf Education Initiative is driven by the overarching goal of empowering individuals
@@ -55,100 +118,6 @@ export default function JobPlacement() {
                     <li className={styles.listItem}>Bank of Punjab</li>
                     <li className={styles.listItem}>Deaf Reach</li>
                   </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.flexCol}>
-            <div className={styles.imagesGrid}>
-              <div className={styles.imagesGrid__gridItem}>
-                <div
-                  className={styles.imagesGrid__imageContainer}
-                  style={{
-                    backgroundImage: `url(${Image1.src})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center',
-                    backgroundSize: 'cover',
-                  }}
-                >
-                  {/* <Image
-                    src={BoyRaisingHand}
-                    alt="Boy raising his hand"
-                    // width={208}
-                    // height={268}
-                    className={styles.imagesGrid__image}
-                  /> */}
-                </div>
-              </div>
-              <div className={styles.imagesGrid__gridItem}>
-                <p className={styles.imageText}>
-                  <span>
-                    Since 2015, we have helped 2,500+ deaf men and women find meaningful employment
-                  </span>
-                  <span>
-                    <HandDrawnUnderlines
-                      color="var(--sandy-brown)"
-                      svgClass={styles.handDrawnLinesIcon}
-                    />
-                  </span>
-                </p>
-                <div
-                  className={styles.imagesGrid__imageContainer}
-                  style={{
-                    backgroundImage: `url(${Image2.src})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center',
-                    backgroundSize: 'cover',
-                  }}
-                >
-                  {/* <Image
-                    src={DeafChildrenWithTeacher}
-                    alt="Deaf children with teacher"
-                    // width={346}
-                    // height={286}
-                    className={styles.imagesGrid__image}
-                  /> */}
-                </div>
-              </div>
-              <div className={styles.imagesGrid__gridItem}>
-                <div
-                  className={styles.imagesGrid__imageContainer}
-                  style={{
-                    backgroundImage: `url(${Image3.src})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center',
-                    backgroundSize: 'cover',
-                  }}
-                >
-                  {/* <Image
-                    src={DeafReachCampus}
-                    alt="Deaf reach campus"
-                    // width={276}
-                    // height={296}
-                    className={styles.imagesGrid__image}
-                  /> */}
-                </div>
-              </div>
-              <div className={styles.imagesGrid__gridItem}>
-                <div
-                  className={styles.imagesGrid__imageContainer}
-                  style={{
-                    backgroundImage: `url(${Image4.src})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center',
-                    backgroundSize: 'cover',
-                  }}
-                >
-                  {/* <span className={styles.imageIcon}>
-                    <HandDrawnTwinkle />
-                  </span> */}
-                  {/* <Image
-                    src={BoyAndGirlInLab}
-                    alt="A boy and a girl in the lab observing"
-                    // width={280}
-                    // height={232}
-                    className={styles.imagesGrid__image}
-                  /> */}
                 </div>
               </div>
             </div>

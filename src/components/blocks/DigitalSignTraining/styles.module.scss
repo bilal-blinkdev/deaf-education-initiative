@@ -5,12 +5,12 @@
   background-color: $white;
 }
 .container {
-  max-width: 1200px;
+  max-width: 1300px;
 }
 .flexBox {
   display: flex;
   flex-direction: column;
-  gap: 5rem;
+  gap: 12rem;
   @media (min-width: 1100px) {
     flex-direction: row;
   }
