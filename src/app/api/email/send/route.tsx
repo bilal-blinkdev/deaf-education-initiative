@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     // 2. Email to company
     const companyTemplate = donationUserDetailsTemplate(body.data);
     const { data, error } = await resend.emails.send({
-      from: 'Deaf Reach AU <noreply@deiuk.org>',
+      from: 'Deaf Reach UK <noreply@deiuk.org>',
       to: ['hassan.ahmed@fesf.org.pk', 'faysal.soomro@fesf.org.pk'],
       subject: 'Donation Received',
       // react: <DonationUserDetailsEmail {...body.data} />,
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     if (body.data.email) {
       const donorTemplate = donationThankYouTemplate(body.data);
       const { data, error } = await resend.emails.send({
-        from: 'Deaf Reach AU <noreply@deiuk.org>',
+        from: 'Deaf Reach UK <noreply@deiuk.org>',
         to: body.data.email,
         subject: 'Thank You for Your Donation',
         html: donorTemplate,
