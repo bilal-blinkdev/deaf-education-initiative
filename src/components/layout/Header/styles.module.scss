@@ -25,22 +25,36 @@ $background: #fff;
     font-size: 1.8rem;
     font-weight: bold;
     display: block;
-    padding: 2rem 0;
   }
 }
-.navItemTitle {
-  font-size: 1.8rem;
-  font-weight: bold;
-  display: block;
-  padding: 2rem 0;
-  cursor: pointer;
-}
-.hasSubMenu {
+.navItem {
   &:hover {
-    & .navItemTitle {
+    & > .navItemTitle,
+    & > .navLink {
       color: var(--dark-blue);
       transition: 0.1s;
     }
+    .subMenu {
+      display: block;
+    }
+  }
+}
+.navItemTitle,
+.navLink {
+  font-size: 1.8rem;
+  font-weight: bold;
+  display: block;
+  cursor: pointer;
+}
+.navItemTitle,
+.navLink {
+  padding: 2rem;
+}
+.hasSubMenu {
+  .navLink {
+    padding: 1.2rem 4rem 1.2rem 2rem;
+  }
+  &:hover {
     .subMenu {
       display: block;
     }
@@ -52,7 +66,7 @@ $background: #fff;
   list-style-type: none;
   gap: 4rem;
   top: 83px;
-  padding: 1.6rem 4rem 1.6rem 2rem;
+  padding: 0;
   border-radius: 8px;
   z-index: 10;
   background-color: var(--white);
@@ -67,6 +81,23 @@ $background: #fff;
     width: 100%;
     z-index: 10;
     background-color: transparent;
+  }
+  & li {
+    &:first-child .navLink {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+    &:last-child .navLink {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+  }
+  & .navLink {
+    &:hover {
+      transition: 0.1s;
+      color: var(--dark-blue);
+      background-color: var(--yellow);
+    }
   }
 }
 .logo {
@@ -87,7 +118,9 @@ $background: #fff;
     flex-direction: row;
   }
 }
-
+.buttonLink {
+  padding: 0;
+}
 .menuToggle {
   width: 0;
   height: 0;

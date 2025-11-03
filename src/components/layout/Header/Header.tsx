@@ -11,6 +11,7 @@ import styles from './styles.module.scss';
 import { fetchGlobal } from '@/app/lib/payload/fetchGlobal';
 import HamburgerMenu from '@/graphics/HamburgerMenu';
 import Cross from '@/graphics/Cross';
+import { cn } from '@/utils/ui';
 
 export default async function Header() {
   const headerData = await fetchGlobal<HeaderType>('header', 2);
@@ -35,7 +36,10 @@ export default async function Header() {
                   {navItems?.map((item) => {
                     if (!item) return null;
                     return (
-                      <li key={item.id} className={item.hasSubMenu ? styles.hasSubMenu : ''}>
+                      <li
+                        key={item.id}
+                        className={cn(styles.navItem, [item.hasSubMenu ? styles.hasSubMenu : ''])}
+                      >
                         {item.hasSubMenu ? (
                           <>
                             <span className={styles.navItemTitle}>{item.title}</span>
@@ -44,7 +48,7 @@ export default async function Header() {
                                 if (!subItem) return null;
                                 return (
                                   <li key={subItem.id}>
-                                    <SmartLink link={subItem} />
+                                    <SmartLink link={subItem} className={styles.navLink} />
                                   </li>
                                 );
                               })}
@@ -60,6 +64,7 @@ export default async function Header() {
                               customUrl: item.customUrl,
                               openInNewTab: item.openInNewTab,
                             }}
+                            className={styles.navLink}
                           />
                         )}
                       </li>
@@ -71,7 +76,7 @@ export default async function Header() {
                 {<LogoutButton />}
                 {buttons &&
                   buttons.map((btn, index) => (
-                    <SmartLink key={index} link={btn}>
+                    <SmartLink key={index} link={btn} className={styles.buttonLink}>
                       <Button size="large">{btn.linkText}</Button>
                     </SmartLink>
                   ))}
