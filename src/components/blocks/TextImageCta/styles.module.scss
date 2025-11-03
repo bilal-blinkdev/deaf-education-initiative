@@ -47,10 +47,11 @@
 }
 .medalImage {
   position: absolute;
+  display: none;
   top: -100px;
-  right: 0px;
+  left: -220px;
   width: auto;
-  height: 200px;
+  height: 294px;
 }
 .heading {
   text-align: left;
