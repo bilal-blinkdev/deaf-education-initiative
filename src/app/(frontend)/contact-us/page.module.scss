@@ -1,0 +1,77 @@
+@use '../colors.scss' as *;
+
+.textBlock {
+  padding: 8rem 0 !important;
+}
+.connectWithUs {
+  padding: 0 0 8rem;
+}
+.connectWithUs__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.connectWithUs__gridItem {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-basis: 50%;
+  &:first-child {
+    padding: 4rem 6rem;
+    border-radius: 12px;
+    background-color: $dodger-blue;
+  }
+  &:last-child {
+    padding: 4rem 0 0;
+    & .connectWithUs__heading {
+      padding: 0 2rem;
+    }
+    @media (min-width: 840px) {
+      padding: 4rem 2rem 0;
+    }
+  }
+}
+.connectWithUs__contactInfo {
+  margin-top: 4rem;
+  color: $white;
+}
+.connectWithUs__contactItem {
+  padding: 2rem 0;
+}
+.connectWithUs__contactItemName {
+  margin-bottom: 2rem;
+}
+.connectWithUs__contactItemDescription {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.connectWithUs__email {
+  text-decoration: underline;
+}
+.connectWithUs__socialLinks {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: auto;
+}
+
+.ourSchools {
+  padding: 0 0 8rem;
+}
+.ourSchools__heading {
+  text-align: center;
+}
+.ourSchools__figure {
+  text-align: center;
+}
+.ourSchools__image {
+  width: 100%;
+  max-width: 660px;
+  height: auto;
+}
+.contactCtaBlock {
+  padding: 0 0 8rem !important;
+}
+.donationCtaBlock {
+  padding: 0 0 4rem !important;
+}
