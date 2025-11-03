@@ -5,6 +5,7 @@ import TwoColumnCard from '@/components/blocks/TwoColumnCard';
 import SubscriptionBlock from '@/components/blocks/Subscription';
 import SchoolBoyAndGirls from '@/assets/three-girls-one-boy-in-school-uniform.webp';
 import ManSpeaking from '@/assets/man-speaking.webp';
+import styles from './page.module.scss';
 
 export default function OurPartners() {
   const content = {
@@ -50,7 +51,7 @@ export default function OurPartners() {
       />
       <LogosGrid />
       {/* <TextCtaAndTwoCards content={content} /> */}
-      <TwoColumnCard />
+      <TwoColumnCard className={styles.donationCtaBlock} />
       <SubscriptionBlock />
     </>
   );

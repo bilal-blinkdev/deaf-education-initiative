@@ -20,6 +20,7 @@ import PeopleChatting from '@/graphics/PeopleChatting';
 import Globe from '@/graphics/Globe';
 import { fetchPrograms } from './our-programs/page';
 import { notFound } from 'next/navigation';
+import styles from './page.module.scss';
 
 export default async function HomePage() {
   const headers = await getHeaders();
@@ -137,7 +138,7 @@ export default async function HomePage() {
       <Cards />
       <CardsSlider cards={cards} />
       <TestimonialSlider />
-      <TwoColumnCard />
+      <TwoColumnCard className={styles.donationCtaBlock} />
       <LogoSlider />
       <Subscription />
     </>

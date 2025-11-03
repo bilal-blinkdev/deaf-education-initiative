@@ -2,10 +2,10 @@ import Image from 'next/image';
 import Container from '@/components/layout/Container';
 import Button from '@/components/elements/Button';
 import SchoolGirlsRaisingHands from '@/assets/school-girls-raising-hands.webp';
-import styles from './styles.module.scss';
 import Heading from '@/components/elements/Heading';
 import QuestionMarkRoundedFilled from '@/graphics/QuestionMarkRoundedFilled';
 import Paragraph from '@/components/elements/Paragraph';
+import styles from './styles.module.scss';
 
 type Faq = {
   question: string;

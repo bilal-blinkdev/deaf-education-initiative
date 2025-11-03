@@ -4,6 +4,7 @@ import Heading from '@/components/elements/Heading';
 import HeadingOverline from '@/components/elements/HeadingOverline';
 import Paragraph from '@/components/elements/Paragraph';
 import styles from './styles.module.scss';
+import { cn } from '@/utils/ui';
 
 type TextProps = {
   content: {
@@ -24,13 +25,13 @@ type TextProps = {
     };
   };
   sectionClass?: string;
-  customClass?: string;
+  containerClass?: string;
 };
 
-export default function Text({ content, sectionClass, customClass }: TextProps) {
+export default function Text({ content, sectionClass, containerClass }: TextProps) {
   return (
-    <section className={`${styles.text} ${styles[sectionClass ?? '']} ${customClass}`}>
-      <Container customClass={styles.container}>
+    <section className={cn(styles.text, sectionClass)}>
+      <Container customClass={cn(styles.container, containerClass)}>
         <HeadingOverline
           align={content.headingOverline.align}
           color={content.headingOverline.color}

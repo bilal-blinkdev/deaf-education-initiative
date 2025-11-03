@@ -7,6 +7,7 @@ import Text from '@/components/blocks/Text';
 import TwoColumnCard from '@/components/blocks/TwoColumnCard';
 import EventCards from '@/components/blocks/EventsCards';
 import { Card } from '@/components/blocks/EventsCards';
+import styles from './page.module.scss';
 
 async function fetchEvents(): Promise<Event[]> {
   // Sorts by eventDate in descending order to show upcoming or most recent events first
@@ -64,9 +65,9 @@ export default async function OurEvents() {
 
   return (
     <>
-      <Text content={textBlockContent} />
+      <Text content={textBlockContent} sectionClass={styles.textBlock} />
       <EventCards cards={cards} />
-      <TwoColumnCard />
+      <TwoColumnCard className={styles.donationCtaBlock} />
       <SubscriptionBlock />
     </>
   );

@@ -3,10 +3,11 @@ import Container from '@/components/layout/Container';
 import Button from '@/components/elements/Button';
 import SchoolGirlsRaisingHands from '@/assets/school-girls-raising-hands.webp';
 import styles from './styles.module.scss';
+import { cn } from '@/utils/ui';
 
-export default function TwoColumnCard() {
+export default function TwoColumnCard({ className = '' }: { className?: string }) {
   return (
-    <section className={styles.twoColumnCard}>
+    <section className={cn(styles.twoColumnCard, className)}>
       <Container>
         <div className={styles.card}>
           <div className={styles.cardBody}>

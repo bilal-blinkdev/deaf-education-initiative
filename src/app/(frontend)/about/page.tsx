@@ -12,6 +12,7 @@ import SubscriptionBlock from '@/components/blocks/Subscription';
 import TwoColumnCard from '@/components/blocks/TwoColumnCard';
 import TextCtaWithBgImage from '@/components/blocks/TextCtaWithBgImage';
 import OurVision from '@/components/blocks/OurVision';
+import styles from './page.module.scss';
 
 export default function About() {
   const keyMetrics = {
@@ -73,7 +74,7 @@ export default function About() {
       <IconTextCards sectionClass="ourCoreValues" />
       <TextCtaWithBgImage sectionClass="organizationInfo" />
       <LogoSliderBlock />
-      <TwoColumnCard />
+      <TwoColumnCard className={styles.donationCtaBlock} />
       <SubscriptionBlock />
     </>
   );

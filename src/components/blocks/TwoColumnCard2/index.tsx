@@ -5,6 +5,7 @@ import Paragraph from '@/components/elements/Paragraph';
 import Button from '@/components/elements/Button';
 import styles from './styles.module.scss';
 import HeadingOverline from '@/components/elements/HeadingOverline';
+import { cn } from '@/utils/ui';
 
 type TwoColumnCardProps = {
   content: {
@@ -26,6 +27,7 @@ type TwoColumnCardProps = {
   titleColor?: string;
   titleOverlineColor?: string;
   descriptionColor?: string;
+  sectionClass?: string;
 };
 
 export default function TwoColumnCard2({
@@ -36,9 +38,10 @@ export default function TwoColumnCard2({
   titleColor,
   titleOverlineColor,
   descriptionColor,
+  sectionClass,
 }: TwoColumnCardProps) {
   return (
-    <section className={styles.twoColumnCard2}>
+    <section className={cn(styles.twoColumnCard2, sectionClass)}>
       <Container>
         <div className={styles.card}>
           <div className={styles.cardBody}>

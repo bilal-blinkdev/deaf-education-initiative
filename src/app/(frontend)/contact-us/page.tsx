@@ -18,8 +18,8 @@ import SchoolGirlsRaisingHands from '@/assets/school-girls-raising-hands.webp';
 
 import Faqs from '@/components/blocks/Faqs';
 import TwoColumnCard2 from '@/components/blocks/TwoColumnCard2';
-import styles from './styles.module.scss';
 import SubscriptionBlock from '@/components/blocks/Subscription';
+import styles from './page.module.scss';
 
 export default function ContactUs() {
   const textBlockContent = {
@@ -94,7 +94,7 @@ export default function ContactUs() {
   };
   return (
     <>
-      <Text content={textBlockContent} />
+      <Text content={textBlockContent} sectionClass={styles.textBlock} />
       <section className={styles.connectWithUs}>
         <Container>
           <div className={styles.connectWithUs__grid}>
@@ -175,8 +175,13 @@ export default function ContactUs() {
         titleColor="var(--ebony)"
         titleOverlineColor="var(--dodger-blue)"
         descriptionColor="var(--ebony)"
+        sectionClass={styles.contactCtaBlock}
       />
-      <TwoColumnCard2 content={donationContent} colOneBg="var(--flamingo)" />
+      <TwoColumnCard2
+        content={donationContent}
+        colOneBg="var(--flamingo)"
+        sectionClass={styles.donationCtaBlock}
+      />
       <SubscriptionBlock />
     </>
   );
