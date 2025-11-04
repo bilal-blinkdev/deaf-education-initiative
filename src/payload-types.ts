@@ -74,9 +74,11 @@ export interface Config {
     donors: Donor;
     categories: Category;
     authors: Author;
+    blog: Blog;
     publications: Publication;
     events: Event;
     programs: Program;
+    'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,9 +92,11 @@ export interface Config {
     donors: DonorsSelect<false> | DonorsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
     publications: PublicationsSelect<false> | PublicationsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     programs: ProgramsSelect<false> | ProgramsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -296,10 +300,6 @@ export interface Page {
   layout: (CardGrid | ImageGrid | KeyMetricsBlock)[];
   meta?: {
     title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (string | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -793,9 +793,9 @@ export interface Author {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "publications".
+ * via the `definition` "blog".
  */
-export interface Publication {
+export interface Blog {
   id: string;
   title: string;
   slug: string;
@@ -820,6 +820,25 @@ export interface Publication {
     };
     [k: string]: unknown;
   };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publications".
+ */
+export interface Publication {
+  id: string;
+  title: string;
+  featuredImage: string | Media;
+  reportDocuments: {
+    document: string | Media;
+    title: string;
+    allowDownload?: boolean | null;
+    id?: string | null;
+  }[];
+  publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -858,6 +877,10 @@ export interface Event {
     };
     [k: string]: unknown;
   } | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -873,9 +896,30 @@ export interface Program {
   featuredImage: string | Media;
   shortDescription: string;
   layout?: (ImageGrid | CardGrid)[] | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: string;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1001,6 +1045,10 @@ export interface PayloadLockedDocument {
         value: string | Author;
       } | null)
     | ({
+        relationTo: 'blog';
+        value: string | Blog;
+      } | null)
+    | ({
         relationTo: 'publications';
         value: string | Publication;
       } | null)
@@ -1011,6 +1059,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'programs';
         value: string | Program;
+      } | null)
+    | ({
+        relationTo: 'payload-kv';
+        value: string | PayloadKv;
       } | null)
     | ({
         relationTo: 'payload-jobs';
@@ -1208,7 +1260,6 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        image?: T;
         description?: T;
       };
   publishedAt?: T;
@@ -1341,9 +1392,9 @@ export interface AuthorsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "publications_select".
+ * via the `definition` "blog_select".
  */
-export interface PublicationsSelect<T extends boolean = true> {
+export interface BlogSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   publishedDate?: T;
@@ -1353,6 +1404,26 @@ export interface PublicationsSelect<T extends boolean = true> {
   excerpt?: T;
   readingDuration?: T;
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publications_select".
+ */
+export interface PublicationsSelect<T extends boolean = true> {
+  title?: T;
+  featuredImage?: T;
+  reportDocuments?:
+    | T
+    | {
+        document?: T;
+        title?: T;
+        allowDownload?: T;
+        id?: T;
+      };
+  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1375,6 +1446,12 @@ export interface EventsSelect<T extends boolean = true> {
         googleMapsEmbedUrl?: T;
       };
   details?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1394,9 +1471,23 @@ export interface ProgramsSelect<T extends boolean = true> {
         imageGrid?: T | ImageGridSelect<T>;
         cardGrid?: T | CardGridSelect<T>;
       };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1484,10 +1575,6 @@ export interface Header {
           | ({
               relationTo: 'events';
               value: string | Event;
-            } | null)
-          | ({
-              relationTo: 'publications';
-              value: string | Publication;
             } | null);
         customUrl?: string | null;
         openInNewTab?: boolean | null;
@@ -1507,10 +1594,6 @@ export interface Header {
                 | ({
                     relationTo: 'events';
                     value: string | Event;
-                  } | null)
-                | ({
-                    relationTo: 'publications';
-                    value: string | Publication;
                   } | null);
               customUrl?: string | null;
               openInNewTab?: boolean | null;
@@ -1536,10 +1619,6 @@ export interface Header {
           | ({
               relationTo: 'events';
               value: string | Event;
-            } | null)
-          | ({
-              relationTo: 'publications';
-              value: string | Publication;
             } | null);
         customUrl?: string | null;
         openInNewTab?: boolean | null;
@@ -1582,10 +1661,6 @@ export interface Footer {
                 | ({
                     relationTo: 'events';
                     value: string | Event;
-                  } | null)
-                | ({
-                    relationTo: 'publications';
-                    value: string | Publication;
                   } | null);
               customUrl?: string | null;
               openInNewTab?: boolean | null;
@@ -1687,6 +1762,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'pages';
           value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'blog';
+          value: string | Blog;
         } | null)
       | ({
           relationTo: 'publications';

@@ -21,7 +21,7 @@ type ButtonProps = {
     color?: string;
     type?: ReactNode;
   } | null;
-  link?: { href: string; target?: string } | null;
+  link?: { href: string; target?: string; download?: boolean } | null;
   loading?: boolean;
   disabled?: boolean;
   customClass?: string | null;
@@ -77,6 +77,7 @@ export default function Button({
       ) : (
         <Link
           href={link.href}
+          download={link.download}
           className={[
             styles.link,
             styles[style],

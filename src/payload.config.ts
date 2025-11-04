@@ -12,7 +12,7 @@ import { Media } from './collections/Media';
 import { Donors } from './collections/Donors';
 import { Categories } from './collections/Categories';
 import { Authors } from './collections/Authors';
-import { Publications } from './collections/Publications';
+import { Blog } from './collections/Blog';
 import { Events } from './collections/Events';
 import { Programs } from './collections/Programs';
 import { Footer } from './globals/Footer';
@@ -22,6 +22,7 @@ import { getServerSideURL } from '@/utils/getURL';
 import { Page } from '@/payload-types';
 
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types';
+import { Publications } from './collections/Publications';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -53,7 +54,18 @@ export default buildConfig({
         : false,
   },
   globals: [Header, Footer],
-  collections: [Users, Media, Pages, Donors, Categories, Authors, Publications, Events, Programs],
+  collections: [
+    Users,
+    Media,
+    Pages,
+    Donors,
+    Categories,
+    Authors,
+    Blog,
+    Publications,
+    Events,
+    Programs,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -62,13 +74,14 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
     connectOptions: {
-      dbName: 'deiuk',
+      dbName: 'deiuk_local',
     },
   }),
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    seoPlugin({ generateTitle, generateURL }),
+    seoPlugin({ generateTitle, generateURL, collections: ['pages', 'programs', 'events'] }),
+
     // storage-adapter-placeholder
   ],
 });

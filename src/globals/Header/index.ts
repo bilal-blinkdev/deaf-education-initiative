@@ -47,7 +47,7 @@ export const Header: GlobalConfig = {
           name: 'internalPage',
           label: 'Page to Link To',
           type: 'relationship',
-          relationTo: ['pages', 'programs', 'events', 'publications'],
+          relationTo: ['pages', 'programs', 'events'],
           required: true,
           filterOptions: () => {
             return {

@@ -26,11 +26,17 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
+      admin: {
+        condition: (data) => data?.mimeType?.startsWith('image/'),
+      },
       // required: true,
     },
     {
       name: 'caption',
       type: 'richText',
+      admin: {
+        condition: (data) => data?.mimeType?.startsWith('image/'),
+      },
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
           return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()];

@@ -4,35 +4,91 @@ import Heading from '@/components/elements/Heading';
 import Button from '@/components/elements/Button';
 import InputField from '@/components/elements/InputField';
 import Link from 'next/link';
+import Image1 from '@/assets/programs/internal/three-girls-in-school-smiling.webp';
+import TabsWithCards, { Card } from '@/components/blocks/TabsWithArticleCards';
 import ThreeLinesAccent from '@/graphics/ThreeLinesAccent';
 import SwigglyLineAccent from '@/graphics/SwigglyLineAccent';
-import { Publication } from '@/payload-types';
+import { Blog, Category } from '@/payload-types';
+import styles from './styles.module.scss';
+import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 import { fetchPayload } from '@/app/lib/payload/fetchPayload';
-import dynamic from 'next/dynamic';
-import PublicationsList from '@/components/blocks/PublicationList';
-import styles from './page.module.scss';
 
 // Fetch all publications
-async function fetchPublications(): Promise<Publication[]> {
-  // Depth=2 ensures media objects within reportDocuments are populated
-  return fetchPayload<Publication>('/api/publications?sort=-publishedAt&depth=2&limit=100');
+async function fetchPublications(): Promise<Blog[]> {
+  return fetchPayload<Blog>('/api/publications?depth=2&limit=100');
+}
+
+// Fetch all categories
+async function fetchCategories(): Promise<Category[]> {
+  return fetchPayload<Category>('/api/categories?limit=100');
 }
 
 export default async function OurPublications() {
   const publications = await fetchPublications();
+  const categories = await fetchCategories();
 
-  if (!publications || publications.length === 0) {
-    // Optionally return notFound() or display a "No publications found" message
-    return (
-      <Container>
-        <Heading level={2} align="center">
-          No Publications Found
-        </Heading>
-      </Container>
-    );
+  if (!publications) {
+    return notFound();
   }
 
+  // Dynamically create tabs from your CMS categories
+  const tabs = [
+    { id: 'all', label: 'View all' },
+    ...categories.map((cat) => ({
+      id: cat.name.toLowerCase().replace(/\s+/g, '-'), // e.g., 'case-studies'
+      label: cat.name,
+    })),
+  ];
+
+  // Map the fetched publications to the format your 'TabsWithCards' component expects
+  const cards = publications.reduce<Card[]>((acc, pub) => {
+    // Use optional chaining to safely access nested properties
+    const category = typeof pub.category === 'object' ? pub.category : null;
+    const author = typeof pub.author === 'object' ? pub.author : null;
+    const featuredImage = typeof pub.featuredImage === 'object' ? pub.featuredImage : null;
+    const authorPhoto = author && typeof author.photo === 'object' ? author.photo : null;
+
+    // Check if all necessary data, including URLs and dimensions, exists
+    if (
+      category &&
+      author &&
+      featuredImage?.url &&
+      featuredImage.width &&
+      featuredImage.height &&
+      authorPhoto?.url &&
+      authorPhoto.width &&
+      authorPhoto.height
+    ) {
+      // If everything is valid, create the Card object and add it to the array
+      acc.push({
+        id: pub.id,
+        image: {
+          url: featuredImage.url,
+          width: featuredImage.width,
+          height: featuredImage.height,
+          alt: featuredImage.alt ?? '',
+        },
+        category: category.name,
+        title: pub.title,
+        excerpt: pub.excerpt,
+        date: format(new Date(pub.publishedDate), 'dd MMM yyyy'),
+        author: {
+          name: author.name,
+          image: {
+            url: authorPhoto.url,
+            width: authorPhoto.width,
+            height: authorPhoto.height,
+            alt: authorPhoto.alt ?? '',
+          },
+        },
+        duration: pub.readingDuration,
+        link: { href: `/our-publications/${pub.slug}` },
+      });
+    }
+
+    return acc;
+  }, []);
   return (
     <>
       <section className={styles.ourJourneySubscription}>
@@ -73,13 +129,7 @@ export default async function OurPublications() {
           </div>
         </Container>
       </section>
-      {/* --- Main Publications Grid Section --- */}
-      <section className={styles.publicationsGrid}>
-        <Container>
-          {/* Render the Client Component and pass the data */}
-          <PublicationsList publications={publications} />
-        </Container>
-      </section>
+      <TabsWithCards tabs={tabs} cards={cards} />
       <section className={styles.ourJourneySubscription__video}>
         <Container>
           <Heading

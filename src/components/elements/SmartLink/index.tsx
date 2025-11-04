@@ -7,7 +7,7 @@ type LinkType = {
   linkText: string;
   linkType: 'internal' | 'custom';
   internalPage?: {
-    relationTo: 'pages' | 'programs' | 'events' | 'publications';
+    relationTo: 'pages' | 'programs' | 'events';
     value: Page | Program | Event | Publication | string;
   } | null;
   customUrl?: string | null;
@@ -33,8 +33,6 @@ const generateHref = (doc: LinkType['internalPage']): string => {
       return `/our-programs/${slug}`;
     case 'events':
       return `/our-events/${slug}`;
-    case 'publications':
-      return `/our-publications/${slug}`;
     default:
       return '#';
   }
