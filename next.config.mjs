@@ -2,7 +2,7 @@ import { withPayload } from '@payloadcms/next/withPayload';
 
 const NEXT_PUBLIC_SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
   ? `${process.env.NEXT_PUBLIC_SERVER_URL}`
-  : undefined || process.env.__NEXT_PRIVATE_ORIGIN || 'http://localhost:5000';
+  : undefined || process.env.__NEXT_PRIVATE_ORIGIN || 'http://deiuk.org';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
