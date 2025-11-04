@@ -74,7 +74,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
     connectOptions: {
-      dbName: 'deiuk_local',
+      dbName: 'deiuk',
     },
   }),
   sharp,
