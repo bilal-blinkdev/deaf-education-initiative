@@ -838,6 +838,10 @@ export interface Publication {
     allowDownload?: boolean | null;
     id?: string | null;
   }[];
+  /**
+   * Temporary field - will be removed
+   */
+  slug?: string | null;
   publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -1423,6 +1427,7 @@ export interface PublicationsSelect<T extends boolean = true> {
         allowDownload?: T;
         id?: T;
       };
+  slug?: T;
   publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;

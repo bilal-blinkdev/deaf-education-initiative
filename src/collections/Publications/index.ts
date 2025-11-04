@@ -59,6 +59,15 @@ export const Publications: CollectionConfig = {
       ],
     },
     {
+      name: 'slug',
+      type: 'text',
+      unique: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Temporary field - will be removed',
+      },
+    },
+    {
       name: 'publishedAt',
       type: 'date',
       admin: {
