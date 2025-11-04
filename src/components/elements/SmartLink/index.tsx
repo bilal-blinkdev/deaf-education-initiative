@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import { Page, Program, Event, Publication } from '@/payload-types';
+import { Page, Program, Event } from '@/payload-types';
 
 // Define a type for the link object coming from Payload
 type LinkType = {
@@ -8,7 +8,7 @@ type LinkType = {
   linkType: 'internal' | 'custom';
   internalPage?: {
     relationTo: 'pages' | 'programs' | 'events';
-    value: Page | Program | Event | Publication | string;
+    value: Page | Program | Event | string;
   } | null;
   customUrl?: string | null;
   openInNewTab?: boolean | null;
