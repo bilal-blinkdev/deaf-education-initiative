@@ -71,6 +71,11 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+  upload: {
+    limits: {
+      fileSize: 50000000, // 50MB, written in bytes
+    },
+  },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
     connectOptions: {
