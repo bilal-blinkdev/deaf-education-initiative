@@ -23,14 +23,11 @@ export default function TextCtaWithBgImage({ sectionClass, customClass }: TextCt
         <div className={styles.flexBox}>
           <h2 className={styles.heading}>Organization Information</h2>
           <p className={styles.description}>
-            Deaf Education Initiative, a program of FESFUK, is a U.K. based 501(c)(3) tax-exempt
-            nonprofit organization (EIN 47-5488861) to support the education of underprivileged deaf
-            children in Pakistan. Deaf Education Initiative supports Deaf Reach programs of the
-            Family Educational Services Foundation (FESF) in Pakistan. To learn more about FESF
-            Pakistan, visit their website. 
-            <a href="/" className={styles.link}>
-              www.fesf.org.pk
-            </a>
+            Deaf Education Initiative (Charity Commission No. 1209822) is a UK-registered charity
+            that supports the education of underprivileged deaf children in Pakistan. The Initiative
+            provides funding and strategic support for the Deaf Reach program run by the Family
+            Educational Services Foundation (FESF) in Pakistan, ensuring access to schooling,
+            transportation, and essential resources for deaf children and their families.
           </p>
           <Button size="large" icons={{ leading: true }}>
             View Certification
