@@ -303,7 +303,7 @@ export default function DonationDetails({
                 </CustomRadio>
               </div>
               {errors.supportType && <p className={styles.inputError}>{errors.supportType}</p>}{' '}
-              {!isLoggedIn && (
+              {/* {!isLoggedIn && (
                 <p className={styles.loginMessage}>
                   Please{' '}
                   <Link href="/login" className={styles.loginLink}>
@@ -311,7 +311,7 @@ export default function DonationDetails({
                   </Link>{' '}
                   for recurring payments
                 </p>
-              )}{' '}
+              )}{' '} */}
             </div>
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Choose an amount to give once</p>
