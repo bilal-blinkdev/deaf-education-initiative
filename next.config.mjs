@@ -10,11 +10,11 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '50mb',
-    },
-  },
+  // experimental: {
+  //   serverActions: {
+  //     bodySizeLimit: '50mb',
+  //   },
+  // },
   images: {
     remotePatterns: [
       ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
@@ -27,16 +27,12 @@ const nextConfig = {
       }),
     ],
   },
-  transpilePackages: ['react-pdf'],
-  webpack: (webpackConfig, { dev, isServer }) => {
+  webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs'],
     };
-    if (isServer) {
-      webpackConfig.externals.push('pdfjs-dist');
-    }
     return webpackConfig;
   },
 };
