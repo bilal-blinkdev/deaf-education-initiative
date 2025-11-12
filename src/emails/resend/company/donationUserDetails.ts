@@ -52,9 +52,7 @@ export function donationUserDetailsTemplate(data: any) {
                     ${data.country ? `<tr><td><strong>Country:</strong></td><td>${data.country}</td></tr>` : ''}
                     ${data.state ? `<tr><td><strong>State:</strong></td><td>${data.state}</td></tr>` : ''}
                     ${data.city ? `<tr><td><strong>City:</strong></td><td>${data.city}</td></tr>` : ''}
-                    ${data.address ? `<tr><td><strong>Address:</strong></td><td>${data.address}</td></tr>` : ''}
                     ${data.zipCode ? `<tr><td><strong>Zip Code:</strong></td><td>${data.zipCode}</td></tr>` : ''}
-                    ${data.comments ? `<tr><td><strong>Comments:</strong></td><td>${data.comments}</td></tr>` : ''}
                   </table>
                 </td>
               </tr>

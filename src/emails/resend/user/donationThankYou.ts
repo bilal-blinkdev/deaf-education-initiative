@@ -84,14 +84,8 @@ export function donationThankYouTemplate(data: any) {
               <tr>
                 <td style="background-color: #f0f0f0; padding: 20px; text-align: left; font-size: 12px; color: #666; line-height: 1.6;">
                   
-                  <p style="margin: 0 0 15px 0;">
-                    <strong>Contact Address:</strong><br/>
-                    Addr: 2788 Bellmore Ave Bellmore, NY 11710<br/>
-                    Tel: +1-917-565-8801<br/>
-                    Email: info@fesf.org.pk
-                  </p>
                   <p style="margin: 0;">
-                    Deaf Reach NA is a 501(c)(3) tax-exempt non-profit organization. Charitable contributions to Deaf Reach NA are tax-deductible in the U.S. You will receive an official receipt for tax purposes by email from FESF North America for your donation.
+                    Deaf Education Initiative (DEI) is a registered charity under the UK Charity Commission (Charity Number: 1209822). Donations made to Deaf Education Initiative are eligible for tax relief in the UK, where applicable. You will receive an official receipt by email from Deaf Education Initiative for your contribution.
                   </p>
                 </td>
               </tr>
