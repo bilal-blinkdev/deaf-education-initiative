@@ -36,6 +36,22 @@
   margin: 0 auto;
   margin-bottom: 2rem;
 }
+.paymentBoxEmpty {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  padding: 3rem;
+  border-radius: 14px;
+  background-color: $white;
+  box-shadow: 0 4px 25px 0 rgba($ebony, 25%);
+  @media (min-width: 768px) {
+    padding: 4rem;
+  }
+}
+.paymentBoxEmpty__heading {
+  margin: 0;
+}
 .donationCart {
   display: flex;
   flex-direction: column;

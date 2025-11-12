@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
 import Banner from '@/assets/girl-sitting-in-class-making-hand-sign.webp';
 import DonationDetails from '@/components/sections/DonationDetails';
 import Container from '@/components/layout/Container';
@@ -9,8 +8,6 @@ import { PROJECTS_TEST as PROJECTS } from '@/app/constants';
 import styles from './styles.module.scss';
 
 export default function DonationForm({ slug }: { slug?: string }) {
-  const { isFetching: isFetchingUser, isLoggedIn } = useAuth();
-
   const [project, setProject] = useState(PROJECTS[0]);
   const [donationDetails, setDonationDetails] = useState({
     projectType: PROJECTS[0].name,
@@ -41,8 +38,8 @@ export default function DonationForm({ slug }: { slug?: string }) {
             }}
             donationDetails={donationDetails}
             setDonationDetails={setDonationDetails}
-            isFetchingUser={isFetchingUser}
-            isLoggedIn={isLoggedIn}
+            // isFetchingUser={isFetchingUser}
+            // isLoggedIn={isLoggedIn}
             slug={slug}
           />
         </div>

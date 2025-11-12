@@ -1,29 +1,32 @@
 import type { CollectionConfig } from 'payload';
-import syncDonorWithStripe from './hooks/syncDonorWithStripe';
+// import syncDonorWithStripe from './hooks/syncDonorWithStripe';
 
 export const Donors: CollectionConfig = {
   slug: 'donors',
   admin: {
     useAsTitle: 'email',
-  },
-  auth: {
-    // tokenExpiration: 12 * 60 * 60,
-    // verify: true,
-    cookies: {
-      secure: true,
-      sameSite: 'None',
-      domain: process.env.COOKIE_DOMAIN,
-    },
+    defaultColumns: ['name', 'email', 'subscriptionStatus'],
   },
   access: {
+    read: () => true,
     create: () => false,
-    admin: () => false,
+    update: () => true, // Allow webhooks to update status
+    delete: () => false,
   },
   fields: [
     {
       name: 'name',
       label: 'Name',
       type: 'text',
+    },
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'email',
+      admin: {
+        readOnly: true,
+      },
+      unique: true,
     },
     {
       name: 'stripeCustomerId',
@@ -55,7 +58,7 @@ export const Donors: CollectionConfig = {
       },
     },
   ],
-  hooks: {
-    afterChange: [syncDonorWithStripe],
-  },
+  // hooks: {
+  //   afterChange: [syncDonorWithStripe],
+  // },
 };

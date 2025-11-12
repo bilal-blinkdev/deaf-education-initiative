@@ -64,7 +64,6 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
-    donors: DonorAuthOperations;
   };
   blocks: {};
   collections: {
@@ -72,6 +71,7 @@ export interface Config {
     media: Media;
     pages: Page;
     donors: Donor;
+    donations: Donation;
     categories: Category;
     authors: Author;
     blog: Blog;
@@ -90,6 +90,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     donors: DonorsSelect<false> | DonorsSelect<true>;
+    donations: DonationsSelect<false> | DonationsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
@@ -114,13 +115,9 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
   };
   locale: null;
-  user:
-    | (User & {
-        collection: 'users';
-      })
-    | (Donor & {
-        collection: 'donors';
-      });
+  user: User & {
+    collection: 'users';
+  };
   jobs: {
     tasks: {
       schedulePublish: TaskSchedulePublish;
@@ -133,24 +130,6 @@ export interface Config {
   };
 }
 export interface UserAuthOperations {
-  forgotPassword: {
-    email: string;
-    password: string;
-  };
-  login: {
-    email: string;
-    password: string;
-  };
-  registerFirstUser: {
-    email: string;
-    password: string;
-  };
-  unlock: {
-    email: string;
-    password: string;
-  };
-}
-export interface DonorAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -738,6 +717,7 @@ export interface KeyMetricsBlock {
 export interface Donor {
   id: string;
   name?: string | null;
+  email?: string | null;
   stripeCustomerId?: string | null;
   subscriptionStatus?:
     | (
@@ -754,21 +734,30 @@ export interface Donor {
     | null;
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donations".
+ */
+export interface Donation {
+  id: string;
+  project?: string | null;
+  supportType?: ('Give Once' | 'Recurring') | null;
+  amount?: number | null;
+  donationType?: ('Zakat' | 'Donation') | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  country?: string | null;
+  city?: string | null;
+  address?: string | null;
+  zipCode?: string | null;
+  comments?: string | null;
+  status?: ('pending' | 'complete' | 'failed') | null;
+  donor?: (string | null) | Donor;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -838,10 +827,6 @@ export interface Publication {
     allowDownload?: boolean | null;
     id?: string | null;
   }[];
-  /**
-   * Temporary field - will be removed
-   */
-  slug?: string | null;
   publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -1041,6 +1026,10 @@ export interface PayloadLockedDocument {
         value: string | Donor;
       } | null)
     | ({
+        relationTo: 'donations';
+        value: string | Donation;
+      } | null)
+    | ({
         relationTo: 'categories';
         value: string | Category;
       } | null)
@@ -1073,15 +1062,10 @@ export interface PayloadLockedDocument {
         value: string | PayloadJob;
       } | null);
   globalSlug?: string | null;
-  user:
-    | {
-        relationTo: 'users';
-        value: string | User;
-      }
-    | {
-        relationTo: 'donors';
-        value: string | Donor;
-      };
+  user: {
+    relationTo: 'users';
+    value: string | User;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1091,15 +1075,10 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user:
-    | {
-        relationTo: 'users';
-        value: string | User;
-      }
-    | {
-        relationTo: 'donors';
-        value: string | Donor;
-      };
+  user: {
+    relationTo: 'users';
+    value: string | User;
+  };
   key?: string | null;
   value?:
     | {
@@ -1356,24 +1335,34 @@ export interface KeyMetricsBlockSelect<T extends boolean = true> {
  */
 export interface DonorsSelect<T extends boolean = true> {
   name?: T;
+  email?: T;
   stripeCustomerId?: T;
   subscriptionStatus?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donations_select".
+ */
+export interface DonationsSelect<T extends boolean = true> {
+  project?: T;
+  supportType?: T;
+  amount?: T;
+  donationType?: T;
+  firstName?: T;
+  lastName?: T;
   email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
+  phone?: T;
+  country?: T;
+  city?: T;
+  address?: T;
+  zipCode?: T;
+  comments?: T;
+  status?: T;
+  donor?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1427,7 +1416,6 @@ export interface PublicationsSelect<T extends boolean = true> {
         allowDownload?: T;
         id?: T;
       };
-  slug?: T;
   publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;

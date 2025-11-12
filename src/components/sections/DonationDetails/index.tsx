@@ -9,10 +9,8 @@ import CheckVerified from '@/graphics/CheckVerified';
 import DonatingHand from '@/assets/hand-donating.webp';
 import styles from './styles.module.scss';
 import ChevronDown from '@/graphics/ChevronDown';
-import CircleNotch from '@/graphics/CircleNotch';
-import Link from 'next/link';
 
-type Project = {
+export type Project = {
   name: string;
   hint: string;
   amountOptions: { id: string; symbol: string; amount: string; period?: string | null }[];
@@ -26,10 +24,10 @@ type DonationDetailsProps = {
   handleClick: (jumpToStep?: number) => void;
   donationDetails: any;
   setDonationDetails: any;
-  setClientSecret?: (secret: string) => void;
-  paymentDetails?: any;
-  isFetchingUser: boolean;
-  isLoggedIn: boolean;
+  // setClientSecret?: (secret: string) => void;
+  // paymentDetails?: any;
+  // isFetchingUser: boolean;
+  // isLoggedIn: boolean;
   slug?: string;
 };
 type customRadioProps = {
@@ -52,10 +50,10 @@ export default function DonationDetails({
   handleClick,
   donationDetails,
   setDonationDetails,
-  paymentDetails,
-  setClientSecret,
-  isFetchingUser = false,
-  isLoggedIn = false,
+  // paymentDetails,
+  // setClientSecret,
+  // isFetchingUser = false,
+  // isLoggedIn = false,
   slug = 'home',
 }: DonationDetailsProps) {
   const pathname = usePathname();
@@ -63,7 +61,8 @@ export default function DonationDetails({
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [selectedProject, setSelectedProject] = useState<Project | undefined>(projects[0]);
   const [disableAmountOptions, setDisableAmountOptions] = useState(false);
-  const [isStripeIntentLoading, SetIsStripeIntentLoading] = useState(false);
+  // const [isStripeIntentLoading, SetIsStripeIntentLoading] = useState(false);
+  const [isStepCompleted, setIsStepCompleted] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const otherAmountRef = useRef<HTMLInputElement>(null);
 
@@ -100,7 +99,11 @@ export default function DonationDetails({
     if (!donationDetails.supportType) {
       newErrors.supportType = 'Please choose a support type.';
     }
-    if (donationDetails.donationFixedAmount <= 1 && donationDetails.otherAmount < 1) {
+    if (
+      donationDetails.donationFixedAmount <= 1 &&
+      donationDetails?.supportType === 'Give Once' &&
+      donationDetails.otherAmount < 1
+    ) {
       newErrors.donationFixedAmount = 'Please select or enter a valid donation amount.';
       newErrors.otherAmount = 'Please select or enter a valid donation amount.';
     }
@@ -149,23 +152,22 @@ export default function DonationDetails({
     e.preventDefault();
 
     if (!validate()) {
+      setIsStepCompleted(false);
       return;
     }
-    console.log(selectedProject);
 
-    if (pathname === '/donate' && typeof setClientSecret === 'function' && paymentDetails) {
-      SetIsStripeIntentLoading(true);
+    if (pathname === '/donate' /*&& typeof setClientSecret === 'function' && paymentDetails*/) {
+      // SetIsStripeIntentLoading(true);
       try {
-        let priceId: string | null = null;
-        let endpoint = '/api/stripe/create-payment-intent';
-        let body: object;
+        // let priceId: string | null = null;
+        // let endpoint = '/api/stripe/create-payment-intent';
+        // let body: object;
 
         if (donationDetails.supportType === 'Recurring') {
-          if (!isLoggedIn) {
-            setErrors({ supportType: 'Please log in for recurring donations.' });
-            return;
-          }
-          console.log(project);
+          // if (!isLoggedIn) {
+          //   setErrors({ supportType: 'Please log in for recurring donations.' });
+          //   return;
+          // }
 
           const selectedOption = selectedProject?.amountOptions.find(
             (opt) => opt.amount === donationDetails.donationFixedAmount,
@@ -176,36 +178,38 @@ export default function DonationDetails({
             setErrors({ donationFixedAmount: 'Please select a valid recurring plan.' });
             return;
           }
-          priceId = selectedOption.id;
-          console.log(priceId);
+          // priceId = selectedOption.id;
+          // console.log(priceId);
 
-          endpoint = '/api/stripe/create-setup-intent';
-          body = { priceId };
+          // endpoint = '/api/stripe/create-setup-intent';
+          // body = { priceId };
         } else {
-          body = { amount: Number(paymentDetails.amount) * 100 };
+          // body = { amount: Number(paymentDetails.amount) * 100 };
         }
-        console.log(body);
+        // console.log(body);
 
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        });
+        // const response = await fetch(endpoint, {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify(body),
+        // });
 
-        const data = await response.json();
+        // const data = await response.json();
 
-        if (data.clientSecret) {
-          setClientSecret(data.clientSecret);
-          handleClick();
-        } else {
-          // Handle cases where the API call fails
-          setErrors({ projectType: data.error || 'Failed to initialize payment.' });
-        }
+        // if (data.clientSecret) {
+        //   setClientSecret(data.clientSecret);
+        //   handleClick();
+        // } else {
+        //   // Handle cases where the API call fails
+        //   setErrors({ projectType: data.error || 'Failed to initialize payment.' });
+        // }
+        handleClick();
       } catch (error) {
+        setIsStepCompleted(false);
         console.error('Form submission error:', error);
         setErrors({ projectType: 'An unknown error occurred.' });
       } finally {
-        SetIsStripeIntentLoading(false);
+        setIsStepCompleted(true);
       }
     } else if (pathname === '/' || pathname.includes(slug)) {
       const form = e.currentTarget;
@@ -239,7 +243,7 @@ export default function DonationDetails({
             <h2
               className={[styles.donationCardHeading, step !== 1 && styles.marginBottom].join(' ')}
             >
-              {step !== 1 && (
+              {step !== 1 && isStepCompleted && (
                 <span className={[styles.stepCompletionIcon].join(' ')}>
                   <CheckVerified />
                 </span>
@@ -293,13 +297,14 @@ export default function DonationDetails({
                   inputValue="Recurring"
                   handleChange={handleInputChange}
                   checked={donationDetails.supportType}
-                  disabled={!isLoggedIn}
+                  // disabled={!isLoggedIn}
                 >
-                  {isFetchingUser ? (
+                  {/* {isFetchingUser ? (
                     <CircleNotch color="var(--dark-blue)" className={styles.loadingIcon} />
                   ) : (
                     'Recurring Donation'
-                  )}
+                  )} */}
+                  Recurring Donation
                 </CustomRadio>
               </div>
               {errors.supportType && <p className={styles.inputError}>{errors.supportType}</p>}{' '}
@@ -343,19 +348,23 @@ export default function DonationDetails({
                 <p className={styles.inputError}>{errors.donationFixedAmount}</p>
               )}{' '}
             </div>
-            <div className={styles.inputGroup}>
-              <p className={styles.inputGroupLabel}>Other amount</p>
-              <input
-                type="number"
-                name="otherAmount"
-                value={donationDetails.otherAmount ? donationDetails.otherAmount : ''}
-                className={styles.input}
-                placeholder="£ 500"
-                onChange={handleInputChange}
-                ref={otherAmountRef}
-              />
-              {errors.otherAmount && <p className={styles.inputError}>{errors.otherAmount}</p>}{' '}
-            </div>
+            {donationDetails?.supportType === 'Give Once' && (
+              <div className={styles.inputGroup}>
+                <p className={styles.inputGroupLabel}>Other amount</p>
+                <input
+                  type="number"
+                  name="otherAmount"
+                  value={donationDetails.otherAmount ? donationDetails.otherAmount : ''}
+                  className={styles.input}
+                  placeholder="£ 500"
+                  onChange={handleInputChange}
+                  ref={otherAmountRef}
+                />
+                {errors.otherAmount && (
+                  <p className={styles.inputError}>{errors.otherAmount}</p>
+                )}{' '}
+              </div>
+            )}
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Choose donation type</p>
               <select
@@ -380,8 +389,8 @@ export default function DonationDetails({
               size="large"
               width="full"
               icons={{ leading: true }}
-              loading={isStripeIntentLoading}
-              disabled={isStripeIntentLoading}
+              // loading={isStripeIntentLoading}
+              // disabled={isStripeIntentLoading}
             >
               {pathname === '/donate' ? 'Continue to Personal Details' : 'Donate Now'}
             </Button>

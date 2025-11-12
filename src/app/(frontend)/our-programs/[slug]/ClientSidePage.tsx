@@ -25,11 +25,8 @@ import Paragraph from '@/components/elements/Paragraph';
 import Image from 'next/image';
 import ThreeLinesAccent from '@/graphics/ThreeLinesAccent';
 import SwigglyLineAccent from '@/graphics/SwigglyLineAccent';
-import { useAuth } from '@/hooks/useAuth';
 
 export default function OurProgramClientSide({ program }: { program: Program }) {
-  const { isFetching: isFetchingUser, isLoggedIn } = useAuth();
-
   const [project, setProject] = useState(PROJECTS[0]);
   const [donationDetails, setDonationDetails] = useState({
     projectType: PROJECTS[0].name,
@@ -66,8 +63,8 @@ export default function OurProgramClientSide({ program }: { program: Program }) 
               }}
               donationDetails={donationDetails}
               setDonationDetails={setDonationDetails}
-              isFetchingUser={isFetchingUser}
-              isLoggedIn={isLoggedIn}
+              // isFetchingUser={isFetchingUser}
+              // isLoggedIn={isLoggedIn}
               customClass={styles.forPrograms}
             />
           </div>
@@ -200,7 +197,7 @@ export default function OurProgramClientSide({ program }: { program: Program }) 
             <iframe
               width="560"
               height="315"
-              src="https://www.youtube.com/embed/K4TOrB7at0Y?si=GDlnltoNPYN5WDof"
+              src="https://www.youtube.com/embed/hSLYfnMlXpI"
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

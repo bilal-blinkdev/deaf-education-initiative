@@ -6,12 +6,8 @@ import CheckVerified from '@/graphics/CheckVerified';
 import ChevronDown from '../../../graphics/ChevronDown';
 import styles from './styles.module.scss';
 import { SelectField } from 'payload';
+import { Project } from '../DonationDetails';
 
-type Project = {
-  name: string;
-  hint: string;
-  amountOptions: { symbol: string; amount: string; period?: string | null }[];
-};
 type UserDetailsFormProps = {
   customClass?: string;
   project: Project;
@@ -19,8 +15,10 @@ type UserDetailsFormProps = {
   projects: Project[];
   step: number;
   handleClick: (jumpToStep?: number) => void;
+  donationDetails: any;
   userDetails: any;
   setUserDetails: any;
+  setClientSecret?: (secret: string) => void;
 };
 type customRadioProps = {
   children: ReactNode;
@@ -66,14 +64,18 @@ export default function UserDetails({
   projects,
   step,
   handleClick,
+  donationDetails,
   userDetails,
   setUserDetails,
+  setClientSecret,
 }: UserDetailsFormProps) {
   const countries = Country.getAllCountries();
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [states, setStates] = useState<IState[]>();
   const [cities, setCities] = useState<ICity[]>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isStripeIntentLoading, SetIsStripeIntentLoading] = useState(false);
+  const [isStepCompleted, setIsStepCompleted] = useState(false);
 
   useEffect(() => {
     setProject(projects[0]);
@@ -170,11 +172,83 @@ export default function UserDetails({
     setUserDetails((prev: any) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const isValid = true;
+    // const isValid = true;
 
-    if (isValid) handleClick();
+    // if (isValid) handleClick();
+
+    if (!validate() || typeof setClientSecret !== 'function') {
+      setIsStepCompleted(false);
+      return;
+    }
+
+    SetIsStripeIntentLoading(true);
+
+    try {
+      let priceId: string | null = null;
+      let endpoint: string | null = null;
+      let body: object;
+
+      // This is the total amount for one-time payments
+      const amount =
+        Number(donationDetails.otherAmount) > 0
+          ? Number(donationDetails.otherAmount)
+          : Number(donationDetails.donationFixedAmount);
+
+      if (donationDetails.supportType === 'Recurring') {
+        const selectedProject = projects.find((p) => p.name === donationDetails.projectType);
+        const selectedOption = selectedProject?.amountOptions.find(
+          (opt) => opt.amount === donationDetails.donationFixedAmount,
+        );
+
+        if (!selectedOption?.id) {
+          // We check for 'id' which is your priceId
+          setErrors({ donationFixedAmount: 'Please select a valid recurring plan.' });
+          return;
+        }
+
+        endpoint = '/api/stripe/create-setup-intent';
+        body = {
+          priceId: selectedOption.id,
+          email: userDetails.email,
+          name: `${userDetails.firstName} ${userDetails.lastName}`,
+          donationDetails: donationDetails,
+          userDetails: userDetails,
+        };
+      } else {
+        // Handle "Give Once" payments
+        endpoint = '/api/stripe/create-payment-intent';
+        body = {
+          amount: amount * 100,
+          receipt_email: userDetails.email,
+          donationDetails: donationDetails,
+          userDetails: userDetails,
+        };
+      }
+
+      // Fetch stripe intent
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json();
+
+      if (data.clientSecret) {
+        setClientSecret(data.clientSecret);
+        handleClick();
+      }
+    } catch (error) {
+      setIsStepCompleted(false);
+      console.error('Form submission error:', error);
+      setErrors({ projectType: 'An unknown error occurred.' });
+    } finally {
+      setIsStepCompleted(true);
+    }
+
+    SetIsStripeIntentLoading(false);
   };
 
   return (
@@ -182,7 +256,7 @@ export default function UserDetails({
       <div className={styles.donationCard}>
         <section className={styles.donationCardHeader}>
           <h2 className={[styles.donationCardHeading, step !== 2 && styles.marginBottom].join(' ')}>
-            {step !== 2 && (
+            {step !== 2 && isStepCompleted && (
               <span className={[styles.stepCompletionIcon].join(' ')}>
                 <CheckVerified />
               </span>
@@ -358,7 +432,14 @@ export default function UserDetails({
                 rows={6}
               ></textarea>
             </div>
-            <Button type="submit" size="large" width="full" icons={{ leading: true }}>
+            <Button
+              type="submit"
+              size="large"
+              width="full"
+              icons={{ leading: true }}
+              loading={isStripeIntentLoading}
+              disabled={isStripeIntentLoading}
+            >
               Continue to Payment Details
             </Button>
           </form>

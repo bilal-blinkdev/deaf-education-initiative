@@ -2,7 +2,6 @@ import { ReactNode, useEffect, useState } from 'react';
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
-import { useAuth } from '@/hooks/useAuth';
 import styles from './styles.module.scss';
 
 type Project = {
@@ -51,7 +50,6 @@ export default function PaymentDetails({
   const [errorMessage, setErrorMessage] = useState<string>();
 
   const [loading, setLoading] = useState(false);
-  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     setProject(projects[0]);
@@ -73,13 +71,13 @@ export default function PaymentDetails({
     }
 
     // A check to guide users to log in for recurring payments
-    if (donationDetails.supportType === 'Recurring' && !isLoggedIn) {
-      console.log('isLoggedIn', isLoggedIn);
-      // Check login here
-      setErrorMessage('Please log in or sign up to start a recurring donation.');
-      setLoading(false);
-      return;
-    }
+    // if (donationDetails.supportType === 'Recurring' && !isLoggedIn) {
+    //   console.log('isLoggedIn', isLoggedIn);
+    //   // Check login here
+    //   setErrorMessage('Please log in or sign up to start a recurring donation.');
+    //   setLoading(false);
+    //   return;
+    // }
 
     const { error: submitError } = await elements.submit();
     if (submitError) {
@@ -90,13 +88,15 @@ export default function PaymentDetails({
 
     let error;
 
+    const return_url = `${window.location.origin}/donate/thank-you`;
+
     if (donationDetails.supportType === 'Recurring') {
       // For 'setup' mode, use confirmSetup
       const { error: setupError } = await stripe.confirmSetup({
         elements,
         clientSecret,
         confirmParams: {
-          return_url: window.location.origin,
+          return_url,
         },
         redirect: 'if_required',
       });
@@ -107,7 +107,7 @@ export default function PaymentDetails({
         elements,
         clientSecret,
         confirmParams: {
-          return_url: window.location.origin,
+          return_url,
         },
         redirect: 'if_required',
       });
@@ -121,6 +121,7 @@ export default function PaymentDetails({
       // Success! No error was returned.
       setPaymentSucceeded(true);
       sendEmail();
+      window.location.href = return_url;
     }
 
     setLoading(false);

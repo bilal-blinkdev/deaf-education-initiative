@@ -13,8 +13,8 @@ import HandDrawnTwinkle from '@/graphics/HandDrawnTwinkle';
 import HandDrawnSmily from '@/graphics/HandDrawnSmily';
 import ArrowLeft from '@/graphics/ArrowLeft';
 import { PROJECTS_TEST as PROJECTS } from '@/app/constants';
+import Heading from '@/components/elements/Heading';
 import styles from './styles.module.scss';
-import { useAuth } from '@/hooks/useAuth';
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
   throw new Error('NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined');
@@ -23,8 +23,6 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 const NUMBER_OF_STEPS = 3;
 
 export default function Donation({ donationDetailsFormData }: any) {
-  const { isFetching: isFetchingUser, isLoggedIn } = useAuth();
-
   const [step, setStep] = useState(1);
 
   const [donationDetails, setDonationDetails] = useState(
@@ -60,7 +58,7 @@ export default function Donation({ donationDetailsFormData }: any) {
   const [paymentSucceeded, setPaymentSucceeded] = useState<boolean>(false);
 
   const [clientSecret, setClientSecret] = useState('');
-  const [elementsOptions, setElementsOptions] = useState<StripeElementsOptions>({});
+  // const [elementsOptions, setElementsOptions] = useState<StripeElementsOptions>({});
 
   const [project, setProject] = useState(PROJECTS[0]);
   const appearance = {
@@ -103,7 +101,13 @@ export default function Donation({ donationDetailsFormData }: any) {
     });
   };
   const handleEmail = async () => {
-    if (userDetails) {
+    if (userDetails && donationDetails && paymentDetails) {
+      const emailData = {
+        ...userDetails,
+        ...donationDetails,
+        amount: paymentDetails.amount,
+      };
+
       const response = await fetch('api/email/send', {
         method: 'POST',
         headers: {
@@ -111,7 +115,7 @@ export default function Donation({ donationDetailsFormData }: any) {
         },
         body: JSON.stringify({
           to: userDetails.email,
-          data: userDetails,
+          data: emailData,
         }),
       });
 
@@ -154,25 +158,29 @@ export default function Donation({ donationDetailsFormData }: any) {
   //   // 👇 The dependency array is correct and won't cause a loop.
   // }, [paymentDetails.amount, donationDetails.supportType]);
 
-  useEffect(() => {
-    if (clientSecret) {
-      if (donationDetails.supportType === 'Recurring') {
-        setElementsOptions({
-          appearance,
-          mode: 'setup',
-          currency: 'gbp',
-        });
-      } else {
-        setElementsOptions({
-          appearance,
-          mode: 'payment',
-          amount: Number(paymentDetails.amount) * 100,
-          currency: 'gbp',
-        });
-      }
-    }
-  }, [clientSecret, donationDetails.supportType, paymentDetails.amount]);
-
+  {
+    // useEffect(() => {
+    //   console.log('clientSecret: ', clientSecret);
+    //   if (clientSecret) {
+    //     if (donationDetails.supportType === 'Recurring') {
+    //       setElementsOptions({
+    //         appearance,
+    //         mode: 'setup',
+    //         currency: 'gbp',
+    //         clientSecret: clientSecret,
+    //       } as unknown as StripeElementsOptions);
+    //     } else {
+    //       setElementsOptions({
+    //         appearance,
+    //         mode: 'payment',
+    //         amount: Number(paymentDetails.amount) * 100,
+    //         currency: 'gbp',
+    //         clientSecret: clientSecret,
+    //       } as unknown as StripeElementsOptions);
+    //     }
+    //   }
+    // }, [clientSecret, donationDetails.supportType, paymentDetails.amount]);
+  }
   return (
     <section className={styles.donation}>
       <Container>
@@ -199,10 +207,10 @@ export default function Donation({ donationDetailsFormData }: any) {
                 step={step}
                 donationDetails={donationDetails}
                 setDonationDetails={setDonationDetails}
-                isFetchingUser={isFetchingUser}
-                isLoggedIn={isLoggedIn}
-                setClientSecret={setClientSecret}
-                paymentDetails={paymentDetails}
+                // isFetchingUser={isFetchingUser}
+                // isLoggedIn={isLoggedIn}
+                // setClientSecret={setClientSecret}
+                // paymentDetails={paymentDetails}
               />
               <UserDetailsBox
                 project={project}
@@ -210,23 +218,52 @@ export default function Donation({ donationDetailsFormData }: any) {
                 projects={PROJECTS}
                 handleClick={handleStepChange}
                 step={step}
+                donationDetails={donationDetails}
                 userDetails={userDetails}
                 setUserDetails={setUserDetails}
+                setClientSecret={setClientSecret}
               />
-              <Elements stripe={stripePromise} options={elementsOptions}>
-                <PaymentDetailsBox
-                  project={project}
-                  setProject={setProject}
-                  projects={PROJECTS}
-                  handleClick={handleStepChange}
-                  step={step}
-                  setPaymentDetails={setPaymentDetails}
-                  setPaymentSucceeded={setPaymentSucceeded}
-                  donationDetails={donationDetails}
-                  clientSecret={clientSecret}
-                  sendEmail={handleEmail}
-                />
-              </Elements>
+              {clientSecret ? (
+                <Elements
+                  stripe={stripePromise}
+                  options={
+                    {
+                      clientSecret,
+                      appearance,
+                      // amount:
+                      //   donationDetails.supportType === 'Recurring'
+                      //     ? undefined
+                      //     : Number(paymentDetails.amount) * 100,
+                      // mode: donationDetails.supportType === 'Recurring' ? undefined : 'payment',
+                      // currency: 'gbp',
+                    } as StripeElementsOptions
+                  }
+                >
+                  <PaymentDetailsBox
+                    project={project}
+                    setProject={setProject}
+                    projects={PROJECTS}
+                    handleClick={handleStepChange}
+                    step={step}
+                    setPaymentDetails={setPaymentDetails}
+                    setPaymentSucceeded={setPaymentSucceeded}
+                    donationDetails={donationDetails}
+                    clientSecret={clientSecret}
+                    sendEmail={handleEmail}
+                  />
+                </Elements>
+              ) : (
+                <section className={styles.paymentBoxEmpty}>
+                  <Heading level={2} className={styles.paymentBoxEmpty__heading}>
+                    {step !== 3 && (
+                      <span className={[styles.stepCompletionIcon].join(' ')}>
+                        {/* <CheckVerified /> */}
+                      </span>
+                    )}
+                    <span>Payment Details</span>
+                  </Heading>
+                </section>
+              )}
             </div>
             <div className={styles.flexCol}>
               <div className={styles.donationCart}>
@@ -273,7 +310,7 @@ export default function Donation({ donationDetailsFormData }: any) {
             </div>
           </div>
         )}
-        {paymentSucceeded && (
+        {/* {paymentSucceeded && (
           <div className={styles.success}>
             <h2 className={styles.success__heading}>
               <HandDrawnSmily />
@@ -293,7 +330,7 @@ export default function Donation({ donationDetailsFormData }: any) {
               Home
             </Button>
           </div>
-        )}
+        )} */}
       </Container>
     </section>
   );

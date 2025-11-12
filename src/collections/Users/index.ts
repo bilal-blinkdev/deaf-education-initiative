@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { protectRoles } from './hooks/protectRoles';
-import syncUserWithStripe from './hooks/syncUserWithStripe';
+// import syncUserWithStripe from './hooks/syncUserWithStripe';
 import editor from './access/editor';
 import admin from './access/admin';
 import viewer from './access/viewer';

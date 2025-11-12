@@ -1,6 +1,4 @@
 export function donationUserDetailsTemplate(data: any) {
-  console.log(data);
-
   return `
   <!DOCTYPE html>
   <html>
@@ -18,13 +16,34 @@ export function donationUserDetailsTemplate(data: any) {
               <tr>
                 <td style="background-color: #004aad; color: #ffffff; padding: 20px; text-align: center;">
                   <h1 style="margin: 0; font-size: 22px;">🎉 New Donation Received</h1>
-                  <p style="margin: 5px 0 0; font-size: 14px;">A user has successfully made a donation. Here are the details:</p>
+                  <p style="margin: 5px 0 0; font-size: 14px;">A user has successfully made a donation.</p>
                 </td>
               </tr>
 
-              <!-- Body -->
+              <!-- Donation Details Section -->
               <tr>
-                <td style="padding: 20px;">
+                <td style="padding: 20px 20px 10px 20px;">
+                  <h2 style="margin: 0 0 10px 0; font-size: 18px; color: #004aad;">Donation Details</h2>
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 14px; line-height: 1.6;">
+                    <tr><td width="30%"><strong>Project:</strong></td><td>${data.projectType}</td></tr>
+                    <tr><td width="30%"><strong>Amount:</strong></td><td>£${data.amount}</td></tr>
+                    <tr><td width="30%"><strong>Support Type:</strong></td><td>${data.supportType}</td></tr>
+                    <tr><td width="30%"><strong>Donation Type:</strong></td><td>${data.donationType}</td></tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Divider -->
+              <tr>
+                <td style="padding: 0 20px;">
+                  <div style="border-top: 1px solid #e0e0e0;"></div>
+                </td>
+              </tr>
+
+              <!-- User Details Section -->
+              <tr>
+                <td style="padding: 10px 20px 20px 20px;">
+                  <h2 style="margin: 10px 0 10px 0; font-size: 18px; color: #004aad;">Donor Details</h2>
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 14px; line-height: 1.6;">
                     <tr><td width="30%"><strong>First Name:</strong></td><td>${data.firstName}</td></tr>
                     ${data.lastName ? `<tr><td><strong>Last Name:</strong></td><td>${data.lastName}</td></tr>` : ''}

@@ -5,13 +5,11 @@ import Container from '../Container';
 import Button from '@/components/elements/Button';
 import LogoWithText from '@/graphics/LogoV2WithText';
 import SmartLink from '@/components/elements/SmartLink'; // Reusing your SmartLink component
-import LogoutButton from '@/components/elements/LogoutButton';
-import { getUser } from '@/app/(frontend)/(authenticated)/_actions/getUser';
-import styles from './styles.module.scss';
 import { fetchGlobal } from '@/app/lib/payload/fetchGlobal';
 import HamburgerMenu from '@/graphics/HamburgerMenu';
 import Cross from '@/graphics/Cross';
 import { cn } from '@/utils/ui';
+import styles from './styles.module.scss';
 
 export default async function Header() {
   const headerData = await fetchGlobal<HeaderType>('header', 2);
@@ -72,8 +70,7 @@ export default async function Header() {
                   })}
                 </ul>
               </nav>
-              <div className={styles.userProfileBtn}>
-                {<LogoutButton />}
+              <div className={styles.buttonsGroup}>
                 {buttons &&
                   buttons.map((btn, index) => (
                     <SmartLink key={index} link={btn} className={styles.buttonLink}>
@@ -107,7 +104,7 @@ export default async function Header() {
                   ))}
               </ul>
             </nav>
-            <div className={styles.userProfileBtn}>
+            <div className={styles.buttonsGroup}>
               {buttons &&
                 buttons.map((btn, index) => (
                   <SmartLink key={index} link={btn}>
@@ -116,7 +113,6 @@ export default async function Header() {
                     </Button>
                   </SmartLink>
                 ))}
-              {<LogoutButton style="default" width="full" />}
             </div>
           </aside>
         </div>

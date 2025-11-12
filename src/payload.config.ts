@@ -23,6 +23,7 @@ import { Page } from '@/payload-types';
 
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types';
 import { Publications } from './collections/Publications';
+import { Donations } from './collections/Donations';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -59,6 +60,7 @@ export default buildConfig({
     Media,
     Pages,
     Donors,
+    Donations,
     Categories,
     Authors,
     Blog,

@@ -186,10 +186,6 @@ select.input {
   user-select: none;
   color: $label-fg;
   background-color: $label-bg;
-  &:hover {
-    color: $label-hover-fg;
-    background-color: $label-hover-bg;
-  }
   &:active {
     box-shadow: 0 0 0 4px rgba($label-hover-bg, 30%);
   }
@@ -207,6 +203,10 @@ select.input {
     & input:not(checked) + label {
       border: 1px solid rgba($ebony, 12%);
       color: rgba($ebony, 30%);
+      &:hover {
+        color: $label-hover-fg;
+        background-color: $label-hover-bg;
+      }
     }
     & input:checked + label {
       color: $label-selected-fg;

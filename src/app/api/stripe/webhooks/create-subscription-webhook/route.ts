@@ -33,6 +33,22 @@ export async function POST(req: Request) {
   try {
     const payload = await getPayload({ config });
     switch (event.type) {
+      case 'payment_intent.succeeded': {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        const donationId = paymentIntent.metadata.donationId; // ⇐ Get our Donation ID
+
+        if (donationId) {
+          // Mark the donation as "Complete" in Payload
+          await payload.update({
+            collection: 'donations',
+            id: donationId,
+            data: {
+              status: 'complete',
+            },
+          });
+        }
+        break;
+      }
       case 'setup_intent.succeeded':
         const setupIntent = event.data.object as Stripe.SetupIntent;
 
@@ -41,22 +57,11 @@ export async function POST(req: Request) {
           const customerId = setupIntent.customer as string;
           const paymentMethodId = setupIntent.payment_method as string;
           const priceId = setupIntent.metadata.priceId;
+          const donationId = setupIntent.metadata.donationId;
 
-          if (!customerId || !paymentMethodId || !priceId) {
+          if (!customerId || !paymentMethodId || !priceId || !donationId) {
             throw new Error('Missing required data in SetupIntent metadata.');
           }
-
-          // Find the corresponding donor in your database
-          const { docs: donors } = await payload.find({
-            collection: 'donors',
-            where: {
-              stripeCustomerId: { equals: customerId },
-            },
-          });
-          console.log('DONORS: ', donors);
-
-          if (donors.length === 0) throw new Error('Donor not found.');
-          const donor = donors[0];
 
           // Set the new payment method as the customer's default
           await stripe.customers.update(customerId, {
@@ -65,7 +70,7 @@ export async function POST(req: Request) {
             },
           });
 
-          // CREATE THE SUBSCRIPTION
+          // Create the subscription
           await stripe.subscriptions.create({
             customer: customerId,
             items: [{ price: priceId }],
@@ -73,14 +78,37 @@ export async function POST(req: Request) {
             off_session: true,
           });
 
-          // Update the donor's status in Payload
+          // Mark the donation as "Complete" in Payload
           await payload.update({
-            collection: 'donors',
-            id: donor.id,
+            collection: 'donations',
+            id: donationId,
             data: {
-              subscriptionStatus: 'active',
+              status: 'complete',
             },
           });
+
+          // Find the corresponding donor in your database
+          const { docs: donors } = await payload.find({
+            collection: 'donors',
+            where: {
+              stripeCustomerId: { equals: customerId },
+            },
+          });
+
+          // if (donors.length === 0) throw new Error('Donor not found.');
+          // const donor = donors[0];
+
+          // Update the donor's status in Payload
+          if (donors.length > 0) {
+            const donor = donors[0];
+            await payload.update({
+              collection: 'donors',
+              id: donor.id,
+              data: {
+                subscriptionStatus: 'active',
+              },
+            });
+          }
         }
         break;
 
