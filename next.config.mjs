@@ -27,13 +27,16 @@ const nextConfig = {
       }),
     ],
   },
-  webpack: (webpackConfig) => {
+  transpilePackages: ['react-pdf'],
+  webpack: (webpackConfig, { dev, isServer }) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs'],
     };
-
+    if (isServer) {
+      webpackConfig.externals.push('pdfjs-dist');
+    }
     return webpackConfig;
   },
 };
