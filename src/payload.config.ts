@@ -24,6 +24,7 @@ import { Page } from '@/payload-types';
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types';
 import { Publications } from './collections/Publications';
 import { Donations } from './collections/Donations';
+import { Projects } from './collections/Projects';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -61,6 +62,7 @@ export default buildConfig({
     Pages,
     Donors,
     Donations,
+    Projects,
     Categories,
     Authors,
     Blog,
