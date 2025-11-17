@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
           email: email,
           name: `${firstName} ${lastName}`,
           stripeCustomerId: customer.id,
-          subscriptionStatus: 'none',
+          hasActiveSubscription: 'No',
         },
       });
     }

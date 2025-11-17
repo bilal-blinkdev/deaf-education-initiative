@@ -63,7 +63,7 @@ export const POST = async (req: Request) => {
           email: email,
           name: `${firstName} ${lastName}`,
           stripeCustomerId: customer.id,
-          subscriptionStatus: 'none',
+          hasActiveSubscription: 'No',
         },
       });
     }

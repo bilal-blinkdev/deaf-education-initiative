@@ -6,7 +6,7 @@ export const Donors: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     group: 'Fundraising',
-    defaultColumns: ['name', 'email', 'subscriptionStatus'],
+    defaultColumns: ['name', 'email', 'hasActiveSubscription'],
     components: {
       beforeList: [
         {
