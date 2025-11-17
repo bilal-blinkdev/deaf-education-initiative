@@ -4,11 +4,23 @@ import HeadingDescription from '@/components/blocks/HeadingDescription';
 import Donation from '@/components/blocks/Donation';
 
 import { cookies } from 'next/headers';
+import { fetchProjects } from '@/app/lib/payload/fetchProjects';
 
 export default async function Donate() {
   const cookieStore = await cookies();
   const donationDataCookie = cookieStore.get('donationData');
   const donationData = donationDataCookie ? JSON.parse(donationDataCookie.value) : {};
+
+  let projects = await fetchProjects();
+
+  if (projects.length === 0) {
+    return (
+      <section style={{ paddingTop: '100px', paddingBottom: '100px', textAlign: 'center' }}>
+        <h2>Donations are temporarily unavailable.</h2>
+        <p>Please check back later.</p>
+      </section>
+    );
+  }
 
   const content = {
     heading: { text: 'Give Deaf Children the Chance to Learn' },
@@ -22,7 +34,7 @@ export default async function Donate() {
     <>
       <Banner src={DeafGirlStudying} alt="Deaf Girl Studying" />
       <HeadingDescription content={content} />
-      <Donation donationDetailsFormData={donationData} />
+      <Donation projects={projects} donationDetailsFormData={donationData} />
     </>
   );
 }

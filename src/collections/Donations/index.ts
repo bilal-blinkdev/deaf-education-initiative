@@ -4,8 +4,40 @@ export const Donations: CollectionConfig = {
   slug: 'donations',
   admin: {
     useAsTitle: 'email',
+    group: 'Fundraising',
     defaultColumns: ['email', 'project', 'amount', 'status'],
+    components: {
+      beforeList: [
+        {
+          path: '@/components/admin/ExportCSV#ExportCSV',
+          clientProps: {
+            collection: 'donations',
+            fieldOrder: [
+              'id',
+              'email',
+              'firstName',
+              'lastName',
+              'project',
+              'amount',
+              'donationType',
+              'supportType',
+              'status',
+              'phone',
+              'country',
+              'city',
+              'address',
+              'zipCode',
+              'comments',
+              'donor',
+              'createdAt',
+              'updatedAt',
+            ],
+          },
+        },
+      ],
+    },
   },
+
   access: {
     // We'll create these programmatically, so lock down the admin UI
     // to prevent accidental creation or deletion.

@@ -5,6 +5,7 @@ export const Authors: CollectionConfig = {
   slug: 'authors',
   admin: {
     useAsTitle: 'name',
+    group: 'Blog',
   },
   access: {
     read: () => true,

@@ -6,7 +6,8 @@ import CheckVerified from '@/graphics/CheckVerified';
 import ChevronDown from '../../../graphics/ChevronDown';
 import styles from './styles.module.scss';
 import { SelectField } from 'payload';
-import { Project } from '../DonationDetails';
+import { Project } from '@/payload-types';
+// import { Project } from '../DonationDetails';
 
 type UserDetailsFormProps = {
   customClass?: string;
@@ -186,7 +187,6 @@ export default function UserDetails({
     SetIsStripeIntentLoading(true);
 
     try {
-      let priceId: string | null = null;
       let endpoint: string | null = null;
       let body: object;
 
@@ -199,20 +199,19 @@ export default function UserDetails({
       if (donationDetails.supportType === 'Recurring') {
         const selectedProject = projects.find((p) => p.name === donationDetails.projectType);
         const selectedOption = selectedProject?.amountOptions.find(
-          (opt) => opt.amount === donationDetails.donationFixedAmount,
+          (opt) => opt.amount === Number(donationDetails.donationFixedAmount),
         );
 
         if (!selectedOption?.id) {
           // We check for 'id' which is your priceId
           setErrors({ donationFixedAmount: 'Please select a valid recurring plan.' });
+          SetIsStripeIntentLoading(false);
           return;
         }
 
         endpoint = '/api/stripe/create-setup-intent';
         body = {
           priceId: selectedOption.id,
-          email: userDetails.email,
-          name: `${userDetails.firstName} ${userDetails.lastName}`,
           donationDetails: donationDetails,
           userDetails: userDetails,
         };
@@ -244,10 +243,10 @@ export default function UserDetails({
       setIsStepCompleted(false);
       console.error('Form submission error:', error);
       setErrors({ projectType: 'An unknown error occurred.' });
-    } finally {
-      setIsStepCompleted(true);
+      SetIsStripeIntentLoading(false);
     }
 
+    setIsStepCompleted(true);
     SetIsStripeIntentLoading(false);
   };
 
@@ -432,6 +431,10 @@ export default function UserDetails({
                 rows={6}
               ></textarea>
             </div>
+            {errors.donationFixedAmount && (
+              <p className={styles.inputError}>{errors.donationFixedAmount}</p>
+            )}{' '}
+            {errors.projectType && <p className={styles.inputError}>{errors.projectType}</p>}{' '}
             <Button
               type="submit"
               size="large"

@@ -1,23 +1,9 @@
-'use client';
-
-import { Program } from '@/payload-types';
-
-import { useState } from 'react';
+import { Program, Project } from '@/payload-types';
 import TwoColumnCard from '@/components/blocks/TwoColumnCard';
 import SubscriptionBlock from '@/components/blocks/Subscription';
 import MainBanner from '@/assets/programs/internal/boy-raising-hand-smiling.webp';
 import Banner from '@/components/blocks/Banner';
 import Text from '@/components/blocks/Text';
-import Image1 from '@/assets/programs/internal/three-girls-in-school-smiling.webp';
-import Image2 from '@/assets/programs/internal/three-girls-one-boy-in-school-smiling.webp';
-import Image3 from '@/assets/programs/internal/students-clapping.webp';
-import Image4 from '@/assets/programs/internal/boy-in-school-writing-in-notebook.webp';
-import FImage1 from '@/assets/programs/internal/student-graduating.webp';
-import FImage2 from '@/assets/programs/internal/two-school-girls-in-library.webp';
-import FImage3 from '@/assets/programs/internal/classroom-full-of-students.webp';
-import styles from './styles.module.scss';
-import { PROJECTS_TEST as PROJECTS } from '@/app/constants';
-import DonationDetails from '@/components/sections/DonationDetails';
 import Container from '@/components/layout/Container';
 import HandDrawnUnderlines from '@/graphics/HandDrawnUnderlines';
 import Heading from '@/components/elements/Heading';
@@ -25,16 +11,15 @@ import Paragraph from '@/components/elements/Paragraph';
 import Image from 'next/image';
 import ThreeLinesAccent from '@/graphics/ThreeLinesAccent';
 import SwigglyLineAccent from '@/graphics/SwigglyLineAccent';
+import DonationDetailsGlobal from '@/components/sections/DonationDetailsGlobal';
+import styles from './styles.module.scss';
 
-export default function OurProgramClientSide({ program }: { program: Program }) {
-  const [project, setProject] = useState(PROJECTS[0]);
-  const [donationDetails, setDonationDetails] = useState({
-    projectType: PROJECTS[0].name,
-    supportType: 'Give Once',
-    otherAmount: 0,
-    donationType: 'Zakat',
-    donationFixedAmount: '1',
-  });
+type OurProgramClientSideProps = {
+  projects: Project[];
+  program: Program;
+};
+
+export default function OurProgramClientSide({ projects, program }: OurProgramClientSideProps) {
   const textBlockContent = {
     heading: { text: program.title, align: 'center' },
     headingOverline: {
@@ -54,19 +39,7 @@ export default function OurProgramClientSide({ program }: { program: Program }) 
       <section className={styles.donation}>
         <Container>
           <div className={styles.donationForm}>
-            <DonationDetails
-              project={project}
-              setProject={setProject}
-              projects={PROJECTS}
-              handleClick={() => {
-                console.log('test');
-              }}
-              donationDetails={donationDetails}
-              setDonationDetails={setDonationDetails}
-              // isFetchingUser={isFetchingUser}
-              // isLoggedIn={isLoggedIn}
-              customClass={styles.forPrograms}
-            />
+            <DonationDetailsGlobal projects={projects} customClass={styles.forPrograms} />
           </div>
           {program.layout?.map((block, index) => {
             if (block.blockType === 'imageGrid') {

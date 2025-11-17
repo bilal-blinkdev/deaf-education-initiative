@@ -5,7 +5,27 @@ export const Donors: CollectionConfig = {
   slug: 'donors',
   admin: {
     useAsTitle: 'email',
+    group: 'Fundraising',
     defaultColumns: ['name', 'email', 'subscriptionStatus'],
+    components: {
+      beforeList: [
+        {
+          path: '@/components/admin/ExportCSV#ExportCSV',
+          clientProps: {
+            collection: 'donors',
+            fieldOrder: [
+              'id',
+              'name',
+              'email',
+              'stripeCustomerId',
+              'hasActiveSubscription',
+              'createdAt',
+              'updatedAt',
+            ],
+          },
+        },
+      ],
+    },
   },
   access: {
     read: () => true,
@@ -38,23 +58,17 @@ export const Donors: CollectionConfig = {
       },
     },
     {
-      name: 'subscriptionStatus',
-      label: 'Subscription Status',
+      name: 'hasActiveSubscription',
+      label: 'Has Active Subscription',
       type: 'select',
       options: [
-        { label: 'Active', value: 'active' },
-        { label: 'Canceled', value: 'canceled' },
-        { label: 'Incomplete', value: 'incomplete' },
-        { label: 'Incomplete Expired', value: 'incomplete_expired' },
-        { label: 'Past Due', value: 'past_due' },
-        { label: 'Trialing', value: 'trialing' },
-        { label: 'Unpaid', value: 'unpaid' },
-        { label: 'Paused', value: 'paused' },
-        { label: 'None', value: 'none' },
+        { label: 'Yes', value: 'Yes' },
+        { label: 'No', value: 'No' },
       ],
-      defaultValue: 'none',
+      defaultValue: 'No',
       admin: {
         position: 'sidebar',
+        readOnly: true,
       },
     },
   ],

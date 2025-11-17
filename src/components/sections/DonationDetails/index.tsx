@@ -7,27 +7,18 @@ import axios from 'axios';
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
 import DonatingHand from '@/assets/hand-donating.webp';
-import styles from './styles.module.scss';
 import ChevronDown from '@/graphics/ChevronDown';
+import { Project } from '@/payload-types';
+import styles from './styles.module.scss';
 
-export type Project = {
-  name: string;
-  hint: string;
-  amountOptions: { id: string; symbol: string; amount: string; period?: string | null }[];
-};
 type DonationDetailsProps = {
   customClass?: string;
-  project: Project;
   setProject: any;
   projects: Project[];
   step?: number;
   handleClick: (jumpToStep?: number) => void;
   donationDetails: any;
   setDonationDetails: any;
-  // setClientSecret?: (secret: string) => void;
-  // paymentDetails?: any;
-  // isFetchingUser: boolean;
-  // isLoggedIn: boolean;
   slug?: string;
 };
 type customRadioProps = {
@@ -43,17 +34,13 @@ type customRadioProps = {
 
 export default function DonationDetails({
   customClass,
-  project,
   setProject,
   projects,
   step,
   handleClick,
   donationDetails,
   setDonationDetails,
-  // paymentDetails,
-  // setClientSecret,
-  // isFetchingUser = false,
-  // isLoggedIn = false,
+
   slug = 'home',
 }: DonationDetailsProps) {
   const pathname = usePathname();
@@ -61,9 +48,7 @@ export default function DonationDetails({
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [selectedProject, setSelectedProject] = useState<Project | undefined>(projects[0]);
   const [disableAmountOptions, setDisableAmountOptions] = useState(false);
-  // const [isStripeIntentLoading, SetIsStripeIntentLoading] = useState(false);
   const [isStepCompleted, setIsStepCompleted] = useState(false);
-  const [redirect, setRedirect] = useState(false);
   const otherAmountRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -170,7 +155,7 @@ export default function DonationDetails({
           // }
 
           const selectedOption = selectedProject?.amountOptions.find(
-            (opt) => opt.amount === donationDetails.donationFixedAmount,
+            (opt) => opt.amount === Number(donationDetails.donationFixedAmount),
           );
 
           if (!selectedOption?.id) {
@@ -325,9 +310,9 @@ export default function DonationDetails({
                   selectedProject?.amountOptions.map((amount, index) => (
                     <CustomRadio
                       inputType="radio"
-                      inputId={amount.amount}
+                      inputId={amount.amount.toString()}
                       inputName="donationFixedAmount"
-                      inputValue={amount.amount}
+                      inputValue={amount.amount.toString()}
                       handleChange={handleInputChange}
                       checked={donationDetails.donationFixedAmount}
                       disabled={disableAmountOptions}

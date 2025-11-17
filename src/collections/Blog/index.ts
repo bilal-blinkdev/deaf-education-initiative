@@ -6,11 +6,12 @@ export const Blog: CollectionConfig = {
   slug: 'blog',
   admin: {
     useAsTitle: 'title',
+    group: 'Blog',
     defaultColumns: ['title', 'category', 'author', 'publishedDate'],
   },
   labels: {
-    singular: 'Blog',
-    plural: 'Blog',
+    singular: 'Post',
+    plural: 'Posts',
   },
   access: {
     read: () => true,

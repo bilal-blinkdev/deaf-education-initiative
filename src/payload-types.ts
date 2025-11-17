@@ -72,13 +72,14 @@ export interface Config {
     pages: Page;
     donors: Donor;
     donations: Donation;
+    projects: Project;
+    subscriptions: Subscription;
     categories: Category;
     authors: Author;
     blog: Blog;
     publications: Publication;
     events: Event;
     programs: Program;
-    'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -91,13 +92,14 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     donors: DonorsSelect<false> | DonorsSelect<true>;
     donations: DonationsSelect<false> | DonationsSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    subscriptions: SubscriptionsSelect<false> | SubscriptionsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
     publications: PublicationsSelect<false> | PublicationsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     programs: ProgramsSelect<false> | ProgramsSelect<true>;
-    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -719,19 +721,7 @@ export interface Donor {
   name?: string | null;
   email?: string | null;
   stripeCustomerId?: string | null;
-  subscriptionStatus?:
-    | (
-        | 'active'
-        | 'canceled'
-        | 'incomplete'
-        | 'incomplete_expired'
-        | 'past_due'
-        | 'trialing'
-        | 'unpaid'
-        | 'paused'
-        | 'none'
-      )
-    | null;
+  hasActiveSubscription?: ('Yes' | 'No') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -756,6 +746,48 @@ export interface Donation {
   comments?: string | null;
   status?: ('pending' | 'complete' | 'failed') | null;
   donor?: (string | null) | Donor;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: string;
+  name: string;
+  /**
+   * A short, helpful message shown below the project dropdown.
+   */
+  hint?: string | null;
+  amountOptions: {
+    /**
+     * Copy the `price_...` ID from your Stripe Dashboard.
+     */
+    id: string;
+    symbol: string;
+    amount: number;
+    /**
+     * e.g., "month", "year", "setup school". Leave blank for one-time.
+     */
+    period?: string | null;
+  }[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscriptions".
+ */
+export interface Subscription {
+  id: string;
+  stripeSubscriptionID: string;
+  status: 'active' | 'canceled' | 'past_due' | 'unpaid';
+  planName?: string | null;
+  planAmount?: number | null;
+  planPeriod?: string | null;
+  donor: string | Donor;
+  originalDonationEntry?: (string | null) | Donation;
   updatedAt: string;
   createdAt: string;
 }
@@ -895,23 +927,6 @@ export interface Program {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-kv".
- */
-export interface PayloadKv {
-  id: string;
-  key: string;
-  data:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
@@ -1030,6 +1045,14 @@ export interface PayloadLockedDocument {
         value: string | Donation;
       } | null)
     | ({
+        relationTo: 'projects';
+        value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'subscriptions';
+        value: string | Subscription;
+      } | null)
+    | ({
         relationTo: 'categories';
         value: string | Category;
       } | null)
@@ -1052,10 +1075,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'programs';
         value: string | Program;
-      } | null)
-    | ({
-        relationTo: 'payload-kv';
-        value: string | PayloadKv;
       } | null)
     | ({
         relationTo: 'payload-jobs';
@@ -1337,7 +1356,7 @@ export interface DonorsSelect<T extends boolean = true> {
   name?: T;
   email?: T;
   stripeCustomerId?: T;
-  subscriptionStatus?: T;
+  hasActiveSubscription?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1361,6 +1380,39 @@ export interface DonationsSelect<T extends boolean = true> {
   comments?: T;
   status?: T;
   donor?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  name?: T;
+  hint?: T;
+  amountOptions?:
+    | T
+    | {
+        id?: T;
+        symbol?: T;
+        amount?: T;
+        period?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscriptions_select".
+ */
+export interface SubscriptionsSelect<T extends boolean = true> {
+  stripeSubscriptionID?: T;
+  status?: T;
+  planName?: T;
+  planAmount?: T;
+  planPeriod?: T;
+  donor?: T;
+  originalDonationEntry?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1473,14 +1525,6 @@ export interface ProgramsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-kv_select".
- */
-export interface PayloadKvSelect<T extends boolean = true> {
-  key?: T;
-  data?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

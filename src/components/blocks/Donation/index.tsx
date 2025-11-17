@@ -9,10 +9,8 @@ import DonationDetailsBox from '@/components/sections/DonationDetails';
 import UserDetailsBox from '@/components/sections/UserDetails';
 import PaymentDetailsBox from '@/components/sections/PaymentDetails';
 import Button from '@/components/elements/Button';
-import HandDrawnTwinkle from '@/graphics/HandDrawnTwinkle';
-import HandDrawnSmily from '@/graphics/HandDrawnSmily';
-import ArrowLeft from '@/graphics/ArrowLeft';
-import { PROJECTS_TEST as PROJECTS } from '@/app/constants';
+// import { PROJECTS_TEST as PROJECTS } from '@/app/constants';
+import { Project as ProjectType } from '@/payload-types';
 import Heading from '@/components/elements/Heading';
 import styles from './styles.module.scss';
 
@@ -22,18 +20,23 @@ if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined)
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 const NUMBER_OF_STEPS = 3;
 
-export default function Donation({ donationDetailsFormData }: any) {
+type DonationProps = {
+  donationDetailsFormData?: any;
+  projects: ProjectType[];
+};
+
+export default function Donation({ donationDetailsFormData, projects }: DonationProps) {
   const [step, setStep] = useState(1);
 
   const [donationDetails, setDonationDetails] = useState(
     donationDetailsFormData?.donationFixedAmount > 0 || donationDetailsFormData?.otherAmount > 0
       ? donationDetailsFormData
       : {
-          projectType: PROJECTS[0].name,
+          projectType: projects[0]?.name,
           supportType: 'Give Once',
           otherAmount: 0,
           donationType: 'Zakat',
-          donationFixedAmount: '1',
+          donationFixedAmount: projects[0]?.amountOptions[0]?.amount.toString() || '1',
         },
   );
   const [userDetails, setUserDetails] = useState({
@@ -60,7 +63,7 @@ export default function Donation({ donationDetailsFormData }: any) {
   const [clientSecret, setClientSecret] = useState('');
   // const [elementsOptions, setElementsOptions] = useState<StripeElementsOptions>({});
 
-  const [project, setProject] = useState(PROJECTS[0]);
+  const [project, setProject] = useState<ProjectType>(projects[0]);
   const appearance = {
     theme: 'stripe' as const,
     rules: {
@@ -153,6 +156,21 @@ export default function Donation({ donationDetailsFormData }: any) {
     });
   }, [donationDetails]);
 
+  // Safety check effect in case projects prop loads after initial state
+  useEffect(() => {
+    if (projects.length > 0 && !project) {
+      setProject(projects[0]);
+    }
+    if (projects.length > 0 && !donationDetails.projectType) {
+      setDonationDetails((prev: any) => ({
+        ...prev,
+        projectType: projects[0].name,
+        donationFixedAmount:
+          prev.donationFixedAmount || projects[0].amountOptions[0].amount.toString(),
+      }));
+    }
+  }, [projects, project, donationDetails.projectType]);
+
   // useEffect(() => {
   //   configureStripeOptions();
   //   // 👇 The dependency array is correct and won't cause a loop.
@@ -200,9 +218,8 @@ export default function Donation({ donationDetailsFormData }: any) {
           <div className={styles.flex}>
             <div className={styles.flexCol}>
               <DonationDetailsBox
-                project={project}
                 setProject={setProject}
-                projects={PROJECTS}
+                projects={projects}
                 handleClick={handleStepChange}
                 step={step}
                 donationDetails={donationDetails}
@@ -215,7 +232,7 @@ export default function Donation({ donationDetailsFormData }: any) {
               <UserDetailsBox
                 project={project}
                 setProject={setProject}
-                projects={PROJECTS}
+                projects={projects}
                 handleClick={handleStepChange}
                 step={step}
                 donationDetails={donationDetails}
@@ -242,7 +259,7 @@ export default function Donation({ donationDetailsFormData }: any) {
                   <PaymentDetailsBox
                     project={project}
                     setProject={setProject}
-                    projects={PROJECTS}
+                    projects={projects}
                     handleClick={handleStepChange}
                     step={step}
                     setPaymentDetails={setPaymentDetails}

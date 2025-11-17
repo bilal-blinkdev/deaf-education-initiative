@@ -3,12 +3,13 @@ import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
 import styles from './styles.module.scss';
+import { Project } from '@/payload-types';
 
-type Project = {
-  name: string;
-  hint: string;
-  amountOptions: { symbol: string; amount: string; period?: string | null }[];
-};
+// type Project = {
+//   name: string;
+//   hint: string;
+//   amountOptions: { symbol: string; amount: string; period?: string | null }[];
+// };
 type PaymentDetailsProps = {
   customClass?: string;
   project: Project;
