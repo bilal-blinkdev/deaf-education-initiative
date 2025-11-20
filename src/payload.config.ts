@@ -91,7 +91,7 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    seoPlugin({ generateTitle, generateURL, collections: ['pages', 'programs', 'events'] }),
+    seoPlugin({ generateTitle, generateURL, collections: ['pages'] }),
 
     // storage-adapter-placeholder
   ],
