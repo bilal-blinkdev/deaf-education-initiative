@@ -1,5 +1,5 @@
 import Banner from '@/components/blocks/Banner';
-import DeafGirlStudying from '@/assets/deaf-girl-studying.webp';
+import BannerImage from '@/assets/girl-holding-books-and-smiling.webp';
 import HeadingDescription from '@/components/blocks/HeadingDescription';
 import Donation from '@/components/blocks/Donation';
 
@@ -32,7 +32,7 @@ export default async function Donate() {
 
   return (
     <>
-      <Banner src={DeafGirlStudying} alt="Deaf Girl Studying" />
+      <Banner src={BannerImage} alt="Banner Image" />
       <HeadingDescription content={content} />
       <Donation projects={projects} donationDetailsFormData={donationData} />
     </>
