@@ -22,7 +22,7 @@ const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
 export const generateMeta = async (args: { doc: Partial<Page> | null }): Promise<Metadata> => {
   const { doc } = args;
 
-  // const ogImage = getImageURL(doc?.meta?.image);
+  const ogImage = getImageURL(doc?.meta?.image);
 
   const title = doc?.meta?.title
     ? doc?.meta?.title + ' |  Deaf Education Initiative'
@@ -32,13 +32,13 @@ export const generateMeta = async (args: { doc: Partial<Page> | null }): Promise
     description: doc?.meta?.description,
     openGraph: mergeOpenGraph({
       description: doc?.meta?.description || '',
-      // images: ogImage
-      //   ? [
-      //       {
-      //         url: ogImage,
-      //       },
-      //     ]
-      //   : undefined,
+      images: ogImage
+        ? [
+            {
+              url: ogImage,
+            },
+          ]
+        : undefined,
       title,
       url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
     }),
