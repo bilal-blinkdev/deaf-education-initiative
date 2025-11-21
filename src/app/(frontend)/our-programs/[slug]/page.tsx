@@ -18,5 +18,5 @@ export default async function OurProgram({ params }: { params: Promise<{ slug: s
     return notFound();
   }
 
-  return <OurProgramClientSide projects={projects} program={program} />;
+  return <OurProgramClientSide projects={projects} program={program} slug={slug} />;
 }

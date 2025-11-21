@@ -2,9 +2,13 @@ import { colorSelectorField } from '@/fields/colorSelector';
 import { paddingField } from '@/fields/padding';
 import { Block } from 'payload';
 
-export const ImageGrid: Block = {
-  slug: 'imageGrid',
-  interfaceName: 'ImageGrid',
+export const DonationForm: Block = {
+  slug: 'donationForm',
+  interfaceName: 'DonationForm',
+  // labels: {
+  //   singular: 'Donation Section',
+  //   plural: 'Donation Sections',
+  // },
   fields: [
     {
       type: 'tabs',
@@ -13,24 +17,10 @@ export const ImageGrid: Block = {
           label: 'Content',
           fields: [
             {
-              name: 'imageText',
-              type: 'textarea',
-              required: true,
-            },
-            {
-              name: 'images',
-              type: 'array',
-              label: 'Grid Images',
-              minRows: 4,
-              required: true,
-              fields: [
-                {
-                  name: 'image',
-                  type: 'upload',
-                  relationTo: 'media',
-                  required: true,
-                },
-              ],
+              name: 'title',
+              label: 'Section Title (Optional)',
+              type: 'text',
+              defaultValue: 'Make a Donation',
             },
           ],
         },

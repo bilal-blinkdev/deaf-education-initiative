@@ -13,38 +13,49 @@ import ThreeLinesAccent from '@/graphics/ThreeLinesAccent';
 import SwigglyLineAccent from '@/graphics/SwigglyLineAccent';
 import DonationDetailsGlobal from '@/components/sections/DonationDetailsGlobal';
 import styles from './styles.module.scss';
+import { RenderHero } from '@/components/heros/RenderHero';
 
 type OurProgramClientSideProps = {
   projects: Project[];
   program: Program;
+  slug: string;
 };
 
-export default function OurProgramClientSide({ projects, program }: OurProgramClientSideProps) {
-  const textBlockContent = {
-    heading: { text: program.title, align: 'center' },
-    headingOverline: {
-      text: 'Our Programs > Education',
-      align: 'center',
-      color: 'var(--dodger-blue)',
-    },
-    description: {
-      text: program.shortDescription,
-      align: 'center',
-    },
-  } as const;
+export default function OurProgramClientSide({
+  projects,
+  program,
+  slug,
+}: OurProgramClientSideProps) {
+  const { hero, layout } = program;
   return (
     <>
-      <Banner src={MainBanner} alt="Student sitting in the class smiling" />
-      <Text content={textBlockContent} />
-      <section className={styles.donation}>
-        <Container>
-          <div className={styles.donationForm}>
-            <DonationDetailsGlobal projects={projects} customClass={styles.forPrograms} />
-          </div>
-          {program.layout?.map((block, index) => {
-            if (block.blockType === 'imageGrid') {
-              return (
-                <div key={index} className={styles.imagesGrid}>
+      <RenderHero {...hero} slug={slug} />
+      {layout?.map((block, index) => {
+        if (block.blockType === 'pageIntro') {
+          const textContent = {
+            heading: {
+              text: block.title,
+              align: block.alignment || 'center',
+              color: block.headingColor || undefined,
+            },
+            headingOverline: {
+              text: block.overline || '',
+              align: block.alignment || 'center',
+              color: block.overlineColor || undefined,
+            },
+            description: {
+              text: block.description || '',
+              align: block.alignment || 'center',
+            },
+          };
+
+          return <Text key={index} content={textContent} />;
+        }
+        if (block.blockType === 'imageGrid') {
+          return (
+            <section key={index} className={styles.imageGrid}>
+              <Container>
+                <div className={styles.imagesGrid}>
                   {block.images?.slice(0, 4).map((item, imgIndex) => {
                     if (typeof item.image !== 'object' || !item.image?.url) {
                       return null;
@@ -64,7 +75,7 @@ export default function OurProgramClientSide({ projects, program }: OurProgramCl
                           <div
                             className={styles.imagesGrid__imageContainer}
                             style={{
-                              backgroundImage: `url(${item.image?.url})`,
+                              backgroundImage: `url("${item.image?.url}")`,
                               backgroundRepeat: 'no-repeat',
                               backgroundPosition: 'center',
                               backgroundSize: 'cover',
@@ -78,7 +89,7 @@ export default function OurProgramClientSide({ projects, program }: OurProgramCl
                         <div
                           className={styles.imagesGrid__imageContainer}
                           style={{
-                            backgroundImage: `url(${item.image?.url})`,
+                            backgroundImage: `url("${item.image?.url}")`,
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'center',
                             backgroundSize: 'cover',
@@ -88,12 +99,10 @@ export default function OurProgramClientSide({ projects, program }: OurProgramCl
                     );
                   })}
                 </div>
-              );
-            }
-          })}
-        </Container>
-      </section>
-      {program.layout?.map((block, index) => {
+              </Container>
+            </section>
+          );
+        }
         if (block.blockType === 'cardGrid') {
           return (
             <section key={index} className={styles.features}>
@@ -140,6 +149,21 @@ export default function OurProgramClientSide({ projects, program }: OurProgramCl
                       </div>
                     );
                   })}
+                </div>
+              </Container>
+            </section>
+          );
+        }
+        if (block.blockType === 'donationForm') {
+          return (
+            <section key={index} className={styles.donation}>
+              <Container>
+                <div className={styles.donationForm}>
+                  <DonationDetailsGlobal
+                    projects={projects}
+                    customClass={styles.forPrograms}
+                    slug={slug}
+                  />
                 </div>
               </Container>
             </section>

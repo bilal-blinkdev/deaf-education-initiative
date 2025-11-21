@@ -281,6 +281,10 @@ export interface Page {
   layout: (CardGrid | ImageGrid | KeyMetricsBlock)[];
   meta?: {
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -528,6 +532,167 @@ export interface ImageGrid {
     image: string | Media;
     id?: string | null;
   }[];
+  paddingTop?:
+    | (
+        | '0x'
+        | '1x'
+        | '2x'
+        | '3x'
+        | '4x'
+        | '5x'
+        | '6x'
+        | '7x'
+        | '8x'
+        | '9x'
+        | '10x'
+        | '11x'
+        | '12x'
+        | '13x'
+        | '14x'
+        | '15x'
+        | '16x'
+        | '17x'
+        | '18x'
+        | '19x'
+        | '20x'
+        | '21x'
+        | '22x'
+        | '23x'
+        | '24x'
+        | '25x'
+        | '26x'
+        | '27x'
+        | '28x'
+        | '29x'
+        | '30x'
+        | '31x'
+        | '32x'
+        | '33x'
+        | '34x'
+        | '35x'
+        | '36x'
+        | '37x'
+        | '38x'
+        | '39x'
+        | '40x'
+      )
+    | null;
+  paddingBottom?:
+    | (
+        | '0x'
+        | '1x'
+        | '2x'
+        | '3x'
+        | '4x'
+        | '5x'
+        | '6x'
+        | '7x'
+        | '8x'
+        | '9x'
+        | '10x'
+        | '11x'
+        | '12x'
+        | '13x'
+        | '14x'
+        | '15x'
+        | '16x'
+        | '17x'
+        | '18x'
+        | '19x'
+        | '20x'
+        | '21x'
+        | '22x'
+        | '23x'
+        | '24x'
+        | '25x'
+        | '26x'
+        | '27x'
+        | '28x'
+        | '29x'
+        | '30x'
+        | '31x'
+        | '32x'
+        | '33x'
+        | '34x'
+        | '35x'
+        | '36x'
+        | '37x'
+        | '38x'
+        | '39x'
+        | '40x'
+      )
+    | null;
+  colors?: {
+    mainBackgroundColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+    headingTextColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+    descriptionTextColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'imageGrid';
@@ -898,10 +1063,6 @@ export interface Event {
     };
     [k: string]: unknown;
   } | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -916,14 +1077,200 @@ export interface Program {
   slug: string;
   featuredImage: string | Media;
   shortDescription: string;
-  layout?: (ImageGrid | CardGrid)[] | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
+  hero: {
+    type: 'none' | 'simpleImage' | 'donationForm';
+    media?: (string | null) | Media;
   };
+  layout?: (PageIntro | ImageGrid | CardGrid | DonationForm)[] | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageIntro".
+ */
+export interface PageIntro {
+  overline?: string | null;
+  title: string;
+  description?: string | null;
+  alignment?: ('center' | 'left' | 'right') | null;
+  overlineColor?: ('var(--dodger-blue)' | 'var(--sandy-brown)' | 'var(--dark-blue)' | 'var(--black)') | null;
+  headingColor?: ('var(--dark-blue)' | 'var(--black)' | 'var(--white)') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pageIntro';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DonationForm".
+ */
+export interface DonationForm {
+  title?: string | null;
+  paddingTop?:
+    | (
+        | '0x'
+        | '1x'
+        | '2x'
+        | '3x'
+        | '4x'
+        | '5x'
+        | '6x'
+        | '7x'
+        | '8x'
+        | '9x'
+        | '10x'
+        | '11x'
+        | '12x'
+        | '13x'
+        | '14x'
+        | '15x'
+        | '16x'
+        | '17x'
+        | '18x'
+        | '19x'
+        | '20x'
+        | '21x'
+        | '22x'
+        | '23x'
+        | '24x'
+        | '25x'
+        | '26x'
+        | '27x'
+        | '28x'
+        | '29x'
+        | '30x'
+        | '31x'
+        | '32x'
+        | '33x'
+        | '34x'
+        | '35x'
+        | '36x'
+        | '37x'
+        | '38x'
+        | '39x'
+        | '40x'
+      )
+    | null;
+  paddingBottom?:
+    | (
+        | '0x'
+        | '1x'
+        | '2x'
+        | '3x'
+        | '4x'
+        | '5x'
+        | '6x'
+        | '7x'
+        | '8x'
+        | '9x'
+        | '10x'
+        | '11x'
+        | '12x'
+        | '13x'
+        | '14x'
+        | '15x'
+        | '16x'
+        | '17x'
+        | '18x'
+        | '19x'
+        | '20x'
+        | '21x'
+        | '22x'
+        | '23x'
+        | '24x'
+        | '25x'
+        | '26x'
+        | '27x'
+        | '28x'
+        | '29x'
+        | '30x'
+        | '31x'
+        | '32x'
+        | '33x'
+        | '34x'
+        | '35x'
+        | '36x'
+        | '37x'
+        | '38x'
+        | '39x'
+        | '40x'
+      )
+    | null;
+  colors?: {
+    mainBackgroundColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+    headingTextColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+    descriptionTextColor?:
+      | (
+          | '#0000cc'
+          | '#ffff00'
+          | '#121127'
+          | '#2f2f2f'
+          | '#3399ff'
+          | '#f29559'
+          | '#f26419'
+          | '#ff080c'
+          | '#039855'
+          | '#f2f3ff'
+          | '#fcfcfc'
+          | '#eaecf0'
+          | '#d0d5dd'
+          | '#0a090c'
+          | '#444bd3'
+          | '#e9e9e9'
+          | 'rgb(223, 245, 255)'
+          | '#fff'
+          | '#000'
+        )
+      | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'donationForm';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1262,6 +1609,7 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
+        image?: T;
         description?: T;
       };
   publishedAt?: T;
@@ -1315,6 +1663,15 @@ export interface ImageGridSelect<T extends boolean = true> {
     | {
         image?: T;
         id?: T;
+      };
+  paddingTop?: T;
+  paddingBottom?: T;
+  colors?:
+    | T
+    | {
+        mainBackgroundColor?: T;
+        headingTextColor?: T;
+        descriptionTextColor?: T;
       };
   id?: T;
   blockName?: T;
@@ -1491,12 +1848,6 @@ export interface EventsSelect<T extends boolean = true> {
         googleMapsEmbedUrl?: T;
       };
   details?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1510,21 +1861,55 @@ export interface ProgramsSelect<T extends boolean = true> {
   slug?: T;
   featuredImage?: T;
   shortDescription?: T;
+  hero?:
+    | T
+    | {
+        type?: T;
+        media?: T;
+      };
   layout?:
     | T
     | {
+        pageIntro?: T | PageIntroSelect<T>;
         imageGrid?: T | ImageGridSelect<T>;
         cardGrid?: T | CardGridSelect<T>;
-      };
-  meta?:
-    | T
-    | {
-        title?: T;
-        description?: T;
+        donationForm?: T | DonationFormSelect<T>;
       };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageIntro_select".
+ */
+export interface PageIntroSelect<T extends boolean = true> {
+  overline?: T;
+  title?: T;
+  description?: T;
+  alignment?: T;
+  overlineColor?: T;
+  headingColor?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DonationForm_select".
+ */
+export interface DonationFormSelect<T extends boolean = true> {
+  title?: T;
+  paddingTop?: T;
+  paddingBottom?: T;
+  colors?:
+    | T
+    | {
+        mainBackgroundColor?: T;
+        headingTextColor?: T;
+        descriptionTextColor?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

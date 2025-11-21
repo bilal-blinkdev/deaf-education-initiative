@@ -2,6 +2,9 @@ import { CollectionConfig } from 'payload';
 import { ImageGrid } from '@/blocks/ImageGrid';
 import { CardGrid } from '@/blocks/CardGrid';
 import { formatSlug } from '@/utils/formatSlug';
+import { DonationForm } from '@/blocks/DonationForm';
+import { hero } from '@/fields/heros';
+import { PageIntro } from '@/blocks/PageIntro';
 
 export const Programs: CollectionConfig = {
   slug: 'programs',
@@ -30,31 +33,46 @@ export const Programs: CollectionConfig = {
       },
     },
     {
-      name: 'featuredImage',
-      type: 'upload',
-      relationTo: 'media',
-      required: true,
-      label: 'Image for Card', // Updated label for clarity
-    },
-    {
-      name: 'shortDescription', // Renamed from 'excerpt'
-      type: 'textarea',
-      required: true,
-      label: 'Short Description for Card', // Updated label for clarity
-    },
-    // ✅ This is the new field for your flexible page layouts
-    {
-      name: 'layout',
-      label: 'Page Layout',
-      type: 'blocks',
-      minRows: 1,
-      blocks: [ImageGrid, CardGrid],
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Card',
+          fields: [
+            {
+              name: 'featuredImage',
+              type: 'upload',
+              relationTo: 'media',
+              required: true,
+              label: 'Card Featured Image',
+            },
+            {
+              name: 'shortDescription',
+              type: 'textarea',
+              required: true,
+              label: 'Card Short Description',
+            },
+          ],
+        },
+        { label: 'Hero', fields: [hero] },
+        {
+          label: 'Content',
+          fields: [
+            {
+              name: 'layout',
+              label: 'Page Layout',
+              type: 'blocks',
+              minRows: 1,
+              blocks: [PageIntro, ImageGrid, CardGrid, DonationForm],
+            },
+          ],
+        },
+      ],
     },
   ],
   versions: {
     drafts: {
       autosave: {
-        interval: 100, // We set this interval for optimal live preview
+        interval: 100,
       },
       schedulePublish: true,
     },

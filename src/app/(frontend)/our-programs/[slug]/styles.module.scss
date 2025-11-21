@@ -1,15 +1,19 @@
 @use '../../colors.scss' as *;
 
+.imageGrid {
+  padding: 8rem 0 0;
+  background-color: $dark-blue;
+}
 .donation {
   padding: 10rem 0 0;
   background-color: $dark-blue;
 }
-.donationForm {
-  margin-bottom: 5rem;
-}
 .forPrograms {
   width: 100%;
   max-width: 100% !important;
+  & [class*='donationCard'] {
+    margin: 0;
+  }
 }
 .imagesGrid {
   position: relative;
