@@ -28,7 +28,14 @@ export default function TextCtaWithBgImage({ sectionClass, customClass }: TextCt
             Deaf Reach program in Pakistan, we provide education, skills training, and job placement
             programs to empower deaf children.
           </p>
-          <Button size="large" icons={{ leading: true }}>
+          <Button
+            size="large"
+            icons={{ leading: true }}
+            link={{
+              href: '/Registration_Certificate_1209822-20240924125950005XJCLCACQ.pdf',
+              target: '_blank',
+            }}
+          >
             View Certification
           </Button>
         </div>
