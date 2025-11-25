@@ -9,6 +9,9 @@ export function donationThankYouTemplate(data: any) {
       ? `${data.firstName || ''} ${data.lastName || ''}`.trim()
       : 'Donor';
 
+  // Determine if we should show state and city separately or combined
+  const showSeparateStateCity = data.state && data.city && data.state !== data.city;
+
   return `
   <!DOCTYPE html>
   <html>
@@ -66,6 +69,18 @@ export function donationThankYouTemplate(data: any) {
                         : ''
                     }
                     ${
+                      showSeparateStateCity
+                        ? `
+                    ${
+                      data.state
+                        ? `
+                    <tr style="background-color: #f9f9f9;">
+                      <td style="padding: 8px 12px; border-bottom: 1px solid #eee;" width="35%"><strong>State:</strong></td>
+                      <td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${data.state}</td>
+                    </tr>`
+                        : ''
+                    }
+                    ${
                       data.city
                         ? `
                     <tr>
@@ -73,6 +88,17 @@ export function donationThankYouTemplate(data: any) {
                       <td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${data.city}</td>
                     </tr>`
                         : ''
+                    }`
+                        : `
+                    ${
+                      data.state || data.city
+                        ? `
+                    <tr style="background-color: #f9f9f9;">
+                      <td style="padding: 8px 12px; border-bottom: 1px solid #eee;" width="35%"><strong>City/State:</strong></td>
+                      <td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${data.state || data.city}</td>
+                    </tr>`
+                        : ''
+                    }`
                     }
                     <tr style="background-color: #f9f9f9;">
                       <td style="padding: 8px 12px; border-bottom: 1px solid #eee;" width="35%"><strong>Donation Amount:</strong></td>
