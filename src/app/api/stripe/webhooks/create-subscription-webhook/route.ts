@@ -65,6 +65,10 @@ export async function POST(req: Request) {
   try {
     const payload = await getPayload({ config });
     switch (event.type) {
+      case 'payment_intent.created': {
+        console.log('Payment Intent Created');
+        break;
+      }
       case 'payment_intent.succeeded': {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
         const donationId = paymentIntent.metadata.donationId;
@@ -79,6 +83,10 @@ export async function POST(req: Request) {
             },
           });
         }
+        break;
+      }
+      case 'setup_intent.created': {
+        console.log('Setup Intent Created');
         break;
       }
       case 'setup_intent.succeeded':
