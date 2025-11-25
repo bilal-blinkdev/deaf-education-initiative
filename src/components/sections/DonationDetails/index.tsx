@@ -49,6 +49,7 @@ export default function DonationDetails({
   const [selectedProject, setSelectedProject] = useState<Project | undefined>(projects[0]);
   const [disableAmountOptions, setDisableAmountOptions] = useState(false);
   const [isStepCompleted, setIsStepCompleted] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const otherAmountRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -207,8 +208,10 @@ export default function DonationDetails({
           },
         });
 
+        setIsRedirecting(true);
         router.push('/donate');
       } catch (error) {
+        setIsRedirecting(false);
         console.error('Donation form submission failed:', error);
       }
     }
@@ -374,8 +377,8 @@ export default function DonationDetails({
               size="large"
               width="full"
               icons={{ leading: true }}
-              // loading={isStripeIntentLoading}
-              // disabled={isStripeIntentLoading}
+              loading={isRedirecting}
+              disabled={isRedirecting}
             >
               {pathname === '/donate' ? 'Continue to Personal Details' : 'Donate Now'}
             </Button>
