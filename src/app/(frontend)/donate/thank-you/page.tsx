@@ -8,21 +8,29 @@ export default function ThankYou() {
     <section className={styles.donationSuccess}>
       <Container>
         <div className={styles.success}>
-          <h2 className={styles.success__heading}>
-            <span>Thank You for Your Support!</span>
-          </h2>
-          <p className={styles.success__description}>
-            Thank you for supporting Deaf Education Initiative’s cause with your generous donation!
-            You’re helping make dreams come true and changing lives for the better.
-          </p>
-          <Button
-            size="large"
-            width="auto"
-            link={{ href: '/' }}
-            icons={{ trailing: true, type: <ArrowLeft /> }}
-          >
-            Home
-          </Button>
+          <div className={styles.success__header}>
+            <video className={styles.success__video} autoPlay muted loop playsInline>
+              <source src="/media/videos/donation-thankyou.mp4" type="video/mp4" />
+              <source src="/media/videos/donation-thankyou.webm" type="video/webm" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div className={styles.success__body}>
+            <h2 className={styles.success__heading}>
+              <span>Thank You For Your Donation</span>
+            </h2>
+            <p className={styles.success__description}>
+              We have sent you an email with the donation information
+            </p>
+            <Button
+              size="large"
+              width="maxContent"
+              link={{ href: '/' }}
+              icons={{ trailing: true, type: <ArrowLeft /> }}
+            >
+              Home
+            </Button>
+          </div>
         </div>
       </Container>
     </section>
