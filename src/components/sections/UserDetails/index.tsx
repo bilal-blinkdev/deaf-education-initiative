@@ -97,11 +97,16 @@ export default function UserDetails({
     if (!userDetails.country) {
       newErrors.country = 'Please select your country.';
     }
-    if (!userDetails.state) {
-      newErrors.state = 'Please enter your state.';
+    // Only validate state if states are available
+    if (states && states.length > 0 && !userDetails.state) {
+      newErrors.state =
+        cities && cities.length > 0
+          ? 'Please select your state.'
+          : 'Please select your city/state.';
     }
-    if (!userDetails.city) {
-      newErrors.city = 'Please enter your city.';
+    // Only validate city if cities dropdown is shown
+    if (cities && cities.length > 0 && !userDetails.city) {
+      newErrors.city = 'Please select your city.';
     }
     if (!userDetails.address) {
       newErrors.address = 'Please enter your full address.';
@@ -136,33 +141,42 @@ export default function UserDetails({
 
     if (name === 'country') {
       const countryCode = value;
+
       if (countryCode === '') {
-        setUserDetails((prev: any) => ({ ...prev, state: '' }));
-        setUserDetails((prev: any) => ({ ...prev, city: '' }));
+        setUserDetails((prev: any) => ({ ...prev, state: '', city: '' }));
+        setStates([]);
+        setCities([]);
+      } else {
+        const fetchedStates = State.getStatesOfCountry(countryCode);
+        setStates(fetchedStates);
+        setCities([]);
+
+        const country = Country.getCountryByCode(countryCode);
+        setUserDetails((prev: any) => ({ ...prev, [name]: country?.name, state: '', city: '' }));
       }
-
       setSelectedCountry(countryCode);
-      setCities([]);
-
-      const fetchedStates = State.getStatesOfCountry(countryCode);
-      setStates(fetchedStates);
-
-      const country = Country.getCountryByCode(countryCode);
-      setUserDetails((prev: any) => ({ ...prev, [name]: country?.name }));
       return;
     } else if (name === 'state') {
       const stateCode = value;
 
       if (stateCode === '') {
         setUserDetails((prev: any) => ({ ...prev, city: '' }));
+        setCities([]);
+      } else {
+        // Check if this state has cities
+        const fetchedCities = City.getCitiesOfState(selectedCountry, stateCode);
+
+        // If no cities found, treat state selection as final location
+        if (fetchedCities.length === 0) {
+          setCities([]);
+          const state = State.getStateByCodeAndCountry(stateCode, selectedCountry);
+          setUserDetails((prev: any) => ({ ...prev, state: state?.name, city: state?.name }));
+        } else {
+          setCities(fetchedCities);
+          const state = State.getStateByCodeAndCountry(stateCode, selectedCountry);
+          setUserDetails((prev: any) => ({ ...prev, state: state?.name, city: '' }));
+        }
       }
-
-      const fetchedCities = City.getCitiesOfState(selectedCountry, stateCode);
-      setCities(fetchedCities);
-
-      const state = State.getStateByCodeAndCountry(stateCode, selectedCountry);
-
-      setUserDetails((prev: any) => ({ ...prev, [name]: state?.name }));
       return;
     } else if (name === 'city') {
       setUserDetails((prev: any) => ({ ...prev, [name]: value }));
@@ -344,54 +358,63 @@ export default function UserDetails({
               </div>
               {errors.country && <p className={styles.inputError}>{errors.country}</p>}{' '}
             </div>
-            <div className={styles.inputGroup}>
-              <p className={styles.inputGroupLabel}>
-                State<span className={styles.required}>*</span>
-              </p>
-              <select
-                className={styles.input}
-                name="state"
-                // value={userDetails.state}
-                disabled={!states?.length}
-                onChange={handleCountryStateCityChange}
-              >
-                <option value="">Select a state</option>
-                {states &&
-                  states.map((state) => (
-                    <option value={state.isoCode} key={state.isoCode}>
-                      {state.name}
-                    </option>
-                  ))}
-              </select>
-              <div className={styles.iconSelect}>
-                <ChevronDown />
+            {/* Show State dropdown if states exist AND cities will be available */}
+            {states && states.length > 0 && (
+              <div className={styles.inputGroup}>
+                <p className={styles.inputGroupLabel}>
+                  {cities && cities.length > 0 ? 'State' : 'City/State'}
+                  <span className={styles.required}>*</span>
+                </p>
+                <select
+                  className={styles.input}
+                  name="state"
+                  // value={userDetails.state}
+                  disabled={!states?.length}
+                  onChange={handleCountryStateCityChange}
+                >
+                  <option value="">
+                    {cities && cities.length > 0 ? 'Select a state' : 'Select a city or state'}
+                  </option>
+                  {states &&
+                    states.map((state) => (
+                      <option value={state.isoCode} key={state.isoCode}>
+                        {state.name}
+                      </option>
+                    ))}
+                </select>
+                <div className={styles.iconSelect}>
+                  <ChevronDown />
+                </div>
+                {errors.state && <p className={styles.inputError}>{errors.state}</p>}{' '}
               </div>
-              {errors.state && <p className={styles.inputError}>{errors.state}</p>}{' '}
-            </div>
-            <div className={styles.inputGroup}>
-              <p className={styles.inputGroupLabel}>
-                City<span className={styles.required}>*</span>
-              </p>
-              <select
-                className={styles.input}
-                name="city"
-                // value={userDetails.city}
-                disabled={!cities?.length}
-                onChange={handleCountryStateCityChange}
-              >
-                <option value="">Select a city</option>
-                {cities &&
-                  cities.map((city) => (
-                    <option value={city.name} key={city.name}>
-                      {city.name}
-                    </option>
-                  ))}
-              </select>
-              <div className={styles.iconSelect}>
-                <ChevronDown />
+            )}
+            {/* Only show City dropdown if cities are available */}
+            {cities && cities.length > 0 && (
+              <div className={styles.inputGroup}>
+                <p className={styles.inputGroupLabel}>
+                  City<span className={styles.required}>*</span>
+                </p>
+                <select
+                  className={styles.input}
+                  name="city"
+                  // value={userDetails.city}
+                  disabled={!cities?.length}
+                  onChange={handleCountryStateCityChange}
+                >
+                  <option value="">Select a city</option>
+                  {cities &&
+                    cities.map((city) => (
+                      <option value={city.name} key={city.name}>
+                        {city.name}
+                      </option>
+                    ))}
+                </select>
+                <div className={styles.iconSelect}>
+                  <ChevronDown />
+                </div>
+                {errors.city && <p className={styles.inputError}>{errors.city}</p>}{' '}
               </div>
-              {errors.city && <p className={styles.inputError}>{errors.city}</p>}{' '}
-            </div>
+            )}
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>
                 Address<span className={styles.required}>*</span>
