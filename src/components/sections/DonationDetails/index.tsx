@@ -201,6 +201,7 @@ export default function DonationDetails({
       const form = e.currentTarget;
       const formData = new FormData(form);
 
+      setIsRedirecting(true);
       try {
         await axios.post('/donation-form', formData, {
           headers: {
@@ -208,7 +209,6 @@ export default function DonationDetails({
           },
         });
 
-        setIsRedirecting(true);
         router.push('/donate');
       } catch (error) {
         setIsRedirecting(false);
