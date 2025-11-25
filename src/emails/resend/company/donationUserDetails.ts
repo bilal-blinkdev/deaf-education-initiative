@@ -1,4 +1,6 @@
 export function donationUserDetailsTemplate(data: any) {
+  const showSeparateStateCity = data.state && data.city && data.state !== data.city;
+
   return `
   <!DOCTYPE html>
   <html>
@@ -50,8 +52,16 @@ export function donationUserDetailsTemplate(data: any) {
                     ${data.email ? `<tr><td><strong>Email:</strong></td><td>${data.email}</td></tr>` : ''}
                     ${data.phoneNumber ? `<tr><td><strong>Phone:</strong></td><td>${data.phoneNumber}</td></tr>` : ''}
                     ${data.country ? `<tr><td><strong>Country:</strong></td><td>${data.country}</td></tr>` : ''}
-                    ${data.state ? `<tr><td><strong>State:</strong></td><td>${data.state}</td></tr>` : ''}
-                    ${data.city ? `<tr><td><strong>City:</strong></td><td>${data.city}</td></tr>` : ''}
+                    ${
+                      showSeparateStateCity
+                        ? `
+                      ${data.state ? `<tr><td><strong>State:</strong></td><td>${data.state}</td></tr>` : ''}
+                      ${data.city ? `<tr><td><strong>City:</strong></td><td>${data.city}</td></tr>` : ''}
+                    `
+                        : `
+                      ${data.state || data.city ? `<tr><td><strong>City/State:</strong></td><td>${data.state || data.city}</td></tr>` : ''}
+                    `
+                    }
                     ${data.zipCode ? `<tr><td><strong>Zip Code:</strong></td><td>${data.zipCode}</td></tr>` : ''}
                   </table>
                 </td>

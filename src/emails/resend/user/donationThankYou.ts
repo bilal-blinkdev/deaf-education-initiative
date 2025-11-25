@@ -57,6 +57,15 @@ export function donationThankYouTemplate(data: any) {
                         : ''
                     }
                     ${
+                      data.country
+                        ? `
+                    <tr>
+                      <td style="padding: 8px 12px; border-bottom: 1px solid #eee;" width="35%"><strong>Country:</strong></td>
+                      <td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${data.country}</td>
+                    </tr>`
+                        : ''
+                    }
+                    ${
                       data.city
                         ? `
                     <tr>
