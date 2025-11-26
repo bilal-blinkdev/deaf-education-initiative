@@ -24,7 +24,7 @@ import SchoolGirlsRaisingHands from '@/assets/school-girls-raising-hands.webp';
 // Fetch a single publication by its slug
 async function fetchPublication(slug: string): Promise<Blog | null> {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_PAYLOAD_URL}/api/publications?where[slug][equals]=${slug}&depth=2`,
+    `${process.env.NEXT_PUBLIC_PAYLOAD_URL}/api/blog?where[slug][equals]=${slug}&depth=2`,
     { cache: 'no-store' },
   );
 

@@ -16,7 +16,7 @@ import { fetchPayload } from '@/app/lib/payload/fetchPayload';
 
 // Fetch all publications
 async function fetchPublications(): Promise<Blog[]> {
-  return fetchPayload<Blog>('/api/publications?depth=2&limit=100');
+  return fetchPayload<Blog>('/api/blog?depth=2&limit=100');
 }
 
 // Fetch all categories
@@ -83,7 +83,7 @@ export default async function OurPublications() {
           },
         },
         duration: pub.readingDuration,
-        link: { href: `/our-publications/${pub.slug}` },
+        link: { href: `/blog/${pub.slug}` },
       });
     }
 
