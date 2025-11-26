@@ -38,6 +38,16 @@ $background: #fff;
       display: block;
     }
   }
+  // &:active {
+  //   & > .navItemTitle,
+  //   & > .navLink {
+  //     color: var(--dark-blue);
+  //     transition: 0.1s;
+  //   }
+  //   .subMenu {
+  //     display: block;
+  //   }
+  // }
 }
 .navItemTitle,
 .navLink {
@@ -97,6 +107,10 @@ $background: #fff;
       transition: 0.1s;
       color: var(--dark-blue);
       background-color: var(--yellow);
+    }
+    &:active {
+      transition: 0.3s;
+      background-color: #ececff;
     }
   }
 }
