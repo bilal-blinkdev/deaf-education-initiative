@@ -13,6 +13,8 @@ import TwoColumnCard from '@/components/blocks/TwoColumnCard';
 import TextCtaWithBgImage from '@/components/blocks/TextCtaWithBgImage';
 import OurVision from '@/components/blocks/OurVision';
 import styles from './page.module.scss';
+import PeopleChatting from '@/graphics/PeopleChatting';
+import Globe from '@/graphics/Globe';
 
 export default function About() {
   const keyMetrics = {
@@ -21,48 +23,64 @@ export default function About() {
         content: [
           {
             format: 'normal',
-            text: 'Transforming Lives of Deaf Children',
+            text: 'In Pakistan, more than 95% of deaf children ',
           },
           {
             format: 'break',
           },
           {
             format: 'normal',
-            text: ' Through Quality Education',
+            text: 'of school-going age are deprived of their right to education.',
           },
         ],
       },
-      // subHeading: 'About Us',
       description: {
         content: [
           {
+            format: 'bold',
+            text: 'Deaf Education Initiative is striving to ensure that no deaf child goes without literacy and learning.',
+          },
+          {
+            format: 'break',
+          },
+          {
             format: 'normal',
-            text: 'Deaf Education Initiative is a non-profit organization committed to the education and empowerment of deaf children and youth in Pakistan. We believe every child deserves access to language, learning, and the tools to reach their full potential.',
+            text: ' We are a non-profit organization, registered with the Charity Commission UK, which is working to empower underserved deaf children and youth in Pakistan. We support the Deaf Reach Program in Pakistan, which is working on empowering the Deaf Community by providing a full circle solution from education, skills training, and teacher development to parent training and job placements.',
           },
         ],
       },
       metrics: [
         {
           icon: <Student />,
-          numbers: '2380+',
-          text: 'Students currently enrolled across our 9 campuses',
+          numbers: '2500+',
+          text: 'Students Currently Enrolled',
         },
         {
           icon: <Employees />,
           numbers: '50,000+',
-          text: 'Direct beneficiaries to date',
+          text: 'Direct Beneficiaries',
         },
         {
           icon: <Teacher />,
           numbers: '2750+',
-          text: 'Deaf youth and adults found meaningful employment',
+          text: 'Deaf Persons Employed',
+        },
+        {
+          icon: <PeopleChatting />,
+          numbers: '7500+',
+          text: 'Words PSL Dictionary',
+        },
+        {
+          icon: <Globe />,
+          numbers: '107',
+          text: 'Sites Across Pakistan',
         },
       ],
     },
     // colors: {
-    //   mainSection: { bgColor: 'var(--$dark-blue)' },
-    //   heading: { textColor: 'var(--alabaster)' },
-    //   description: { textColor: 'var(--alabaster)' },
+    //   mainSection: { bgColor: 'var(--white)' },
+    //   heading: { textColor: 'var(--ebony)' },
+    //   description: { textColor: 'var(--ebony)' },
     // },
   };
   return (

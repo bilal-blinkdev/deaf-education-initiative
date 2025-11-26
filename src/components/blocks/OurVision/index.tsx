@@ -125,10 +125,10 @@ export default function OurVision() {
               access to quality education that meets their learning needs.
             </Paragraph>
             <Paragraph color="var(--white)">
-              Since the past 35+ years, Deaf Reach has been dedicated to working towards empowerment
-              of the Deaf community in Pakistan. What began as a small club for the Deaf has grown
-              into the country’s only branch network of schools, colleges, and training centers
-              dedicated to serving the Deaf community.
+              For the past 35+ years, Deaf Reach, the parent program of DEI, is dedicated to working
+              towards empowerment of the Deaf community in Pakistan. What began as a small club for
+              the Deaf has grown into the country&apos;s only branch network of schools, colleges,
+              and training centers dedicated to serving the Deaf community.
             </Paragraph>
             <Paragraph color="var(--white)">
               Dedicated to bridging the education gap, DEI is committed to transforming lives by

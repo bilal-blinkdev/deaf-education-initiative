@@ -24,9 +24,9 @@ export default function TextCtaWithBgImage({ sectionClass, customClass }: TextCt
           <h2 className={styles.heading}>Organization Information</h2>
           <p className={styles.description}>
             Deaf Education Initiative is a UK-registered charity (charity number 1209822) that is
-            committed to empowering underprivileged deaf children and youth in Pakistan. Through the
-            Deaf Reach program in Pakistan, we provide education, skills training, and job placement
-            programs to empower deaf children.
+            committed to empowering underserved deaf children and youth in Pakistan. Through the
+            DEI, the parent program of Deaf Reach, we provide education, skills training, and job
+            placement programs to empower the Deaf Community in Pakistan.
           </p>
           <Button
             size="large"

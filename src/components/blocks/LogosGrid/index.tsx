@@ -15,6 +15,7 @@ import KhakiFoundation from '@/assets/partner-logos/khaki-foundation.webp';
 import Philips from '@/assets/partner-logos/philips.webp';
 import theICareFoundation from '@/assets/partner-logos/the-i-care-foundation.webp';
 import UsAid from '@/assets/partner-logos/us-aid.webp';
+import Tdh from '@/assets/partner-logos/the-lady-fatemah.webp';
 import styles from './styles.module.scss';
 
 export default function LogosGrid() {
@@ -31,9 +32,8 @@ export default function LogosGrid() {
     { logo: { image: Idrf } },
     { logo: { image: Kfc } },
     { logo: { image: KhakiFoundation } },
-    { logo: { image: Philips } },
     { logo: { image: theICareFoundation } },
-    { logo: { image: UsAid } },
+    { logo: { image: Tdh } },
   ];
   return (
     <section className={styles.logosGrid}>
