@@ -34,9 +34,9 @@ export default function TextImageCta({ sectionClass, customClass }: TextImageCta
                 Pakistan
               </cite>
             </p>
-            <Button style="outline" size="large" icons={{ leading: true }}>
+            {/* <Button style="outline" size="large" icons={{ leading: true }}>
               Read More
-            </Button>
+            </Button> */}
           </div>
           <div className={styles.flexCol}>
             <Image src={CivilAward} alt="Civil award" className={styles.image} />
