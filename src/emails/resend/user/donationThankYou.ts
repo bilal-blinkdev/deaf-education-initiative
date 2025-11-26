@@ -111,7 +111,7 @@ export function donationThankYouTemplate(data: any) {
                   </table>
                   
                   <p>With gratitude,</p>
-                  <p>The Deaf Reach Initiative Team</p>
+                  <p>Team Deaf Education Initiative</p>
                 </td>
               </tr>
 
