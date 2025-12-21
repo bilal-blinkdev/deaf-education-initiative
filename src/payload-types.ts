@@ -74,6 +74,7 @@ export interface Config {
     donations: Donation;
     projects: Project;
     subscriptions: Subscription;
+    'mail-list-subscribers': MailListSubscriber;
     categories: Category;
     authors: Author;
     blog: Blog;
@@ -94,6 +95,7 @@ export interface Config {
     donations: DonationsSelect<false> | DonationsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     subscriptions: SubscriptionsSelect<false> | SubscriptionsSelect<true>;
+    'mail-list-subscribers': MailListSubscribersSelect<false> | MailListSubscribersSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
@@ -278,7 +280,7 @@ export interface Page {
     type: 'none' | 'simpleImage' | 'donationForm';
     media?: (string | null) | Media;
   };
-  layout: (CardGrid | ImageGrid | KeyMetricsBlock)[];
+  layout: (CardGrid | ImageGrid | KeyMetricsBlock | ContentWithImageGridBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -879,6 +881,57 @@ export interface KeyMetricsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentWithImageGridBlock".
+ */
+export interface ContentWithImageGridBlock {
+  heading: string;
+  description?: string | null;
+  /**
+   * Add icon-based sections (like in Teacher Training) or extra text blocks.
+   */
+  subFeatures?:
+    | {
+        icon?: ('none' | 'companyEmployees' | 'personalDevelopment' | 'trainingSession') | null;
+        title?: string | null;
+        content?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  cta?: {
+    showButton?: boolean | null;
+    label?: string | null;
+    link?: string | null;
+  };
+  imagePosition?: ('left' | 'right') | null;
+  gridImages: {
+    image: string | Media;
+    id?: string | null;
+  }[];
+  /**
+   * The text that appears in the grid (e.g., "Over 1700+ teachers trained")
+   */
+  highlightText?: string | null;
+  highlightTextPosition?: ('1' | '2' | '3' | '4') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contentWithImageGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "donors".
  */
 export interface Donor {
@@ -953,6 +1006,18 @@ export interface Subscription {
   planPeriod?: string | null;
   donor: string | Donor;
   originalDonationEntry?: (string | null) | Donation;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mail-list-subscribers".
+ */
+export interface MailListSubscriber {
+  id: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  email: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1400,6 +1465,10 @@ export interface PayloadLockedDocument {
         value: string | Subscription;
       } | null)
     | ({
+        relationTo: 'mail-list-subscribers';
+        value: string | MailListSubscriber;
+      } | null)
+    | ({
         relationTo: 'categories';
         value: string | Category;
       } | null)
@@ -1604,6 +1673,7 @@ export interface PagesSelect<T extends boolean = true> {
         cardGrid?: T | CardGridSelect<T>;
         imageGrid?: T | ImageGridSelect<T>;
         keyMetrics?: T | KeyMetricsBlockSelect<T>;
+        contentWithImageGrid?: T | ContentWithImageGridBlockSelect<T>;
       };
   meta?:
     | T
@@ -1707,6 +1777,40 @@ export interface KeyMetricsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentWithImageGridBlock_select".
+ */
+export interface ContentWithImageGridBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  subFeatures?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        content?: T;
+        id?: T;
+      };
+  cta?:
+    | T
+    | {
+        showButton?: T;
+        label?: T;
+        link?: T;
+      };
+  imagePosition?: T;
+  gridImages?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  highlightText?: T;
+  highlightTextPosition?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "donors_select".
  */
 export interface DonorsSelect<T extends boolean = true> {
@@ -1770,6 +1874,17 @@ export interface SubscriptionsSelect<T extends boolean = true> {
   planPeriod?: T;
   donor?: T;
   originalDonationEntry?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mail-list-subscribers_select".
+ */
+export interface MailListSubscribersSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  email?: T;
   updatedAt?: T;
   createdAt?: T;
 }
