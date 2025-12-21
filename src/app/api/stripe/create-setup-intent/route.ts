@@ -11,9 +11,20 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export const POST = async (req: Request) => {
   try {
-    const { donationDetails, userDetails, priceId } = await req.json();
-    if (!donationDetails || !userDetails || !priceId) {
-      return NextResponse.json({ error: 'Email and Price ID ar requrired.' }, { status: 400 });
+    const { donationDetails, userDetails, priceId, customAmount } = await req.json();
+    if (!donationDetails || !userDetails) {
+      return NextResponse.json(
+        { error: 'Donation and user details are required.' },
+        { status: 400 },
+      );
+    }
+
+    // Either priceId OR customAmount must be provided
+    if (!priceId && !customAmount) {
+      return NextResponse.json(
+        { error: 'Either Price ID or custom amount is required.' },
+        { status: 400 },
+      );
     }
 
     const payload = await getPayload({ config });
@@ -71,9 +82,61 @@ export const POST = async (req: Request) => {
     if (!donor) {
       throw new Error('Failed to find or create donor.');
     }
-    console.log(donationDetails);
 
-    // 3. Log the "Pending" Donation in Payload
+    // 3. Use existing or create dynamic price
+    let finalPriceId: string;
+    let donationAmount = Number(donationDetails.donationFixedAmount);
+
+    if (customAmount && !priceId) {
+      // Create a dynamic price for custom amount
+      donationAmount = Number(customAmount);
+
+      // First, get or create a product for this project
+      const products = await stripe.products.list({
+        limit: 100,
+      });
+
+      let product = products.data.find(
+        (p) => p.metadata?.projectType === projectType && p.metadata?.isDynamic === 'true',
+      );
+
+      if (!product) {
+        product = await stripe.products.create({
+          name: `${projectType} - Custom Recurring Donation`,
+          metadata: {
+            projectType: projectType,
+            isDynamic: 'true',
+          },
+        });
+      }
+
+      // Create a new price for this custom amount
+      const price = await stripe.prices.create({
+        product: product.id,
+        unit_amount: Math.round(donationAmount * 100), // Convert to pence/cents
+        currency: 'gbp',
+        recurring: {
+          interval: 'month',
+        },
+        metadata: {
+          customAmount: 'true',
+          projectType: projectType,
+          amount: donationAmount.toString(),
+        },
+      });
+
+      finalPriceId = price.id;
+    } else if (priceId) {
+      finalPriceId = priceId;
+    } else {
+      throw new Error('Could not determine price ID');
+    }
+
+    if (!finalPriceId) {
+      throw new Error('Failed to get or create price ID');
+    }
+
+    // 4. Log the "Pending" Donation in Payload
 
     // Capitalize the donationType to match Payload collection options
     const formattedDonationType = donationType.charAt(0).toUpperCase() + donationType.slice(1);
@@ -84,7 +147,7 @@ export const POST = async (req: Request) => {
         // Donation Details
         project: donationDetails.projectType,
         supportType: donationDetails.supportType,
-        amount: Number(donationDetails.donationFixedAmount), // Recurring uses fixed amount
+        amount: donationAmount,
         donationType: formattedDonationType,
         // User Details
         firstName: firstName,
@@ -103,7 +166,7 @@ export const POST = async (req: Request) => {
       },
     });
 
-    // 4. Create setup intent
+    // 5. Create setup intent
     const setupIntent = await stripe.setupIntents.create({
       customer: customer.id,
       automatic_payment_methods: {
@@ -111,16 +174,20 @@ export const POST = async (req: Request) => {
       },
       usage: 'off_session',
       metadata: {
-        priceId: priceId,
+        priceId: finalPriceId,
         subscriptionFlow: 'true',
         donationId: donation.id,
+        customAmount: customAmount ? 'true' : 'false',
+        projectType: projectType,
+        donationAmount: donationAmount.toString(),
       },
     });
 
-    // 5. Return the client secret
+    // 6. Return the client secret
     return NextResponse.json({
       clientSecret: setupIntent.client_secret,
       setupIntentId: setupIntent.id,
+      priceId: finalPriceId,
     });
   } catch (error: any) {
     console.error('Error creating setup intent:', error);

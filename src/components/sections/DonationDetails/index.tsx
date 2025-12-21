@@ -85,11 +85,7 @@ export default function DonationDetails({
     if (!donationDetails.supportType) {
       newErrors.supportType = 'Please choose a support type.';
     }
-    if (
-      donationDetails.donationFixedAmount <= 1 &&
-      donationDetails?.supportType === 'Give Once' &&
-      donationDetails.otherAmount < 1
-    ) {
+    if (donationDetails.donationFixedAmount <= 1 && donationDetails.otherAmount < 1) {
       newErrors.donationFixedAmount = 'Please select or enter a valid donation amount.';
       newErrors.otherAmount = 'Please select or enter a valid donation amount.';
     }
@@ -105,8 +101,7 @@ export default function DonationDetails({
 
     // no errors
     if (pathname === '/donate') setErrors({});
-    // proceed to next step
-    // e.g. setStep(2) or navigate
+
     return true;
   };
 
@@ -159,7 +154,7 @@ export default function DonationDetails({
             (opt) => opt.amount === Number(donationDetails.donationFixedAmount),
           );
 
-          if (!selectedOption?.id) {
+          if (Number(donationDetails.otherAmount) <= 0 && !selectedOption?.id) {
             // We check for 'id' which is your priceId
             setErrors({ donationFixedAmount: 'Please select a valid recurring plan.' });
             return;
@@ -336,23 +331,26 @@ export default function DonationDetails({
                 <p className={styles.inputError}>{errors.donationFixedAmount}</p>
               )}{' '}
             </div>
-            {donationDetails?.supportType === 'Give Once' && (
-              <div className={styles.inputGroup}>
-                <p className={styles.inputGroupLabel}>Other amount</p>
-                <input
-                  type="number"
-                  name="otherAmount"
-                  value={donationDetails.otherAmount ? donationDetails.otherAmount : ''}
-                  className={styles.input}
-                  placeholder="£ 500"
-                  onChange={handleInputChange}
-                  ref={otherAmountRef}
-                />
-                {errors.otherAmount && (
-                  <p className={styles.inputError}>{errors.otherAmount}</p>
-                )}{' '}
-              </div>
-            )}
+
+            <div className={styles.inputGroup}>
+              <p className={styles.inputGroupLabel}>
+                Other amount {donationDetails?.supportType === 'Recurring' && '(per month)'}
+              </p>
+              {donationDetails?.supportType === 'Recurring' && donationDetails.otherAmount > 0 && (
+                <p className={styles.inputHint}>This amount will be charged monthly.</p>
+              )}
+              <input
+                type="number"
+                name="otherAmount"
+                value={donationDetails.otherAmount ? donationDetails.otherAmount : ''}
+                className={styles.input}
+                placeholder="Enter custom amount"
+                onChange={handleInputChange}
+                ref={otherAmountRef}
+              />
+              {errors.otherAmount && <p className={styles.inputError}>{errors.otherAmount}</p>}{' '}
+            </div>
+
             <div className={styles.inputGroup}>
               <p className={styles.inputGroupLabel}>Choose donation type</p>
               <select

@@ -205,27 +205,41 @@ export default function UserDetails({
       let body: object;
 
       // This is the total amount for one-time payments
+      // Prioritize otherAmount if provided
       const amount =
         Number(donationDetails.otherAmount) > 0
           ? Number(donationDetails.otherAmount)
           : Number(donationDetails.donationFixedAmount);
-
+          
       if (donationDetails.supportType === 'Recurring') {
         const selectedProject = projects.find((p) => p.name === donationDetails.projectType);
-        const selectedOption = selectedProject?.amountOptions.find(
-          (opt) => opt.amount === Number(donationDetails.donationFixedAmount),
-        );
 
-        if (!selectedOption?.id) {
-          // We check for 'id' which is your priceId
-          setErrors({ donationFixedAmount: 'Please select a valid recurring plan.' });
-          SetIsStripeIntentLoading(false);
-          return;
+        // Check if using a predefined price or custom amount
+        let priceId = null;
+        let customAmount = null;
+
+        if (Number(donationDetails.otherAmount) > 0) {
+          // User entered a custom amount
+          customAmount = Number(donationDetails.otherAmount);
+        } else {
+          // User selected a predefined amount
+          const selectedOption = selectedProject?.amountOptions.find(
+            (opt) => opt.amount === Number(donationDetails.donationFixedAmount),
+          );
+
+          if (!selectedOption?.id) {
+            // We check for 'id' which is your priceId
+            setErrors({ donationFixedAmount: 'Please select a valid recurring plan.' });
+            SetIsStripeIntentLoading(false);
+            return;
+          }
+          priceId = selectedOption.id;
         }
 
         endpoint = '/api/stripe/create-setup-intent';
         body = {
-          priceId: selectedOption.id,
+          priceId: priceId,
+          customAmount: customAmount,
           donationDetails: donationDetails,
           userDetails: userDetails,
         };
