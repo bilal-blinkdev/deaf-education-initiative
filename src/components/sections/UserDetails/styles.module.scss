@@ -111,6 +111,18 @@ $input-focus-outline: rgba($cerulean-blue, 30%);
   margin-top: 1rem;
   color: $red;
 }
+.notice {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  color: $ebony-50;
+  & .policyLink {
+    color: $dodger-blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
 .twoColumnInput {
   display: flex;
   justify-content: space-between;

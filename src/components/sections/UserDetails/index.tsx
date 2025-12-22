@@ -4,9 +4,10 @@ import { ICountry, IState, ICity } from 'country-state-city';
 import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
 import ChevronDown from '../../../graphics/ChevronDown';
-import styles from './styles.module.scss';
 import { SelectField } from 'payload';
 import { Project } from '@/payload-types';
+import styles from './styles.module.scss';
+import Link from 'next/link';
 // import { Project } from '../DonationDetails';
 
 type UserDetailsFormProps = {
@@ -210,7 +211,7 @@ export default function UserDetails({
         Number(donationDetails.otherAmount) > 0
           ? Number(donationDetails.otherAmount)
           : Number(donationDetails.donationFixedAmount);
-          
+
       if (donationDetails.supportType === 'Recurring') {
         const selectedProject = projects.find((p) => p.name === donationDetails.projectType);
 
@@ -472,6 +473,13 @@ export default function UserDetails({
               <p className={styles.inputError}>{errors.donationFixedAmount}</p>
             )}{' '}
             {errors.projectType && <p className={styles.inputError}>{errors.projectType}</p>}{' '}
+            <p className={styles.notice}>
+              By continuing, you confirm that you have read and agree to our{' '}
+              <Link href="/privacy-policy" className={styles.policyLink} target="_blank">
+                Privacy Policy
+              </Link>
+              , which explains how we collect and use your personal data.
+            </p>
             <Button
               type="submit"
               size="large"
