@@ -14,6 +14,7 @@ export default function PrivacyPolicy() {
         <Container>
           <Heading level={1}>Privacy Policy</Heading>
           <Heading level={2}>Deaf Education Initiative (DEI)</Heading>
+          <Paragraph>Last updated: 23 December, 2025</Paragraph>
           <Paragraph>
             Deaf Education Initiative (“DEI”, “we”, “us”, or “our”) is committed to protecting your
             privacy and personal data. This Privacy Policy explains how we collect, use, store, and
@@ -166,12 +167,27 @@ export default function PrivacyPolicy() {
             </div>
             <div className={styles.policy}>
               <Heading level={2}>8. Managing Your Cookie Preferences</Heading>
-              <Paragraph> You can change or withdraw your cookie consent at any time by:</Paragraph>
+              <Paragraph>You can control your cookie preferences in the following ways:</Paragraph>
               <ul>
-                <li>Adjusting your browser settings</li>
+                <li>
+                  When you first visit our website, you can{' '}
+                  <strong>accept or decline non-essential cookies</strong>
+                  using our cookie consent banner.
+                </li>
+                <li>
+                  If you previously accepted cookies and later wish to withdraw your consent, you
+                  may do so by <strong>clearing or deleting cookies from your browser</strong>,
+                  which will reset your cookie preferences and cause the consent banner to reappear
+                  on your next visit.
+                </li>
+                <li>
+                  You can also manage or block cookies at any time through your{' '}
+                  <strong>browser settings</strong>.
+                </li>
               </ul>
               <Paragraph>
-                Please note that disabling cookies may affect website functionality.
+                Please note that disabling or blocking cookies may affect the functionality and
+                performance of certain parts of our website.{' '}
               </Paragraph>
             </div>
             <div className={styles.policy}>
