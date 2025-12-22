@@ -1,7 +1,10 @@
+import { Suspense } from 'react';
 import { Ubuntu } from 'next/font/google';
 import localFont from 'next/font/local';
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+import CookieConsent from '@/components/modals/CookieConsent';
 import './globals.scss';
 
 export const metadata = {
@@ -26,9 +29,13 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
+      <Suspense fallback={null}>
+        <GoogleAnalytics GA_MEASUREMENT_ID="G-XXXXXXXX" />
+      </Suspense>
       <body className={`${ubuntu.variable} ${ubuntuSans.variable}`}>
         <Header />
         <main>{children}</main>
+        <CookieConsent />
         <Footer />
       </body>
     </html>

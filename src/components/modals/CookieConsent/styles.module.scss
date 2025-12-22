@@ -1,0 +1,64 @@
+.cookieModal {
+  margin-top: 2.5rem;
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: fit-content;
+  z-index: 30;
+}
+
+.cookieModal.hidden {
+  display: none;
+}
+
+.cookieModal.visible {
+  display: block;
+}
+
+.cookieModal__inner {
+  position: relative;
+}
+
+.cookieModal__content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 10px;
+  padding: 2rem 2.4rem;
+  border-radius: 14px;
+  background-color: var(--white);
+  box-shadow: 0 4px 25px 0 rgba(18, 17, 39, 25%);
+}
+
+.cookieModal__text {
+  text-align: center;
+}
+
+.cookieModal__text p {
+  margin-right: 0.75rem;
+}
+
+.cookieModal__buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.decline-button {
+  background-color: red;
+  color: white;
+  padding: 0.5rem 1rem;
+}
+
+.accept-button {
+  background-color: green;
+  color: white;
+  padding: 0.5rem 1rem;
+}
+
+.responsive-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
