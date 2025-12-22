@@ -1,9 +1,55 @@
+'use client';
+
+import { useState } from 'react';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { subscribe, SubscriptionResponse } from '@/app/(frontend)/actions/subscribe';
 import Link from 'next/link';
 import Container from '@/components/layout/Container';
 import Button from '@/components/elements/Button';
 import styles from './styles.module.scss';
 
 export default function SubscriptionBlock() {
+  const [isPending, setIsPending] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsPending(true);
+
+    const formData = new FormData(e?.currentTarget);
+    const firstName = formData.get('firstName') as string;
+    const lastName = formData.get('lastName') as string;
+    const email = formData.get('email') as string;
+
+    const result: SubscriptionResponse = await subscribe({ firstName, lastName, email });
+
+    setIsPending(false);
+
+    if (result.success) {
+      toast.success('Subscribed successfully!', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Bounce,
+      });
+    } else {
+      toast.dismiss();
+      toast.error(result.error || 'Error occurred', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Bounce,
+      });
+    }
+  };
+
   return (
     <section className={styles.subscriptionBlock}>
       <Container>
@@ -16,14 +62,31 @@ export default function SubscriptionBlock() {
             </p>
           </div>
           <div className={styles.colTwo}>
-            <form action="" className={styles.subscriptionForm}>
+            <form action="" className={styles.subscriptionForm} onSubmit={handleSubmit}>
               <div className={styles.inputGroup}>
-                <input type="text" className={styles.input} placeholder="First name" />
-                <input type="text" className={styles.input} placeholder="Last name" />
+                <input
+                  type="text"
+                  name="firstName"
+                  className={styles.input}
+                  placeholder="First name"
+                />
+                <input
+                  type="text"
+                  name="lastName"
+                  className={styles.input}
+                  placeholder="Last name"
+                />
               </div>
               <div className={styles.inputGroup}>
-                <input type="text" className={styles.input} placeholder="Enter your email" />
-                <Button type="submit">Subscribe</Button>
+                <input
+                  type="email"
+                  name="email"
+                  className={styles.input}
+                  placeholder="Enter your email"
+                />
+                <Button type="submit" loading={isPending}>
+                  Subscribe
+                </Button>
               </div>
             </form>
             <p className={styles.privacyPolicy}>
@@ -36,6 +99,7 @@ export default function SubscriptionBlock() {
           </div>
         </div>
       </Container>
+      <ToastContainer />
     </section>
   );
 }

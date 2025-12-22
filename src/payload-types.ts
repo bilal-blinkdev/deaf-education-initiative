@@ -1015,8 +1015,8 @@ export interface Subscription {
  */
 export interface MailListSubscriber {
   id: string;
-  firstName?: string | null;
-  lastName?: string | null;
+  firstName: string;
+  lastName: string;
   email: string;
   updatedAt: string;
   createdAt: string;

@@ -20,11 +20,13 @@ export const MailListSubscribers: CollectionConfig = {
       name: 'firstName',
       type: 'text',
       label: 'First Name',
+      required: true,
     },
     {
       name: 'lastName',
       type: 'text',
       label: 'Last Name',
+      required: true,
     },
     {
       name: 'email',
