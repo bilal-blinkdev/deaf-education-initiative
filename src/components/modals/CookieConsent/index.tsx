@@ -43,11 +43,20 @@ export default function CookieConsent() {
       <div className={styles.cookieModal__inner}>
         <div className={styles.cookieModal__content}>
           <div className={styles.cookieModal__text}>
-            <p>This site uses cookies:</p>
+            <p>
+              To provide the best experiences, we use technologies like cookies to store and/or
+              access device information. Consenting to these technologies will allow us to process
+              data such as browsing behavior or unique IDs on this site. Not consenting or
+              withdrawing consent may adversely affect certain features and functions.
+            </p>
           </div>
           <div className={styles.cookieModal__buttons}>
-            <Button onClick={() => setCookieConsent(false)}>Decline</Button>
-            <Button onClick={() => setCookieConsent(true)}>Accept</Button>
+            <Button size="large" onClick={() => setCookieConsent(true)}>
+              Accept
+            </Button>
+            <Button size="large" style="soft" onClick={() => setCookieConsent(false)}>
+              Decline
+            </Button>
           </div>
         </div>
       </div>
