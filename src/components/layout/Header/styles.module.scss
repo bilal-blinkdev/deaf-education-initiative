@@ -127,10 +127,6 @@ $background: #fff;
   gap: 1rem;
   align-items: center;
   padding: 2rem 3rem;
-  @media (min-width: 1200px) {
-    padding: 0;
-    flex-direction: row;
-  }
 }
 .buttonLink {
   padding: 0;

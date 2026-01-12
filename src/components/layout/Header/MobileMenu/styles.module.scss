@@ -58,6 +58,13 @@ $mobile-menu-bg: #0000cc;
   appearance: none;
   display: none;
 }
+.buttonsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  padding: 2rem 3rem;
+}
 .drawer {
   position: fixed;
   top: 0;
