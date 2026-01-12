@@ -177,6 +177,15 @@ $background: #fff;
   padding: 2rem 3rem;
   text-align: right;
 }
+.menuToggle:checked ~ [class*='drawer'] {
+  transform: translateX(0);
+}
+
+.menuToggle:checked ~ [class*='overlay'] {
+  opacity: 1;
+  visibility: visible;
+}
+
 @media (max-width: 1200px) {
   .navMenu {
     display: none;

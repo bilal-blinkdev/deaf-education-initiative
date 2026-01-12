@@ -1,15 +1,14 @@
-import Link from 'next/link';
 import { Header as HeaderType } from '@/payload-types';
 
 import Container from '../Container';
 import Button from '@/components/elements/Button';
 import LogoWithText from '@/graphics/LogoV2WithText';
-import SmartLink from '@/components/elements/SmartLink'; // Reusing your SmartLink component
+import SmartLink from '@/components/elements/SmartLink';
 import { fetchGlobal } from '@/app/lib/payload/fetchGlobal';
 import HamburgerMenu from '@/graphics/HamburgerMenu';
-import Cross from '@/graphics/Cross';
 import { cn } from '@/utils/ui';
 import styles from './styles.module.scss';
+import MobileMenu from './MobileMenu';
 
 export default async function Header() {
   const headerData = await fetchGlobal<HeaderType>('header', 2);
@@ -19,6 +18,7 @@ export default async function Header() {
   }
 
   const { navItems, buttons } = headerData;
+  console.log(navItems);
 
   return (
     <header className={styles.header}>
@@ -88,33 +88,7 @@ export default async function Header() {
             <HamburgerMenu width="24" height="24" />
           </label>
           {/* --- Mobile Drawer --- */}
-          <aside className={styles.drawer}>
-            <div className={styles.drawerHeader}>
-              <label htmlFor="mobile-menu-toggle" className={styles.closeButton}>
-                <Cross width="24" height="24" color="var(--titan-white)" />
-              </label>
-            </div>
-            <nav className={styles.drawerNav}>
-              <ul>
-                {navItems &&
-                  navItems.map((item, index) => (
-                    <li key={index}>
-                      <label htmlFor="mobile-menu-toggle">{/* <SmartLink link={item} /> */}</label>
-                    </li>
-                  ))}
-              </ul>
-            </nav>
-            <div className={styles.buttonsGroup}>
-              {buttons &&
-                buttons.map((btn, index) => (
-                  <SmartLink key={index} link={btn}>
-                    <Button size="large" width="full">
-                      {btn.linkText}
-                    </Button>
-                  </SmartLink>
-                ))}
-            </div>
-          </aside>
+          <MobileMenu navItems={navItems} buttons={buttons} />
         </div>
       </Container>
     </header>
