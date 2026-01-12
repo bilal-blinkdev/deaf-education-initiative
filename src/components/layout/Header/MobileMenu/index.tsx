@@ -93,7 +93,7 @@ export default function MobileMenu({ navItems, buttons }: MobileMenuProps) {
       <div className={styles.buttonsGroup}>
         {buttons &&
           buttons.map((btn, index) => (
-            <SmartLink key={index} link={btn}>
+            <SmartLink key={index} link={btn} className={styles.buttonLink}>
               <Button size="large" width="full">
                 {btn.linkText}
               </Button>
