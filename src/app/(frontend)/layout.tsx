@@ -3,9 +3,11 @@ import { Ubuntu } from 'next/font/google';
 import localFont from 'next/font/local';
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
-import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
 import CookieConsent from '@/components/modals/CookieConsent';
 import './globals.scss';
+import AnalyticsProvider from '@/components/analytics/AnalyticsProvider';
+import { AnalyticsPlatform } from '@/payload-types';
+import { fetchPayload } from '../lib/payload/fetchPayload';
 
 export const metadata = {
   description: 'Deaf Education Initiative',
@@ -24,13 +26,17 @@ const ubuntuSans = localFont({
   variable: '--font-ubuntu-sans',
 });
 
+async function fetchAnalyticsPlatforms(): Promise<AnalyticsPlatform[]> {
+  return fetchPayload<AnalyticsPlatform>('/api/analytics-platforms');
+}
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props;
+  const analyticsPlatforms = await fetchAnalyticsPlatforms();
 
   return (
     <html lang="en">
       <Suspense fallback={null}>
-        <GoogleAnalytics GA_MEASUREMENT_ID="G-XXXXXXXX" />
+        <AnalyticsProvider platforms={analyticsPlatforms} debugMode={true} />
       </Suspense>
       <body className={`${ubuntu.variable} ${ubuntuSans.variable}`}>
         <Header />
