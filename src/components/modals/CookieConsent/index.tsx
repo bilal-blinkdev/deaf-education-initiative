@@ -26,10 +26,13 @@ export default function CookieConsent() {
 
     const newValue = cookieConsent ? 'granted' : 'denied';
 
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('consent', 'update', {
-        analytics_storage: newValue,
-      });
+    if (typeof window !== 'undefined') {
+      // Update Google Analytics & GTM for all instances
+      if (window.gtag) {
+        window.gtag('consent', 'update', {
+          analytics_storage: newValue,
+        });
+      }
     }
   }, [cookieConsent]);
 

@@ -81,6 +81,7 @@ export interface Config {
     publications: Publication;
     events: Event;
     programs: Program;
+    'analytics-platforms': AnalyticsPlatform;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -102,6 +103,7 @@ export interface Config {
     publications: PublicationsSelect<false> | PublicationsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     programs: ProgramsSelect<false> | ProgramsSelect<true>;
+    'analytics-platforms': AnalyticsPlatformsSelect<false> | AnalyticsPlatformsSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -1339,6 +1341,57 @@ export interface DonationForm {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analytics-platforms".
+ */
+export interface AnalyticsPlatform {
+  id: string;
+  /**
+   * A descriptive name for this analytics instance (e.g., "Main Site GA4", "US Market Pixel")
+   */
+  name: string;
+  platform: 'google-analytics' | 'google-tag-manager' | 'meta-pixel' | 'meta-conversions-api' | 'linkedin-insight';
+  /**
+   * Enable or disable this analytics platform
+   */
+  enabled?: boolean | null;
+  /**
+   * Format: G-XXXXXXXXXX
+   */
+  gaTrackingId?: string | null;
+  gaDebugMode?: boolean | null;
+  /**
+   * Format: GTM-XXXXXXX
+   */
+  gtmId?: string | null;
+  /**
+   * Your Facebook Pixel ID (numeric)
+   */
+  metaPixelId?: string | null;
+  /**
+   * Your Meta Pixel ID (numeric)
+   */
+  metaConversionsApiPixelId?: string | null;
+  /**
+   * Your Meta Conversions API access token
+   */
+  metaConversionsApiToken?: string | null;
+  /**
+   * For testing events in Meta Events Manager
+   */
+  metaConversionsApiTestCode?: string | null;
+  /**
+   * Your LinkedIn Partner ID
+   */
+  linkedinPartnerId?: string | null;
+  /**
+   * Internal notes about this analytics platform
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
@@ -1491,6 +1544,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'programs';
         value: string | Program;
+      } | null)
+    | ({
+        relationTo: 'analytics-platforms';
+        value: string | AnalyticsPlatform;
       } | null)
     | ({
         relationTo: 'payload-jobs';
@@ -2025,6 +2082,26 @@ export interface DonationFormSelect<T extends boolean = true> {
       };
   id?: T;
   blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analytics-platforms_select".
+ */
+export interface AnalyticsPlatformsSelect<T extends boolean = true> {
+  name?: T;
+  platform?: T;
+  enabled?: T;
+  gaTrackingId?: T;
+  gaDebugMode?: T;
+  gtmId?: T;
+  metaPixelId?: T;
+  metaConversionsApiPixelId?: T;
+  metaConversionsApiToken?: T;
+  metaConversionsApiTestCode?: T;
+  linkedinPartnerId?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

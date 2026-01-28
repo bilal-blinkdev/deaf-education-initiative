@@ -27,6 +27,7 @@ import { Donations } from './collections/Donations';
 import { Projects } from './collections/Projects';
 import { Subscriptions } from './collections/Subscriptions';
 import { MailListSubscribers } from './collections/Subscribers';
+import { AnalyticsPlatforms } from './collections/AnalyitcsPlatforms';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -73,6 +74,7 @@ export default buildConfig({
     Publications,
     Events,
     Programs,
+    AnalyticsPlatforms,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

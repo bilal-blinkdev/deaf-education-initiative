@@ -10,27 +10,36 @@ declare global {
   }
 }
 
-export default function GoogleAnalytics({ GA_MEASUREMENT_ID }: { GA_MEASUREMENT_ID: string }) {
+type GoogleAnalyticsProps = {
+  gaMeasurementId: string;
+  name?: string;
+  debugMode: boolean;
+};
+
+export default function GoogleAnalytics({
+  gaMeasurementId,
+  name,
+  debugMode = false,
+}: GoogleAnalyticsProps) {
   const pathname = usePathname();
-  // SearchParams is a client side function.
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const url = pathname + searchParams.toString();
 
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('config', GA_MEASUREMENT_ID, {
+      window.gtag('config', gaMeasurementId, {
         page_path: url,
       });
     }
-  }, [pathname, searchParams, GA_MEASUREMENT_ID]);
+  }, [pathname, searchParams, gaMeasurementId]);
 
   // Script is added to the head of the document. To Begin, consent is denied.
   return (
     <>
       <Script
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
       />
 
       <Script
@@ -46,8 +55,9 @@ export default function GoogleAnalytics({ GA_MEASUREMENT_ID }: { GA_MEASUREMENT_
                     'analytics_storage': 'denied'
                 });
                 
-                gtag('config', '${GA_MEASUREMENT_ID}', {
+                gtag('config', '${gaMeasurementId}', {
                     page_path: window.location.pathname,
+                    debug_mode: ${debugMode}
                 });
                 `,
         }}
