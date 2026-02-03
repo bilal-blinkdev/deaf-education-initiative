@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { sendGAEvent } from '@/utils/analytics/google-analytics';
 import { sendMetaEvent } from '@/utils/analytics/meta-pixel';
@@ -9,18 +9,24 @@ import Button from '@/components/elements/Button';
 import ArrowLeft from '@/graphics/ArrowLeft';
 import styles from './page.module.scss';
 
-export default function ThankYou() {
+// 1. ISOLATED COMPONENT: This component is the only one allowed to use useSearchParams
+function ThankYouLogic() {
   const searchParams = useSearchParams();
+  const eventFired = useRef(false);
 
   useEffect(() => {
+    if (eventFired.current) return;
+
     const amount = parseFloat(searchParams.get('amount') || '0');
-    const currency = parseFloat(searchParams.get('currency') || 'GBP');
+    // FIX: currency is a string (e.g., 'GBP'), DO NOT use parseFloat here
+    const currency = searchParams.get('currency') || 'GBP';
+
     const transactionId = searchParams.get('transactionId') || `0000000`;
     const projectId = searchParams.get('projectId') || `0000000`;
     const projectName = searchParams.get('projectName') || `none`;
     const projectCategory = searchParams.get('projectCategory') || `none`;
     const projectCategory2 = searchParams.get('projectCategory2') || `none`;
-    const price = searchParams.get('price') || `0`;
+    const price = parseFloat(searchParams.get('price') || '0');
 
     if (amount > 0) {
       sendGAEvent('purchase', {
@@ -33,7 +39,7 @@ export default function ThankYou() {
             item_name: projectName,
             item_category: projectCategory,
             item_category2: projectCategory2,
-            price,
+            price: price || amount,
             quantity: 1,
           },
         ],
@@ -47,15 +53,26 @@ export default function ThankYou() {
         content_type: 'product',
         num_items: 1,
         order_id: transactionId,
-        // Custom properties
         project_subcategory: projectCategory2,
       });
-    }
-  }, []);
 
+      eventFired.current = true;
+    }
+  }, [searchParams]);
+
+  return null; // This component doesn't render anything visible, just logic
+}
+
+// 2. MAIN COMPONENT: Pure layout, wraps the logic in Suspense
+export default function ThankYou() {
   return (
     <section className={styles.donationSuccess}>
       <Container>
+        {/* Suspense Boundary protects the search params logic */}
+        <Suspense fallback={null}>
+          <ThankYouLogic />
+        </Suspense>
+
         <div className={styles.success}>
           <div className={styles.success__header}>
             <video className={styles.success__video} autoPlay muted loop playsInline>
@@ -69,7 +86,7 @@ export default function ThankYou() {
               <span>Thank You For Your Donation</span>
             </h2>
             <p className={styles.success__description}>
-              We have sent you an email with the donation information
+              We have sent you an email with the donation information
             </p>
             <Button
               size="large"
