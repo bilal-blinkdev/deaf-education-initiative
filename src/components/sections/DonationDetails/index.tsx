@@ -10,6 +10,8 @@ import DonatingHand from '@/assets/hand-donating.webp';
 import ChevronDown from '@/graphics/ChevronDown';
 import { Project } from '@/payload-types';
 import styles from './styles.module.scss';
+import { sendGAEvent } from '@/utils/analytics/google-analytics';
+import { sendMetaEvent } from '@/utils/analytics/meta-pixel';
 
 type DonationDetailsProps = {
   customClass?: string;
@@ -77,7 +79,7 @@ export default function DonationDetails({
   }, [selectedProject]);
 
   const validate = () => {
-    let newErrors: { [key: string]: string } = {};
+    const newErrors: { [key: string]: string } = {};
 
     if (!donationDetails.projectType) {
       newErrors.projectType = 'Please select a project.';
@@ -108,7 +110,7 @@ export default function DonationDetails({
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    let { name, value } = e.target;
+    const { name, value } = e.target;
 
     if (name === 'projectType') {
       const proj = projects.find((p) => p.name === value);
@@ -190,6 +192,32 @@ export default function DonationDetails({
         console.error('Form submission error:', error);
         setErrors({ projectType: 'An unknown error occurred.' });
       } finally {
+        sendGAEvent('begin_checkout', {
+          currency: 'GBP',
+          value: donationDetails.otherAmount || donationDetails.donationFixedAmount,
+          items: [
+            {
+              item_id: selectedProject?.id,
+              item_name: donationDetails.projectType,
+              item_category: donationDetails.supportType,
+              item_category2: donationDetails.donationType,
+              price: donationDetails.otherAmount || donationDetails.donationFixedAmount,
+              quantity: 1,
+            },
+          ],
+        });
+        sendMetaEvent('InitiateCheckout', {
+          value: donationDetails.otherAmount || donationDetails.donationFixedAmount,
+          currency: 'GBP',
+          content_name: donationDetails.projectType,
+          content_category: donationDetails.supportType,
+          content_ids: selectedProject?.id ? [selectedProject.id] : [],
+          content_type: 'product',
+          num_items: 1,
+          // Custom properties
+          donation_type: donationDetails.donationType,
+        });
+
         setIsStepCompleted(true);
       }
     } else if (pathname === '/' || pathname.includes(slug)) {

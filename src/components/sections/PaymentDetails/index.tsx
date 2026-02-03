@@ -4,6 +4,8 @@ import Button from '@/components/elements/Button';
 import CheckVerified from '@/graphics/CheckVerified';
 import styles from './styles.module.scss';
 import { Project } from '@/payload-types';
+import { sendGAEvent } from '@/utils/analytics/google-analytics';
+import { sendMetaEvent } from '@/utils/analytics/meta-pixel';
 
 // type Project = {
 //   name: string;
@@ -13,7 +15,7 @@ import { Project } from '@/payload-types';
 type PaymentDetailsProps = {
   customClass?: string;
   project: Project;
-  setProject: Function;
+  setProject: (project: Project) => void;
   projects: Project[];
   step: number;
   handleClick: (jumpToStep?: number) => void;
@@ -88,8 +90,9 @@ export default function PaymentDetails({
     }
 
     let error;
+    let transactionId = '';
 
-    const return_url = `${window.location.origin}/donate/thank-you`;
+    const base_return_url = `${window.location.origin}/donate/thank-you`;
 
     if (donationDetails.supportType === 'Recurring') {
       // For 'setup' mode, use confirmSetup
@@ -97,23 +100,30 @@ export default function PaymentDetails({
         elements,
         clientSecret,
         confirmParams: {
-          return_url,
+          return_url: base_return_url,
         },
         redirect: 'if_required',
       });
       error = setupError;
     } else {
       // For 'payment' mode, use confirmPayment
-      const { error: paymentError } = await stripe.confirmPayment({
+      const { error: paymentError, paymentIntent } = await stripe.confirmPayment({
         elements,
         clientSecret,
         confirmParams: {
-          return_url,
+          return_url: base_return_url,
         },
         redirect: 'if_required',
       });
       error = paymentError;
+      if (paymentIntent) transactionId = paymentIntent.id;
     }
+
+    sendGAEvent('sign_up');
+    sendMetaEvent('CompleteRegistration', {
+      content_name: 'Donation Form',
+      status: 'success',
+    });
 
     if (error) {
       setErrorMessage(error.message || 'An unexpected error occurred.');
@@ -122,7 +132,9 @@ export default function PaymentDetails({
       // Success! No error was returned.
       setPaymentSucceeded(true);
       sendEmail();
-      window.location.href = return_url;
+
+      const final_return_url = `${base_return_url}?amount=${donationDetails.otherAmount || donationDetails.donationFixedAmount}&currency=GBP&transactionId=${transactionId}&projectId=${project?.id}&projectName=${donationDetails.projectType}&projectCategory=${donationDetails.supportType}&projectCategory2=${donationDetails.donationType}`;
+      window.location.href = final_return_url;
     }
 
     setLoading(false);

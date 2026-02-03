@@ -27,7 +27,7 @@ const ubuntuSans = localFont({
 });
 
 async function fetchAnalyticsPlatforms(): Promise<AnalyticsPlatform[]> {
-  return fetchPayload<AnalyticsPlatform>('/api/analytics-platforms');
+  return fetchPayload<AnalyticsPlatform>('/api/analytics-platforms?where[enabled][equals]=true');
 }
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props;

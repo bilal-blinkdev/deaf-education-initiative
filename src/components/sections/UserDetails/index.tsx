@@ -8,12 +8,14 @@ import { SelectField } from 'payload';
 import { Project } from '@/payload-types';
 import styles from './styles.module.scss';
 import Link from 'next/link';
+import { sendGAEvent } from '@/utils/analytics/google-analytics';
+import { sendMetaEvent } from '@/utils/analytics/meta-pixel';
 // import { Project } from '../DonationDetails';
 
 type UserDetailsFormProps = {
   customClass?: string;
   project: Project;
-  setProject: Function;
+  setProject: (project: Project) => void;
   projects: Project[];
   step: number;
   handleClick: (jumpToStep?: number) => void;
@@ -84,7 +86,7 @@ export default function UserDetails({
   }, []);
 
   const validate = () => {
-    let newErrors: { [key: string]: string } = {};
+    const newErrors: { [key: string]: string } = {};
 
     if (!userDetails.firstName) {
       newErrors.firstName = 'Please enter your first name.';
@@ -274,6 +276,15 @@ export default function UserDetails({
       setErrors({ projectType: 'An unknown error occurred.' });
       SetIsStripeIntentLoading(false);
     }
+
+    sendGAEvent('qualify_lead', {
+      currency: 'GBP',
+      value: donationDetails.otherAmount || donationDetails.donationFixedAmount,
+    });
+    sendMetaEvent('Lead', {
+      value: donationDetails.otherAmount || donationDetails.donationFixedAmount,
+      currency: 'GBP',
+    });
 
     setIsStepCompleted(true);
     SetIsStripeIntentLoading(false);
