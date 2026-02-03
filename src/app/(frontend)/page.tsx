@@ -41,14 +41,14 @@ export default async function HomePage() {
         content: [
           {
             format: 'normal',
-            text: 'In Pakistan, more than 95% of deaf children ',
+            text: 'In Pakistan there are more than 1 million ',
           },
           {
             format: 'break',
           },
           {
             format: 'normal',
-            text: 'of school-going age are deprived of their right to education.',
+            text: 'deaf children, less than 5% have access to education.',
           },
         ],
       },
