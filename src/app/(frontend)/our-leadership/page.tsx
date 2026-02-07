@@ -49,7 +49,7 @@ export default function OurLeadership() {
     {
       name: 'Heidi Gustanski-Geary',
       image: Heidi,
-      role: 'Deaf Education Advisor',
+      role: 'Founder & Education Director',
       socialLinks: { linkedIn: { url: 'https://linkedin.com', alt: '' } },
     },
   ];
