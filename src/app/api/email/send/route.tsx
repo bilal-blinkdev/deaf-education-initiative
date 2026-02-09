@@ -14,6 +14,7 @@ export async function POST(request: Request) {
     const { data, error } = await resend.emails.send({
       from: 'Deaf Reach UK <noreply@deiuk.org>',
       to: ['hassan.ahmed@fesf.org.pk', 'faysal.soomro@fesf.org.pk'],
+      cc: ['safia.shafiq@deafreachna.org', 'waqas.hassan@fesf.org.pk'],
       subject: 'Donation Received',
       // react: <DonationUserDetailsEmail {...body.data} />,
       html: companyTemplate,
