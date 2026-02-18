@@ -1,5 +1,5 @@
 import Banner from '@/components/blocks/Banner';
-import BannerImage from '@/assets/girl-holding-books-and-smiling.webp';
+import BannerImage from '@/assets/deaf-children-in-classroom.webp';
 import HeadingDescription from '@/components/blocks/HeadingDescription';
 import Donation from '@/components/blocks/Donation';
 
