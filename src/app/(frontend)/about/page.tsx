@@ -52,7 +52,7 @@ export default function About() {
       metrics: [
         {
           icon: <Student />,
-          numbers: '2500+',
+          numbers: '3200',
           text: 'Students Currently Enrolled',
         },
         {

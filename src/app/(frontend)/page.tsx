@@ -70,7 +70,7 @@ export default async function HomePage() {
       metrics: [
         {
           icon: <Student />,
-          numbers: '2500+',
+          numbers: '3200',
           text: 'Students Currently Enrolled',
         },
         {
